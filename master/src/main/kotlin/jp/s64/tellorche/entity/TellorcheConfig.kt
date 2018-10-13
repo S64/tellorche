@@ -32,7 +32,7 @@ data class TelloController(
 enum class ControllerType(
         val value: String
 ) {
-    M5STACK("M5Stack"),
+    ESP32("ESP32"),
     DEBUG("Debug"),
     //
     ;
