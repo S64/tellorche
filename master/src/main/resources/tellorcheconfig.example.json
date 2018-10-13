@@ -12,7 +12,7 @@
       "type-esp32-config": {
         "ssid": "your-wifi-ssid",
         "passphrase": "your-wifi-passphrase",
-        "com": 0
+        "com_descriptor": "/dev/ttys002"
       }
     },
     "my-controller-2": {

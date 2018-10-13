@@ -10,17 +10,17 @@ import java.io.PrintStream
 
 typealias WifiSsid = String
 typealias WifiPassphrase = String
-typealias ComPort = Int
+typealias ComPortDescriptor = String
 
 @JsonClass(generateAdapter = true)
 data class Esp32ControllerConfig(
         @Json(name = "ssid") val ssid: WifiSsid,
         @Json(name = "passphrase") val passphrase: WifiPassphrase,
-        @Json(name = "com") val comPort: ComPort
+        @Json(name = "com_descriptor") val comPortDescriptor: ComPortDescriptor
 ) {
 
     fun createInterface(id: ControllerId): ITelloController {
-        val port = SerialPort.getCommPorts()[comPort]
+        val port = SerialPort.getCommPort(comPortDescriptor)
                 .apply { this.openPort() }
 
         if (!port.isOpen) {
