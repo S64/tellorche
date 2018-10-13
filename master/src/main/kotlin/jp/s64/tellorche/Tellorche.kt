@@ -1,6 +1,7 @@
 package jp.s64.tellorche
 
 import com.squareup.moshi.Moshi
+import jp.s64.tellorche.controller.ITelloController
 import jp.s64.tellorche.entity.*
 import org.kohsuke.args4j.CmdLineException
 import org.kohsuke.args4j.CmdLineParser
@@ -15,6 +16,8 @@ object Tellorche {
             .build()
 
     private lateinit var config: TellorcheConfig
+
+    private lateinit var controllers: Map<ControllerId, ITelloController>
 
     @JvmStatic
     fun main(orgArgs: Array<String>) {
@@ -33,13 +36,23 @@ object Tellorche {
                     .let { config = TellorcheConfigJsonAdapter(moshi).fromJson(it) ?: TODO("Parse Error") }
         }
 
+        controllers = config.controllers.mapValues {
+            it.value.createInterface(it.key)
+        }
+
         do {
             println("[Tellorche] Config file loaded. Input `exec` to start sequence:")
             if (readLine() == "exec") break
         } while (true)
 
-        // exec
-        mainLoop(args.startAtInMillis)
+        try {
+            // exec
+            mainLoop(args.startAtInMillis)
+        } finally {
+            controllers.forEach {
+                it.value.dispose()
+            }
+        }
     }
 
     private fun mainLoop(skip: TimeInMillis?) {
@@ -74,7 +87,6 @@ object Tellorche {
                         val controller = config.controllers[controllerId]!!
                         doControl(
                                 controllerId,
-                                controller,
                                 action.command,
                                 action.params
                         )
@@ -91,11 +103,10 @@ object Tellorche {
         } while (true)
     }
 
-    private fun doControl(id: ControllerId, controller: TelloController, command: TelloCommand, orgParams: List<TelloActionParam>) {
+    private fun doControl(id: ControllerId, command: TelloCommand, orgParams: List<TelloActionParam>) {
         val params = TelloCommand.convertParams(command, orgParams, config.scale)
 
-        controller.type
-                .createInterface(id)
+        controllers[id]!!
                 .send(command, params)
     }
 

@@ -26,8 +26,18 @@ typealias ControllerId = String
 
 @JsonClass(generateAdapter = true)
 data class TelloController(
-        @Json(name = "type") val type: ControllerType
-)
+        @Json(name = "type") val type: ControllerType,
+        @Json(name = "type-esp32-config") val esp32Configs: Esp32ControllerConfig?
+) {
+
+    fun createInterface(id: ControllerId): ITelloController {
+        return when (type) {
+            ControllerType.DEBUG -> DebugTelloController(id)
+            ControllerType.ESP32 -> esp32Configs!!.createInterface(id)
+        }
+    }
+
+}
 
 enum class ControllerType(
         val value: String
@@ -36,13 +46,6 @@ enum class ControllerType(
     DEBUG("Debug"),
     //
     ;
-
-    fun createInterface(id: ControllerId): ITelloController {
-        return when (this) {
-            DEBUG -> DebugTelloController(id)
-            else -> TODO("ほかのIFつくる")
-        }
-    }
 
     object Adapter {
 
@@ -88,6 +91,19 @@ enum class TelloCommand(
     READ_TIME(Type.READ, "read_time"),
     //
     ;
+
+
+    fun toCommand(params: List<TelloActionParam>): String {
+        val command: String = when (this) {
+            SET_SPEED -> "speed"
+            READ_SPEED -> "Speed?"
+            READ_BATTERY -> "Battery?"
+            READ_TIME -> "Time?"
+            else -> this.configValue
+        }
+
+        return (listOf(command) + params).joinToString(" ")
+    }
 
     object Adapter {
 

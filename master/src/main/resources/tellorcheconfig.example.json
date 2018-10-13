@@ -8,7 +8,12 @@
   },
   "controllers": {
     "my-controller-1": {
-      "type": "Debug"
+      "type": "ESP32",
+      "type-esp32-config": {
+        "ssid": "your-wifi-ssid",
+        "passphrase": "your-wifi-passphrase",
+        "com": 0
+      }
     },
     "my-controller-2": {
       "type": "Debug"

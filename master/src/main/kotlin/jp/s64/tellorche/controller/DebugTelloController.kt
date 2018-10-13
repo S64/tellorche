@@ -13,9 +13,19 @@ class DebugTelloController(
         println(
             String.format(
                     Locale.ROOT,
-                    "Debug[%s]: `%s %s`",
-                    id, command, params.joinToString(" ")
+                    "Debug[%s]: `%s`",
+                    id, command.toCommand(params)
             )
+        )
+    }
+
+    override fun dispose() {
+        println(
+                String.format(
+                        Locale.ROOT,
+                        "Debug[%s]: disposed.",
+                        id
+                )
         )
     }
 
