@@ -3,7 +3,8 @@
   "scale": {
     "x_in_cm": 1,
     "y_in_cm": 1,
-    "z_in_cm": 1
+    "z_in_cm": 1,
+    "speed_in_cm_per_sec": 1
   },
   "controllers": {
     "my-controller-1": {

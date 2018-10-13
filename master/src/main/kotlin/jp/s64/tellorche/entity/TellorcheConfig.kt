@@ -18,7 +18,8 @@ data class TellorcheConfig(
 data class TellorcheScale(
         @Json(name = "x_in_cm") val xInCm: Int,
         @Json(name = "y_in_cm") val yInCm: Int,
-        @Json(name = "z_in_cm") val zInCm: Int
+        @Json(name = "z_in_cm") val zInCm: Int,
+        @Json(name = "speed_in_cm_per_sec") val speedInCmPerSec: Int
 )
 
 typealias ControllerId = String
