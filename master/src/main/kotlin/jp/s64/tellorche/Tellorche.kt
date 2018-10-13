@@ -91,7 +91,9 @@ object Tellorche {
         } while (true)
     }
 
-    private fun doControl(id: ControllerId, controller: TelloController, command: TelloCommand, params: List<TelloActionParam>) {
+    private fun doControl(id: ControllerId, controller: TelloController, command: TelloCommand, orgParams: List<TelloActionParam>) {
+        val params = TelloCommand.convertParams(command, orgParams, config.scale)
+
         controller.type
                 .createInterface(id)
                 .send(command, params)

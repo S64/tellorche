@@ -108,4 +108,26 @@ enum class TelloCommand(
 
     }
 
+    companion object {
+
+        fun convertParams(command: TelloCommand, params: List<TelloActionParam>, scale: TellorcheScale): List<TelloActionParam> {
+            return when (command) {
+                UP, DOWN -> {
+                    return listOf((params[0].toInt() * scale.yInCm).toString())
+                }
+                LEFT, RIGHT -> {
+                    return listOf((params[0].toInt() * scale.xInCm).toString())
+                }
+                FORWARD, BACK -> {
+                    return listOf((params[0].toInt() * scale.zInCm).toString())
+                }
+                SET_SPEED -> {
+                    return listOf((params[0].toInt() * scale.speedInCmPerSec).toString())
+                }
+                else -> params
+            }
+        }
+
+    }
+
 }
