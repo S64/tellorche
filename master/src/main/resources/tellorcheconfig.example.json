@@ -1,0 +1,73 @@
+{
+  "accuracy_in_millis": 150,
+  "scale": {
+    "x_in_cm": 1,
+    "y_in_cm": 1,
+    "z_in_cm": 1
+  },
+  "controllers": {
+    "my-controller-1": {
+      "type": "Debug"
+    },
+    "my-controller-2": {
+      "type": "Debug"
+    }
+  },
+  "sequence": {
+    "0": [
+      {
+        "command": "set_speed",
+        "params": ["100"],
+        "controllers": ["my-controller-1", "my-controller-2"]
+      },
+      {
+        "command": "takeoff",
+        "params": [],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "1000": [
+      {
+        "command": "takeoff",
+        "params": [],
+        "controllers": ["my-controller-2"]
+      }
+    ],
+    "2000": [
+      {
+        "command": "left",
+        "params": ["10"],
+        "controllers": ["my-controller-1"]
+      },
+      {
+        "command": "right",
+        "params": ["10"],
+        "controllers": ["my-controller-2"]
+      }
+    ],
+    "2500": [
+      {
+        "command": "up",
+        "params": ["10"],
+        "controllers": ["my-controller-1"]
+      },
+      {
+        "command": "down",
+        "params": ["10"],
+        "controllers": ["my-controller-2"]
+      }
+    ],
+    "3000": [
+      {
+        "command": "down",
+        "params": ["10"],
+        "controllers": ["my-controller-1"]
+      },
+      {
+        "command": "up",
+        "params": ["10"],
+        "controllers": ["my-controller-2"]
+      }
+    ]
+  }
+}
