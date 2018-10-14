@@ -27,13 +27,13 @@ typealias ControllerId = String
 @JsonClass(generateAdapter = true)
 data class TelloController(
         @Json(name = "type") val type: ControllerType,
-        @Json(name = "type-esp32-config") val esp32Configs: Esp32ControllerConfig?
+        @Json(name = "type-m5stack-config") val m5StackConfigs: M5StackControllerConfig?
 ) {
 
     fun createInterface(id: ControllerId): ITelloController {
         return when (type) {
             ControllerType.DEBUG -> DebugTelloController(id)
-            ControllerType.ESP32 -> esp32Configs!!.createInterface(id)
+            ControllerType.M5STACK -> m5StackConfigs!!.createInterface(id)
         }
     }
 
@@ -42,7 +42,7 @@ data class TelloController(
 enum class ControllerType(
         val value: String
 ) {
-    ESP32("ESP32"),
+    M5STACK("M5Stack"),
     DEBUG("Debug"),
     //
     ;
