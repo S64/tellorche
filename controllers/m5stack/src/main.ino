@@ -21,7 +21,7 @@ void setup() {
 String wifiSsid = "";
 String wifiPassphrase = "";
 
-char *buff;
+// char *buff;
 
 WiFiUDP connection;
 
