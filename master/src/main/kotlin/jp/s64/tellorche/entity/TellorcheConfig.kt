@@ -74,6 +74,7 @@ enum class TelloCommand(
         val type: Type,
         val configValue: String
 ) {
+    COMMAND(Type.MODE, "command"),
     TAKEOFF(Type.DO, "takeoff"),
     LAND(Type.DO, "land"),
     UP(Type.DO, "up"),
@@ -116,6 +117,7 @@ enum class TelloCommand(
     }
 
     enum class Type {
+        MODE,
         DO,
         SET,
         READ,

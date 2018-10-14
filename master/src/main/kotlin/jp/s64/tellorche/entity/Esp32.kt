@@ -21,6 +21,7 @@ data class Esp32ControllerConfig(
 
     fun createInterface(id: ControllerId): ITelloController {
         val port = SerialPort.getCommPort(comPortDescriptor)
+                .apply { baudRate = 921600 }
                 .apply { this.openPort() }
 
         if (!port.isOpen) {
@@ -44,15 +45,22 @@ class Esp32TelloController(
         passphrase: WifiPassphrase
 ) : ITelloController {
 
+    companion object {
+
+        private const val LINE_SEPARATOR = "\n"
+
+    }
+
     private val `in`: BufferedReader
     private val out: PrintStream
 
     init {
         `in` = BufferedReader(InputStreamReader(port.inputStream))
-        out = PrintStream(port.outputStream)
+        out = PrintStream(port.outputStream, true)
 
-        out.println("wifi_ssid $ssid")
-        out.println("wifi_passphrase $passphrase")
+        out.print("wifi_ssid $ssid$LINE_SEPARATOR")
+        out.print("wifi_passphrase $passphrase$LINE_SEPARATOR")
+        out.print("connect$LINE_SEPARATOR")
 
         do {
             val line = `in`.readLine()
@@ -63,7 +71,7 @@ class Esp32TelloController(
     }
 
     override fun send(command: TelloCommand, params: List<TelloActionParam>) {
-        out.println(command.toCommand(params))
+        out.print(command.toCommand(params) + LINE_SEPARATOR)
     }
 
     override fun dispose() {

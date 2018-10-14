@@ -84,7 +84,6 @@ object Tellorche {
 
                 seq.forEach { action ->
                     action.controllers.forEach { controllerId ->
-                        val controller = config.controllers[controllerId]!!
                         doControl(
                                 controllerId,
                                 action.command,

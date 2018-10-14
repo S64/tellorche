@@ -1,5 +1,5 @@
 {
-  "accuracy_in_millis": 150,
+  "accuracy_in_millis": 100,
   "scale": {
     "x_in_cm": 1,
     "y_in_cm": 1,
@@ -12,67 +12,58 @@
       "type-esp32-config": {
         "ssid": "your-wifi-ssid",
         "passphrase": "your-wifi-passphrase",
-        "com_descriptor": "/dev/ttys002"
+        "com_descriptor": "/dev/cu.SLAB_USBtoUART"
       }
-    },
-    "my-controller-2": {
-      "type": "Debug"
     }
   },
   "sequence": {
     "0": [
       {
+        "command": "command",
+        "params": [],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "5000": [
+      {
         "command": "set_speed",
         "params": ["100"],
-        "controllers": ["my-controller-1", "my-controller-2"]
-      },
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "6000": [
       {
         "command": "takeoff",
         "params": [],
         "controllers": ["my-controller-1"]
       }
     ],
-    "1000": [
+    "10000": [
       {
-        "command": "takeoff",
+        "command": "down",
+        "params": ["30"],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "15000": [
+      {
+        "command": "flip",
+        "params": ["f"],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "20000": [
+      {
+        "command": "flip",
+        "params": ["b"],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "25000": [
+      {
+        "command": "land",
         "params": [],
-        "controllers": ["my-controller-2"]
-      }
-    ],
-    "2000": [
-      {
-        "command": "left",
-        "params": ["10"],
         "controllers": ["my-controller-1"]
-      },
-      {
-        "command": "right",
-        "params": ["10"],
-        "controllers": ["my-controller-2"]
-      }
-    ],
-    "2500": [
-      {
-        "command": "up",
-        "params": ["10"],
-        "controllers": ["my-controller-1"]
-      },
-      {
-        "command": "down",
-        "params": ["10"],
-        "controllers": ["my-controller-2"]
-      }
-    ],
-    "3000": [
-      {
-        "command": "down",
-        "params": ["10"],
-        "controllers": ["my-controller-1"]
-      },
-      {
-        "command": "up",
-        "params": ["10"],
-        "controllers": ["my-controller-2"]
       }
     ]
   }
