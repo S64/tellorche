@@ -2,7 +2,13 @@ package jp.s64.tellorche
 
 import com.squareup.moshi.Moshi
 import jp.s64.tellorche.controller.ITelloController
-import jp.s64.tellorche.entity.*
+import jp.s64.tellorche.entity.ControllerId
+import jp.s64.tellorche.entity.ControllerType
+import jp.s64.tellorche.entity.TelloActionParam
+import jp.s64.tellorche.entity.TelloCommand
+import jp.s64.tellorche.entity.TellorcheConfig
+import jp.s64.tellorche.entity.TellorcheConfigJsonAdapter
+import jp.s64.tellorche.entity.TimeInMillis
 import org.kohsuke.args4j.CmdLineException
 import org.kohsuke.args4j.CmdLineParser
 import org.kohsuke.args4j.Option
@@ -108,7 +114,6 @@ object Tellorche {
         controllers[id]!!
                 .send(command, params)
     }
-
 }
 
 class Args {
@@ -118,5 +123,4 @@ class Args {
 
     @Option(name = "--startAt", metaVar = "timeInMillis", required = false)
     var startAtInMillis: TimeInMillis? = null
-
 }

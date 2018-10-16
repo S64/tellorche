@@ -16,9 +16,9 @@ typealias ComPortDescriptor = String
 
 @JsonClass(generateAdapter = true)
 data class M5StackControllerConfig(
-        @Json(name = "ssid") val ssid: WifiSsid,
-        @Json(name = "passphrase") val passphrase: WifiPassphrase,
-        @Json(name = "com_descriptor") val comPortDescriptor: ComPortDescriptor
+    @Json(name = "ssid") val ssid: WifiSsid,
+    @Json(name = "passphrase") val passphrase: WifiPassphrase,
+    @Json(name = "com_descriptor") val comPortDescriptor: ComPortDescriptor
 ) {
 
     fun createInterface(id: ControllerId): ITelloController {
@@ -37,20 +37,18 @@ data class M5StackControllerConfig(
 
         return M5StackTelloController(id, port, ssid, passphrase)
     }
-
 }
 
 class M5StackTelloController(
-        private val id: ControllerId,
-        private val port: SerialPort,
-        ssid: WifiSsid,
-        passphrase: WifiPassphrase
+    private val id: ControllerId,
+    private val port: SerialPort,
+    ssid: WifiSsid,
+    passphrase: WifiPassphrase
 ) : ITelloController {
 
     companion object {
 
         private const val LINE_SEPARATOR = "\n"
-
     }
 
     private val `in`: BufferedReader
@@ -91,5 +89,4 @@ class M5StackTelloController(
             port.closePort()
         }
     }
-
 }

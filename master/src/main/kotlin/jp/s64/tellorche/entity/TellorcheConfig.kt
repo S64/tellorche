@@ -9,26 +9,26 @@ import jp.s64.tellorche.controller.M5StackControllerConfig
 
 @JsonClass(generateAdapter = true)
 data class TellorcheConfig(
-        @Json(name = "accuracy_in_millis") val accuracy: TimeInMillis,
-        @Json(name = "scale") val scale: TellorcheScale,
-        @Json(name = "controllers") val controllers: Map<ControllerId, TelloController>,
-        @Json(name = "sequence") val sequence: Map<TimeInMillis, List<TelloAction>>
+    @Json(name = "accuracy_in_millis") val accuracy: TimeInMillis,
+    @Json(name = "scale") val scale: TellorcheScale,
+    @Json(name = "controllers") val controllers: Map<ControllerId, TelloController>,
+    @Json(name = "sequence") val sequence: Map<TimeInMillis, List<TelloAction>>
 )
 
 @JsonClass(generateAdapter = true)
 data class TellorcheScale(
-        @Json(name = "x_in_cm") val xInCm: Int,
-        @Json(name = "y_in_cm") val yInCm: Int,
-        @Json(name = "z_in_cm") val zInCm: Int,
-        @Json(name = "speed_in_cm_per_sec") val speedInCmPerSec: Int
+    @Json(name = "x_in_cm") val xInCm: Int,
+    @Json(name = "y_in_cm") val yInCm: Int,
+    @Json(name = "z_in_cm") val zInCm: Int,
+    @Json(name = "speed_in_cm_per_sec") val speedInCmPerSec: Int
 )
 
 typealias ControllerId = String
 
 @JsonClass(generateAdapter = true)
 data class TelloController(
-        @Json(name = "type") val type: ControllerType,
-        @Json(name = "type-m5stack-config") val m5StackConfigs: M5StackControllerConfig?
+    @Json(name = "type") val type: ControllerType,
+    @Json(name = "type-m5stack-config") val m5StackConfigs: M5StackControllerConfig?
 ) {
 
     fun createInterface(id: ControllerId): ITelloController {
@@ -37,11 +37,10 @@ data class TelloController(
             ControllerType.M5STACK -> m5StackConfigs!!.createInterface(id)
         }
     }
-
 }
 
 enum class ControllerType(
-        val value: String
+    val value: String
 ) {
     M5STACK("M5Stack"),
     DEBUG("Debug"),
@@ -55,25 +54,23 @@ enum class ControllerType(
             return ControllerType.values()
                     .find { it.value == value }
         }
-
     }
-
 }
 
-typealias TimeInMillis =  Long
+typealias TimeInMillis = Long
 
 @JsonClass(generateAdapter = true)
 data class TelloAction(
-        val command: TelloCommand,
-        val params: List<TelloActionParam>,
-        val controllers: List<ControllerId>
+    val command: TelloCommand,
+    val params: List<TelloActionParam>,
+    val controllers: List<ControllerId>
 )
 
 typealias TelloActionParam = String
 
 enum class TelloCommand(
-        val type: Type,
-        val configValue: String
+    val type: Type,
+    val configValue: String
 ) {
     COMMAND(Type.MODE, "command"),
     TAKEOFF(Type.DO, "takeoff"),
@@ -94,7 +91,6 @@ enum class TelloCommand(
     //
     ;
 
-
     fun toCommand(params: List<TelloActionParam>): String {
         val command: String = when (this) {
             SET_SPEED -> "speed"
@@ -114,7 +110,6 @@ enum class TelloCommand(
             return TelloCommand.values()
                     .find { it.configValue == value }
         }
-
     }
 
     enum class Type {
@@ -124,7 +119,6 @@ enum class TelloCommand(
         READ,
         //
         ;
-
     }
 
     companion object {
@@ -146,7 +140,5 @@ enum class TelloCommand(
                 else -> params
             }
         }
-
     }
-
 }
