@@ -8,5 +8,4 @@ interface ITelloController {
     fun send(command: TelloCommand, params: List<TelloActionParam>)
 
     fun dispose()
-
 }
