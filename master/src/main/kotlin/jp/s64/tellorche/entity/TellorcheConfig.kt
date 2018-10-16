@@ -5,6 +5,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import jp.s64.tellorche.controller.DebugTelloController
 import jp.s64.tellorche.controller.ITelloController
+import jp.s64.tellorche.controller.M5StackControllerConfig
 
 @JsonClass(generateAdapter = true)
 data class TellorcheConfig(
