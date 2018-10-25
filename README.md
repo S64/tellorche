@@ -2,6 +2,11 @@
 
 **Orche**stration toolchain for **TELLO** drone.
 
+## What's this?
+
+Ryze Tech社のトイドローン[Tello](https://amzn.to/2yz09m5)を編隊飛行させるためのツールチェインです。  
+PC向けのマスターアプリとコントローラにあたるデバイスを用意すれば、設定した飛行シーケンスに従ってTelloを動かすことができます。
+
 ## How to debug **without M5Stack**
 
 ```sh
