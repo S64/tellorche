@@ -38,3 +38,20 @@ git pull
 git checkout -b 'shuma/fix-readme-mistake'
 # Switched to a new branch 'shuma/fix-readme-mistake'
 ```
+
+## 完了前でも`WIP`のPull Reqestを作る
+
+自身が現在どんな作業をしているのか、他のメンバーにもわかる状態にしましょう。  
+小さく変更をしてコミットを作成し、その状態でまずはPushします。  
+または、初めに "空のコミット" を作成するのも良いでしょう。例えば以下のように行います:
+
+```sh
+pwd # /Users/shuma/Documents/tellorche
+git commit -m '○○作業の着手' --allow-empty
+# [shuma/fix-readme-mistake *******] ○○作業の着手
+git push
+```
+
+この状態でGitHub.com上でリポジトリを開き、`Pull requests`タブを確認すれば、自身の作ったブランチ名で`Compare & pull request`ボタンが表示されるはずです。
+
+もし完了していない作業中のプルリクであれば、タイトルの先頭に`[WIP]`と付けるのをお忘れなく。`Work In Progress (作業中)`の意を示しておけば、誰かが勝手にマージしてしまうのを防ぐことができます。
