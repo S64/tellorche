@@ -65,6 +65,8 @@ class M5StackTelloController(
         )
         out = PrintStream(port.outputStream, true)
 
+        sendReset()
+
         out.print("wifi_ssid $ssid$LINE_SEPARATOR")
         out.print("wifi_passphrase $passphrase$LINE_SEPARATOR")
         out.print("connect$LINE_SEPARATOR")
@@ -83,18 +85,22 @@ class M5StackTelloController(
 
     override fun dispose() {
         try {
-            out.println("disconnect")
-            do {
-                val line = background.nextCmd()
-                if (line == "Wi-Fi disconnected.") {
-                    break
-                }
-            } while (true)
+            sendReset()
         } finally {
             background.dispose()
             out.close()
             port.closePort()
         }
+    }
+
+    fun sendReset() {
+        out.println("reset")
+        do {
+            val line = background.nextCmd()
+            if (line == "Wi-Fi disconnected.") {
+                break
+            }
+        } while (true)
     }
 }
 
@@ -104,7 +110,7 @@ class MessagePrinter(
 ) {
 
     private val cmds: MutableList<String> = mutableListOf()
-    private val itr: Iterator<String> = cmds.iterator()
+    private var lastRead: Int = -1
 
     private var thread: Thread? = null
 
@@ -113,18 +119,19 @@ class MessagePrinter(
             while (thread != null) {
                 val line = `in`.readLine()
 
-                if (line.indexOf("msg: ") == 0) {
-                    System.out.println(String.format(
-                            Locale.ROOT,
-                            "[%s] %s",
-                            id,
-                            line
-                    ))
-                } else if (line.indexOf("cmd: ") == 0) {
+                if (line.indexOf("cmd: ") == 0) {
                     cmds.add(line.substring(5))
                 }
+
+                System.out.println(String.format(
+                        Locale.ROOT,
+                        "[%s] %s",
+                        id,
+                        line
+                ))
             }
         }
+        thread!!.start()
     }
 
     fun nextCmd(): String {
@@ -132,11 +139,12 @@ class MessagePrinter(
             throw IllegalStateException("Already disposed.")
         }
 
-        while (!itr.hasNext()) {
+        while (cmds.size == (lastRead + 1) && thread != null) {
             // wait
         }
+        lastRead++
 
-        return itr.next()
+        return cmds[lastRead]
     }
 
     fun dispose() {
