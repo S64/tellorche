@@ -11,6 +11,7 @@ import java.io.InputStreamReader
 import java.io.PrintStream
 import java.lang.IllegalStateException
 import java.nio.Buffer
+import java.util.Locale
 
 typealias WifiSsid = String
 typealias WifiPassphrase = String
@@ -97,6 +98,7 @@ class M5StackTelloController(
 }
 
 class MessagePrinter(
+        private val id: ControllerId,
         private val `in`: BufferedReader
 ) {
 
@@ -111,7 +113,12 @@ class MessagePrinter(
                 val line = `in`.readLine()
 
                 if (line.indexOf("msg: ") == 0) {
-                    System.out.println(line)
+                    System.out.println(String.format(
+                            Locale.ROOT,
+                            "[%s] %s",
+                            id,
+                            line
+                    ))
                 } else if (line.indexOf("cmd: ") == 0) {
                     cmds.add(line.substring(5))
                 }
