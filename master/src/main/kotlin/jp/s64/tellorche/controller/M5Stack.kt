@@ -132,7 +132,7 @@ class MessagePrinter(
             throw IllegalStateException("Already disposed.")
         }
 
-        while (itr.hasNext()) {
+        while (!itr.hasNext()) {
             // wait
         }
 
