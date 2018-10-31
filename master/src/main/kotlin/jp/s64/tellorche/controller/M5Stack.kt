@@ -60,6 +60,7 @@ class M5StackTelloController(
 
     init {
         background = MessagePrinter(
+                id = id,
                 `in` = BufferedReader(InputStreamReader(port.inputStream))
         )
         out = PrintStream(port.outputStream, true)
