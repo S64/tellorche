@@ -9,6 +9,8 @@ import jp.s64.tellorche.entity.TelloCommand
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintStream
+import java.lang.IllegalStateException
+import java.nio.Buffer
 
 typealias WifiSsid = String
 typealias WifiPassphrase = String
@@ -51,11 +53,14 @@ class M5StackTelloController(
         private const val LINE_SEPARATOR = "\n"
     }
 
-    private val `in`: BufferedReader
     private val out: PrintStream
 
+    private val background: MessagePrinter
+
     init {
-        `in` = BufferedReader(InputStreamReader(port.inputStream))
+        background = MessagePrinter(
+                `in` = BufferedReader(InputStreamReader(port.inputStream))
+        )
         out = PrintStream(port.outputStream, true)
 
         out.print("wifi_ssid $ssid$LINE_SEPARATOR")
@@ -63,7 +68,7 @@ class M5StackTelloController(
         out.print("connect$LINE_SEPARATOR")
 
         do {
-            val line = `in`.readLine()
+            val line = background.nextCmd()
             if (line == "Wi-Fi connected.") {
                 break
             }
@@ -78,15 +83,56 @@ class M5StackTelloController(
         try {
             out.println("disconnect")
             do {
-                val line = `in`.readLine()
+                val line = background.nextCmd()
                 if (line == "Wi-Fi disconnected.") {
                     break
                 }
             } while (true)
         } finally {
-            `in`.close()
+            background.dispose()
             out.close()
             port.closePort()
         }
     }
+}
+
+class MessagePrinter(
+        private val `in`: BufferedReader
+) {
+
+    private val cmds: MutableList<String> = mutableListOf()
+    private val itr: Iterator<String> = cmds.iterator()
+
+    private var thread: Thread? = null
+
+    init {
+        thread = Thread {
+            while (thread != null) {
+                val line = `in`.readLine()
+
+                if (line.indexOf("msg: ") == 0) {
+                    System.out.println(line)
+                } else if (line.indexOf("cmd: ") == 0) {
+                    cmds.add(line.substring(5))
+                }
+            }
+        }
+    }
+
+    fun nextCmd(): String {
+        if (thread == null) {
+            throw IllegalStateException("Already disposed.")
+        }
+
+        while (itr.hasNext()) {
+            // wait
+        }
+
+        return itr.next()
+    }
+
+    fun dispose() {
+        thread = null
+    }
+
 }
