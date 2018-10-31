@@ -27,13 +27,23 @@ void loop() {
 
         Serial.println("msg: Received command: `" + line + "`.");
 
-        if (WiFi.status() != WL_CONNECTED) {
+        if (line.equals("reset")) {
+            Serial.println("msg: Disconnecting Wi-Fi...");
+            WiFi.disconnect(true);
+            while (WiFi.status() == WL_CONNECTED) {
+                // Serial.println("msg: " + WiFi.status());
+                delay(100);
+            }
+            Serial.println("msg: Wi-Fi disconnected.");
+            Serial.println("cmd: Wi-Fi disconnected.");
+            return;
+        } else if (WiFi.status() != WL_CONNECTED) {
             if (line.equals("connect")) {
                 Serial.println("msg: Connect to Wi-Fi...");
                 WiFi.begin(wifiSsid.c_str(), wifiPassphrase.c_str());
 
                 while (WiFi.status() != WL_CONNECTED) {
-                    Serial.println("msg: " + WiFi.status());
+                    // Serial.println("msg: " + WiFi.status());
                     delay(100);
                 }
 
@@ -54,15 +64,6 @@ void loop() {
                 Serial.println("msg: warn: Wi-Fi not connected.");
                 return;
             }
-        } else if (line.equals("disconnect") && WiFi.status() == WL_CONNECTED) {
-            Serial.println("msg: Disconnecting Wi-Fi...");
-            WiFi.disconnect(true);
-            while (WiFi.status() == WL_CONNECTED) {
-                Serial.println("msg: " + WiFi.status());
-                delay(100);
-            }
-            Serial.println("msg: Wi-Fi disconnected.");
-            return;
         }
 
         Serial.println("msg: Send `" + line +"`.");
