@@ -10,8 +10,8 @@
     "my-controller-1": {
         "ssid": "your-wifi-ssid",
         "passphrase": "your-wifi-passphrase",
-      "type": "M5Stack",
-      "type-m5stack-config": {
+      "type": "ESP32",
+      "type-esp32-config": {
         "com_descriptor": "/dev/cu.SLAB_USBtoUART"
       }
     }
