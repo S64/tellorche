@@ -9,6 +9,10 @@ import jp.s64.tellorche.entity.TelloCommand
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintStream
+import java.lang.IllegalStateException
+import java.nio.Buffer
+import java.util.Collections
+import java.util.Locale
 
 typealias WifiSsid = String
 typealias WifiPassphrase = String
@@ -51,19 +55,32 @@ class M5StackTelloController(
         private const val LINE_SEPARATOR = "\n"
     }
 
-    private val `in`: BufferedReader
     private val out: PrintStream
 
+    private val background: MessagePrinter
+
     init {
-        `in` = BufferedReader(InputStreamReader(port.inputStream))
+        background = MessagePrinter(
+                id = id,
+                `in` = BufferedReader(InputStreamReader(port.inputStream))
+        )
         out = PrintStream(port.outputStream, true)
+
+        sendReset()
+
+        do {
+            val line = background.nextCmd()
+            if (line == "wakeup.") {
+                break
+            }
+        } while (true)
 
         out.print("wifi_ssid $ssid$LINE_SEPARATOR")
         out.print("wifi_passphrase $passphrase$LINE_SEPARATOR")
         out.print("connect$LINE_SEPARATOR")
 
         do {
-            val line = `in`.readLine()
+            val line = background.nextCmd()
             if (line == "Wi-Fi connected.") {
                 break
             }
@@ -76,17 +93,72 @@ class M5StackTelloController(
 
     override fun dispose() {
         try {
-            out.println("disconnect")
-            do {
-                val line = `in`.readLine()
-                if (line == "Wi-Fi disconnected.") {
-                    break
-                }
-            } while (true)
+            sendReset()
         } finally {
-            `in`.close()
+            background.dispose()
             out.close()
             port.closePort()
         }
     }
+
+    fun sendReset() {
+        out.println("reset")
+        do {
+            val line = background.nextCmd()
+            if (line == "Wi-Fi disconnected.") {
+                break
+            }
+        } while (true)
+    }
+}
+
+class MessagePrinter(
+        private val id: ControllerId,
+        private val `in`: BufferedReader
+) {
+
+    private val cmds: MutableList<String> = Collections.synchronizedList(mutableListOf())
+    private var lastRead: Int = -1
+
+    private var thread: Thread? = null
+
+    init {
+        thread = Thread {
+            while (thread != null) {
+                val line = `in`.readLine()
+
+                if (line == null) {
+                    break
+                } else if (line.indexOf("cmd: ") == 0) {
+                    cmds.add(line.substring(5))
+                }
+
+                System.out.println(String.format(
+                        Locale.ROOT,
+                        "[%s] %s",
+                        id,
+                        line
+                ))
+            }
+        }
+        thread!!.start()
+    }
+
+    fun nextCmd(): String {
+        if (thread == null) {
+            throw IllegalStateException("Already disposed.")
+        }
+
+        while (cmds.size == (lastRead + 1) && thread != null) {
+            Thread.sleep(10)
+        }
+        lastRead++
+
+        return cmds[lastRead]
+    }
+
+    fun dispose() {
+        thread = null
+    }
+
 }
