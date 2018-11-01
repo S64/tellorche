@@ -11,6 +11,7 @@ import java.io.InputStreamReader
 import java.io.PrintStream
 import java.lang.IllegalStateException
 import java.nio.Buffer
+import java.util.Collections
 import java.util.Locale
 
 typealias WifiSsid = String
@@ -67,6 +68,13 @@ class M5StackTelloController(
 
         sendReset()
 
+        do {
+            val line = background.nextCmd()
+            if (line == "wakeup.") {
+                break
+            }
+        } while (true)
+
         out.print("wifi_ssid $ssid$LINE_SEPARATOR")
         out.print("wifi_passphrase $passphrase$LINE_SEPARATOR")
         out.print("connect$LINE_SEPARATOR")
@@ -109,7 +117,7 @@ class MessagePrinter(
         private val `in`: BufferedReader
 ) {
 
-    private val cmds: MutableList<String> = mutableListOf()
+    private val cmds: MutableList<String> = Collections.synchronizedList(mutableListOf())
     private var lastRead: Int = -1
 
     private var thread: Thread? = null
@@ -119,7 +127,9 @@ class MessagePrinter(
             while (thread != null) {
                 val line = `in`.readLine()
 
-                if (line.indexOf("cmd: ") == 0) {
+                if (line == null) {
+                    break
+                } else if (line.indexOf("cmd: ") == 0) {
                     cmds.add(line.substring(5))
                 }
 
@@ -140,7 +150,7 @@ class MessagePrinter(
         }
 
         while (cmds.size == (lastRead + 1) && thread != null) {
-            // wait
+            Thread.sleep(10)
         }
         lastRead++
 
