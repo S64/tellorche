@@ -1,5 +1,6 @@
 // NOTICE: This program is Work-In-Progress.
 
+#include <ESP.h>
 #include <WiFi.h>
 #include <WiFiUdp.h>
 
@@ -14,6 +15,7 @@ void setup() {
     Serial.setTimeout(1000UL);
 
     Serial.println("msg: Tellorche M5Stack Controller.");
+    Serial.println("cmd: wakeup.");
 }
 
 String wifiSsid = "";
@@ -36,34 +38,35 @@ void loop() {
             }
             Serial.println("msg: Wi-Fi disconnected.");
             Serial.println("cmd: Wi-Fi disconnected.");
+
+            ESP.restart();
+
+            return;
+        } else if (line.equals("connect")) {
+            Serial.println("msg: Connect to Wi-Fi...");
+            WiFi.begin(wifiSsid.c_str(), wifiPassphrase.c_str());
+
+            while (WiFi.status() != WL_CONNECTED) {
+                // Serial.println("msg: " + WiFi.status());
+                delay(100);
+            }
+
+            Serial.println("cmd: Wi-Fi connected.");
+            Serial.println("msg: Wi-Fi connected.");
+            connection.begin(LOCAL_PORT);
+
+            return;
+        } else if (line.substring(0, 10).equals("wifi_ssid ")) {
+            wifiSsid = line.substring(10);
+            Serial.println("msg: Wi-Fi SSID: `" + wifiSsid + "`.");
+            return;
+        } else if (line.substring(0, 16).equals("wifi_passphrase ")) {
+            wifiPassphrase = line.substring(16);
+            Serial.println("msg: Wi-Fi Passphrase: [secret].");
             return;
         } else if (WiFi.status() != WL_CONNECTED) {
-            if (line.equals("connect")) {
-                Serial.println("msg: Connect to Wi-Fi...");
-                WiFi.begin(wifiSsid.c_str(), wifiPassphrase.c_str());
-
-                while (WiFi.status() != WL_CONNECTED) {
-                    // Serial.println("msg: " + WiFi.status());
-                    delay(100);
-                }
-
-                Serial.println("cmd: Wi-Fi connected.");
-                Serial.println("msg: Wi-Fi connected.");
-                connection.begin(LOCAL_PORT);
-
-                return;
-            } else if (line.substring(0, 10).equals("wifi_ssid ")) {
-                wifiSsid = line.substring(10);
-                Serial.println("msg: Wi-Fi SSID: `" + wifiSsid + "`.");
-                return;
-            } else if (line.substring(0, 16).equals("wifi_passphrase ")) {
-                wifiPassphrase = line.substring(16);
-                Serial.println("msg: Wi-Fi Passphrase: [secret].");
-                return;
-            } else {
-                Serial.println("msg: warn: Wi-Fi not connected.");
-                return;
-            }
+            Serial.println("msg: warn: Wi-Fi not connected.");
+            return;
         }
 
         Serial.println("msg: Send `" + line +"`.");
