@@ -34,7 +34,7 @@ data class TelloController(
     fun createInterface(id: ControllerId): ITelloController {
         return when (type) {
             ControllerType.DEBUG -> DebugTelloController(id)
-            ControllerType.M5STACK -> esp32Configs!!.createInterface(id)
+            ControllerType.ESP32 -> esp32Configs!!.createInterface(id)
         }
     }
 }
@@ -42,7 +42,7 @@ data class TelloController(
 enum class ControllerType(
     val value: String
 ) {
-    M5STACK("M5Stack"),
+    ESP32("M5Stack"),
     DEBUG("Debug"),
     //
     ;
