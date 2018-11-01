@@ -18,7 +18,7 @@ typealias WifiPassphrase = String
 typealias ComPortDescriptor = String
 
 @JsonClass(generateAdapter = true)
-data class M5StackControllerConfig(
+data class ESP32ControllerConfig(
     @Json(name = "ssid") val ssid: WifiSsid,
     @Json(name = "passphrase") val passphrase: WifiPassphrase,
     @Json(name = "com_descriptor") val comPortDescriptor: ComPortDescriptor
