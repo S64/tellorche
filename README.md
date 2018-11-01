@@ -21,15 +21,15 @@ Windows / Mac / Linux distributions
 
 Telloを操作するためには、いずれかのcontrollerが必要です。
 
-#### controllers/m5stack
+#### controllers/esp32
 
-[M5Stack Basic](https://amzn.to/2SidgjO)
+[ESP32-DevKitC](https://amzn.to/2OZk3B0)
 
 ## Documents
 
 - [開発の手引き](docs/development-tutorial.md)
 
-## How to debug **without M5Stack**
+## How to debug **without ESP32-DevKitC**
 
 ```sh
 socat -d -d pty,raw,echo=0 pty,raw,echo=0
@@ -38,18 +38,18 @@ socat -d -d pty,raw,echo=0 pty,raw,echo=0
 # 2018/10/13 20:02:06 socat[8511] N starting data transfer loop with FDs [5,5] and [7,7]
 
 nano -w $PATH_TO_YOUR_CONFIG_FILE
-# Edit $.controllers.your-controller.type-m5stack-config.com_descriptor = ${socat tty (e.g. /dev/ttys002)}
+# Edit $.controllers.your-controller.type-esp32-config.com_descriptor = ${socat tty (e.g. /dev/ttys003)}
 
 cat < /dev/ttys003
 # connect to serial port
 
 # run Tellorche master app
 
-echo 'Wi-Fi connected.' > /dev/ttys003
+echo 'cmd: Wi-Fi connected.' > /dev/ttys003
 
 # in master-app
 exec
 
 # in shell
-echo 'Wi-Fi disconnected.' > /dev/ttys003
+echo 'cmd: Wi-Fi disconnected.' > /dev/ttys003
 ```
