@@ -12,6 +12,11 @@ task printCommandLineMasterApp {
     println 'java -jar ./master/build/libs/tellorche-master-app.jar --config ./tellorcheconfig.example.json'
 }
 
+task buildEsp32Controller(type:Exec) {
+    workingDir './controllers/esp32'
+    commandLine 'platformio', 'run', '--environment', 'esp32dev'
+}
+
 task cleanEsp32Controller(type:Exec) {
     workingDir './controllers/esp32'
     commandLine 'platformio', 'run', '--environment', 'esp32dev', '--target', 'clean'
