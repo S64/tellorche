@@ -7,6 +7,48 @@
 Ryze Tech社のトイドローン[Tello](https://amzn.to/2yz09m5)を編隊飛行させるためのツールチェインです。  
 PC向けのマスターアプリとコントローラにあたるデバイスを用意すれば、設定した飛行シーケンスに従ってTelloを動かすことができます。
 
+## Getting Started
+
+### 1. プロジェクトをclone
+
+```sh
+cd ~/Documents # プロジェクトを設置したいディレクトリ
+git clone git@github.com:S64/tellorche.git
+cd tellorche
+```
+
+### 2. 依存するツールを確認
+
+```sh
+./gradlew checkRequirements
+# 
+#  Task :tellorche:checkJavaRequirements
+# OK: Java 8がインストールされています
+# OK: JDK 8がインストールされています
+# 
+# > Task :tellorche:checkEsp32ControllerRequirements
+# OK: PlatformIO Core (CLI) がインストールされています
+# 
+# BUILD SUCCESSFUL in 1s
+# 1 actionable task: 1 executed
+```
+
+### 3. 一括ビルド
+
+```sh
+./gradlew build
+# ...
+# BUILD SUCCESSFUL in 4s
+# 1 actionable task: 1 executed
+```
+
+### 4. 使用方法チェック
+
+```sh
+./gradlew printCommandLineMasterApp
+./gradlew printCommandLineUploadEsp32Controller
+```
+
 ## Supported Platforms
 
 以下のプラットフォームをサポートします
