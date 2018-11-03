@@ -51,3 +51,13 @@ task checkJavaRequirements {
         }
     }
 }
+
+boolean checkCommandExists(command) {
+    try {
+        def p = Runtime.getRuntime().exec(command)
+        p.waitFor()
+        return p.exitValue() == 0
+    } catch (ignored) {
+        return false
+    }
+}
