@@ -5,7 +5,7 @@ plugins {
     id 'com.github.johnrengelman.shadow' version '4.0.2'
 }
 
-group 'jp.s64'
+group 'jp.s64.tellorche'
 version '1.0-SNAPSHOT'
 
 repositories {
