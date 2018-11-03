@@ -37,3 +37,11 @@ task printCommandLineUploadEsp32Controller {
         println 'platformio run --project-dir ./controllers/esp32 --environment esp32dev --target upload --upload-port ${YOUR_ESP32_PORT}'
     }
 }
+
+task checkJavaRequirements {
+    doLast {
+        if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
+            throw new GradleException('JDK 8のインストールが必要です')
+        }
+    }
+}
