@@ -2,3 +2,8 @@ task buildMasterApp(type:Exec) {
     workingDir './master'
     commandLine './gradlew', 'shadowJar'
 }
+
+task cleanMasterApp(type:Exec) {
+    workingDir './master'
+    commandLine './gradlew', 'clean'
+}
