@@ -50,4 +50,5 @@ jar {
 shadowJar {
     baseName = 'tellorche-master-app'
     preserveFileTimestamps = false
+    archiveName = "${baseName}.${extension}"
 }
