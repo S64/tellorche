@@ -21,3 +21,7 @@ task cleanEsp32Controller(type:Exec) {
     workingDir './controllers/esp32'
     commandLine 'platformio', 'run', '--environment', 'esp32dev', '--target', 'clean'
 }
+
+task printCommandLineUploadEsp32Controller {
+    println 'platformio run --project-dir ./controllers/esp32 --environment esp32dev --target upload --upload-port ${YOUR_ESP32_PORT}'
+}
