@@ -1,3 +1,7 @@
+task checkRequirements(type:GradleBuild) {
+    tasks = ['checkJavaRequirements']
+}
+
 task build(type:GradleBuild) {
     tasks = ['buildMasterApp', 'buildEsp32Controller']
 }
