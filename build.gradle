@@ -1,3 +1,7 @@
+task clean(type:GradleBuild) {
+    tasks = ['cleanMasterApp', 'cleanEsp32Controller']
+}
+
 task buildMasterApp(type:Exec) {
     workingDir './master'
     commandLine './gradlew', 'shadowJar'
