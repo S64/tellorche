@@ -1,5 +1,5 @@
 task checkRequirements(type:GradleBuild) {
-    tasks = ['checkJavaRequirements']
+    tasks = ['checkJavaRequirements', 'checkEsp32ControllerRequirements']
 }
 
 task build(type:GradleBuild) {
@@ -26,12 +26,12 @@ task printCommandLineMasterApp {
     }
 }
 
-task buildEsp32Controller(type:Exec) {
+task buildEsp32Controller(type:Exec, dependsOn: 'checkEsp32ControllerRequirements') {
     workingDir './controllers/esp32'
     commandLine 'platformio', 'run', '--environment', 'esp32dev'
 }
 
-task cleanEsp32Controller(type:Exec) {
+task cleanEsp32Controller(type:Exec, dependsOn: 'checkEsp32ControllerRequirements') {
     workingDir './controllers/esp32'
     commandLine 'platformio', 'run', '--environment', 'esp32dev', '--target', 'clean'
 }
@@ -53,6 +53,16 @@ task checkJavaRequirements {
             throw new GradleException('NG: JDK 8のインストールが必要です')
         } else {
             println 'OK: JDK 8がインストールされています'
+        }
+    }
+}
+
+task checkEsp32ControllerRequirements {
+    doLast {
+        if (!checkCommandExists('platformio --version')) {
+            throw new GradleException('NG: PlatformIO Core (CLI) のインストールが必要です')
+        } else {
+            println 'OK: PlatformIO Core (CLI) がインストールされています'
         }
     }
 }
