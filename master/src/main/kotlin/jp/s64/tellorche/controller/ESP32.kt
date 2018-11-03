@@ -10,7 +10,6 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintStream
 import java.lang.IllegalStateException
-import java.nio.Buffer
 import java.util.Collections
 import java.util.Locale
 
@@ -19,7 +18,7 @@ typealias WifiPassphrase = String
 typealias ComPortDescriptor = String
 
 @JsonClass(generateAdapter = true)
-data class M5StackControllerConfig(
+data class ESP32ControllerConfig(
     @Json(name = "ssid") val ssid: WifiSsid,
     @Json(name = "passphrase") val passphrase: WifiPassphrase,
     @Json(name = "com_descriptor") val comPortDescriptor: ComPortDescriptor
@@ -39,11 +38,11 @@ data class M5StackControllerConfig(
                 0, 0
         )
 
-        return M5StackTelloController(id, port, ssid, passphrase)
+        return ESP32TelloController(id, port, ssid, passphrase)
     }
 }
 
-class M5StackTelloController(
+class ESP32TelloController(
     private val id: ControllerId,
     private val port: SerialPort,
     ssid: WifiSsid,

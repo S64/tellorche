@@ -14,7 +14,7 @@ void setup() {
     Serial.begin(921600);
     Serial.setTimeout(1000UL);
 
-    Serial.println("msg: Tellorche M5Stack Controller.");
+    Serial.println("msg: Tellorche ESP32 Controller.");
     Serial.println("cmd: wakeup.");
 }
 

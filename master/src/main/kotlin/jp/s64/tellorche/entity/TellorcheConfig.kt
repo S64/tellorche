@@ -5,7 +5,7 @@ import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import jp.s64.tellorche.controller.DebugTelloController
 import jp.s64.tellorche.controller.ITelloController
-import jp.s64.tellorche.controller.M5StackControllerConfig
+import jp.s64.tellorche.controller.ESP32ControllerConfig
 
 @JsonClass(generateAdapter = true)
 data class TellorcheConfig(
@@ -28,13 +28,13 @@ typealias ControllerId = String
 @JsonClass(generateAdapter = true)
 data class TelloController(
     @Json(name = "type") val type: ControllerType,
-    @Json(name = "type-m5stack-config") val m5StackConfigs: M5StackControllerConfig?
+    @Json(name = "type-esp32-config") val esp32Configs: ESP32ControllerConfig?
 ) {
 
     fun createInterface(id: ControllerId): ITelloController {
         return when (type) {
             ControllerType.DEBUG -> DebugTelloController(id)
-            ControllerType.M5STACK -> m5StackConfigs!!.createInterface(id)
+            ControllerType.ESP32 -> esp32Configs!!.createInterface(id)
         }
     }
 }
@@ -42,7 +42,7 @@ data class TelloController(
 enum class ControllerType(
     val value: String
 ) {
-    M5STACK("M5Stack"),
+    ESP32("ESP32"),
     DEBUG("Debug"),
     //
     ;
