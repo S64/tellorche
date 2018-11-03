@@ -7,3 +7,7 @@ task cleanMasterApp(type:Exec) {
     workingDir './master'
     commandLine './gradlew', 'clean'
 }
+
+task printCommandLineMasterApp {
+    println 'java -jar ./master/build/libs/tellorche-master-app.jar --config ./tellorcheconfig.example.json'
+}
