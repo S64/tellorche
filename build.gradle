@@ -1,0 +1,78 @@
+task checkRequirements(type:GradleBuild) {
+    tasks = ['checkJavaRequirements', 'checkEsp32ControllerRequirements']
+}
+
+task build(type:GradleBuild) {
+    tasks = ['buildMasterApp', 'buildEsp32Controller']
+}
+
+task clean(type:GradleBuild) {
+    tasks = ['cleanMasterApp', 'cleanEsp32Controller']
+}
+
+task buildMasterApp(type:Exec, dependsOn: 'checkJavaRequirements') {
+    workingDir './master'
+    commandLine './gradlew', 'shadowJar'
+}
+
+task cleanMasterApp(type:Exec) {
+    workingDir './master'
+    commandLine './gradlew', 'clean'
+}
+
+task printCommandLineMasterApp {
+    doLast {
+        println 'java -jar ./master/build/libs/tellorche-master-app.jar --config ./tellorcheconfig.example.json'
+    }
+}
+
+task buildEsp32Controller(type:Exec, dependsOn: 'checkEsp32ControllerRequirements') {
+    workingDir './controllers/esp32'
+    commandLine 'platformio', 'run', '--environment', 'esp32dev'
+}
+
+task cleanEsp32Controller(type:Exec, dependsOn: 'checkEsp32ControllerRequirements') {
+    workingDir './controllers/esp32'
+    commandLine 'platformio', 'run', '--environment', 'esp32dev', '--target', 'clean'
+}
+
+task printCommandLineUploadEsp32Controller {
+    doLast {
+        println 'platformio run --project-dir ./controllers/esp32 --environment esp32dev --target upload --upload-port ${YOUR_ESP32_PORT}'
+    }
+}
+
+task checkJavaRequirements {
+    doLast {
+        if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
+            throw new GradleException('NG: JDK 8のインストールが必要です')
+        } else {
+            println 'OK: Java 8がインストールされています'
+        }
+        if (!checkCommandExists('javac -version')) {
+            throw new GradleException('NG: JDK 8のインストールが必要です')
+        } else {
+            println 'OK: JDK 8がインストールされています'
+        }
+    }
+}
+
+task checkEsp32ControllerRequirements {
+    doLast {
+        if (!checkCommandExists('platformio --version')) {
+            throw new GradleException('NG: PlatformIO Core (CLI) のインストールが必要です')
+        } else {
+            println 'OK: PlatformIO Core (CLI) がインストールされています'
+        }
+    }
+}
+
+boolean checkCommandExists(command) {
+    try {
+        def p = Runtime.getRuntime().exec(command)
+        p.waitFor()
+        return p.exitValue() == 0
+    } catch (ignored) {
+        return false
+    }
+}
