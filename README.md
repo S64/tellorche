@@ -14,16 +14,25 @@ Tellorcheでは標準のビルドツールとしてGradleを採用していま�
 
 ### 1. プロジェクトをclone
 
+[GitHub Desktop](https://desktop.github.com/) アプリなどを使うと、簡単にGitリポジトリをcloneすることができます。  
+このリポジトリをcloneし、clone先ディレクトリをTerminalで開いてください。
+
+<details>
+
+<summary>または、コマンドライン上でcloneしてください</summary>
+
 ```sh
 cd ~/Documents # プロジェクトを設置したいディレクトリ
 git clone git@github.com:S64/tellorche.git
 cd tellorche
 ```
 
+</details>
+
 ### 2. 依存するツールを確認
 
 ```sh
-./gradlew checkRequirements
+./gradlew.bat checkRequirements
 # 
 #  Task :tellorche:checkJavaRequirements
 # OK: Java 8がインストールされています
@@ -39,7 +48,7 @@ cd tellorche
 ### 3. 一括ビルド
 
 ```sh
-./gradlew build
+./gradlew.bat build
 # ...
 # BUILD SUCCESSFUL in 4s
 # 1 actionable task: 1 executed
@@ -48,8 +57,8 @@ cd tellorche
 ### 4. 使用方法チェック
 
 ```sh
-./gradlew printCommandLineMasterApp
-./gradlew printCommandLineUploadEsp32Controller
+./gradlew.bat printCommandLineMasterApp
+./gradlew.bat printCommandLineUploadEsp32Controller
 ```
 
 ## Supported Platforms
@@ -83,9 +92,9 @@ socat -d -d pty,raw,echo=0 pty,raw,echo=0
 # 2018/10/13 20:02:06 socat[8511] N starting data transfer loop with FDs [5,5] and [7,7]
 
 nano -w $PATH_TO_YOUR_CONFIG_FILE
-# Edit $.controllers.your-controller.type-esp32-config.com_descriptor = ${socat tty (e.g. /dev/ttys003)}
+# Edit $.controllers.your-controller.type-esp32-config.com_descriptor = ${socat tty (e.g. /dev/ttys002)}
 
-cat < /dev/ttys003
+cat < /dev/ttys002
 # connect to serial port
 
 # run Tellorche master app
