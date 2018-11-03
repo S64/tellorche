@@ -1,3 +1,7 @@
+task build(type:GradleBuild) {
+    tasks = ['buildMasterApp', 'buildEsp32Controller']
+}
+
 task clean(type:GradleBuild) {
     tasks = ['cleanMasterApp', 'cleanEsp32Controller']
 }
