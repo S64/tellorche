@@ -9,7 +9,9 @@ task cleanMasterApp(type:Exec) {
 }
 
 task printCommandLineMasterApp {
-    println 'java -jar ./master/build/libs/tellorche-master-app.jar --config ./tellorcheconfig.example.json'
+    doLast {
+        println 'java -jar ./master/build/libs/tellorche-master-app.jar --config ./tellorcheconfig.example.json'
+    }
 }
 
 task buildEsp32Controller(type:Exec) {
@@ -23,5 +25,7 @@ task cleanEsp32Controller(type:Exec) {
 }
 
 task printCommandLineUploadEsp32Controller {
-    println 'platformio run --project-dir ./controllers/esp32 --environment esp32dev --target upload --upload-port ${YOUR_ESP32_PORT}'
+    doLast {
+        println 'platformio run --project-dir ./controllers/esp32 --environment esp32dev --target upload --upload-port ${YOUR_ESP32_PORT}'
+    }
 }
