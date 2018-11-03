@@ -1,4 +1,6 @@
 /.gradle
+/.settings
+/.project
 
 !/tellorcheconfig.example.json
 /tellorcheconfig.json
