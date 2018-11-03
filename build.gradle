@@ -47,6 +47,11 @@ task checkJavaRequirements {
         if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
             throw new GradleException('NG: JDK 8のインストールが必要です')
         } else {
+            println 'OK: Java 8がインストールされています'
+        }
+        if (!checkCommandExists('javac -version')) {
+            throw new GradleException('NG: JDK 8のインストールが必要です')
+        } else {
             println 'OK: JDK 8がインストールされています'
         }
     }
