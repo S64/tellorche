@@ -97,12 +97,20 @@ jobs:
           key: root-gradlew-{{ arch }}
           paths:
             - .gradle/
+      - restore_cache:
+          key: esp32-controller-pioenvs-{{ arch }}
+          paths:
+            - controllers/esp32/.pioenvs
       - run:
           name: 'Clean ESP32 Controller builds'
           command: './gradlew cleanEsp32Controller'
       - run:
           name: 'Build ESP32 Controller'
           command: './gradlew buildEsp32Controller'
+      - save_cache:
+          key: esp32-controller-pioenvs-{{ arch }}
+          paths:
+            - controllers/esp32/.pioenvs
 
 workflows:
   version: 2
