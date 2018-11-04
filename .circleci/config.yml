@@ -117,8 +117,8 @@ workflows:
   workflow_master_app:
     jobs:
       - init_root_gradle_wrapper
-      - check_requirements_masterapp
       - init_masterapp_gradle_wrapper
+      - check_requirements_masterapp
       - build_masterapp
   workflow_esp32_controller:
     jobs:
