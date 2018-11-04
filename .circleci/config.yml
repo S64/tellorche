@@ -60,6 +60,10 @@ jobs:
       - image: eclipse/platformio:latest
     steps:
       - checkout
+      - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
       - run:
           name: 'Check ESP32 Controllers requirements'
           command: './gradlew checkEsp32ControllerRequirements'
@@ -89,6 +93,10 @@ jobs:
       - image: eclipse/platformio:latest
     steps:
       - checkout
+      - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
       - run:
           name: 'Clean ESP32 Controller builds'
           command: './gradlew cleanEsp32Controller'
