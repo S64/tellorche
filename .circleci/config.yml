@@ -118,11 +118,21 @@ workflows:
   workflow_master_app:
     jobs:
       - init_root_gradle_wrapper
-      - init_masterapp_gradle_wrapper
-      - check_requirements_masterapp
-      - build_masterapp
+      - init_masterapp_gradle_wrapper:
+          requires:
+            - init_root_gradle_wrapper
+      - check_requirements_masterapp:
+          requires:
+            - init_masterapp_gradle_wrapper
+      - build_masterapp:
+          requires:
+            - check_requirements_masterapp
   workflow_esp32_controller:
     jobs:
       - init_root_gradle_wrapper
-      - check_requirements_esp32_controller
-      - build_esp32_controller
+      - check_requirements_esp32_controller:
+          requires:
+            - init_root_gradle_wrapper
+      - build_esp32_controller:
+          requires:
+            - check_requirements_esp32_controller
