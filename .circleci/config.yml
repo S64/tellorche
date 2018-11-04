@@ -103,6 +103,8 @@ jobs:
           paths:
             - .gradle/
             - ~/.gradle
+      - store_artifacts:
+          path: master/build/libs/
 
   build_esp32_controller:
     docker:
@@ -134,6 +136,8 @@ jobs:
           paths:
             - controllers/esp32/.pioenvs
             - ~/.platformio
+      - store_artifacts:
+          path: controllers/esp32/.pioenvs/esp32dev
 
 workflows:
   version: 2
