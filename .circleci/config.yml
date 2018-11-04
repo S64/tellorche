@@ -9,6 +9,7 @@ jobs:
           key: root-gradlew-{{ arch }}
           paths:
             - .gradle/
+            - ~/.gradle
       - run:
           name: 'Init root gradlew'
           command: './gradlew --version'
@@ -16,6 +17,7 @@ jobs:
           key: root-gradlew-{{ arch }}
           paths:
             - .gradle/
+            - ~/.gradle
 
   init_masterapp_gradle_wrapper:
     docker:
@@ -26,10 +28,12 @@ jobs:
           key: root-gradlew-{{ arch }}
           paths:
             - .gradle/
+            - ~/.gradle
       - restore_cache:
           key: masterapp-gradlew-{{ arch }}
           paths:
             - master/.gradle/
+            - ~/.gradle
       - run:
           name: 'Init masterapp gradlew'
           command: './gradlew --version'
@@ -37,6 +41,7 @@ jobs:
           key: masterapp-gradlew-{{ arch }}
           paths:
             - master/.gradle/
+            - ~/.gradle
 
   check_requirements_masterapp:
     docker:
@@ -47,10 +52,12 @@ jobs:
           key: root-gradlew-{{ arch }}
           paths:
             - .gradle/
+            - ~/.gradle
       - restore_cache:
           key: masterapp-gradlew-{{ arch }}
           paths:
             - master/.gradle/
+            - ~/.gradle
       - run:
           name: 'Check master-app requirements'
           command: './gradlew checkMasterAppRequirements'
@@ -64,6 +71,7 @@ jobs:
           key: root-gradlew-{{ arch }}
           paths:
             - .gradle/
+            - ~/.gradle
       - run:
           name: 'Check ESP32 Controllers requirements'
           command: './gradlew checkEsp32ControllerRequirements'
@@ -77,10 +85,12 @@ jobs:
           key: root-gradlew-{{ arch }}
           paths:
             - .gradle/
+            - ~/.gradle
       - restore_cache:
           key: masterapp-gradlew-{{ arch }}
           paths:
             - master/.gradle/
+            - ~/.gradle
       - run:
           name: 'Clean master-app builds'
           command: './gradlew cleanMasterApp'
@@ -97,6 +107,7 @@ jobs:
           key: root-gradlew-{{ arch }}
           paths:
             - .gradle/
+            - ~/.gradle
       - restore_cache:
           key: esp32-controller-pioenvs-{{ arch }}
           paths:
