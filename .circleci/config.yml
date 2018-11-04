@@ -106,6 +106,7 @@ jobs:
           key: esp32-controller-pioenvs-{{ arch }}
           paths:
             - controllers/esp32/.pioenvs
+            - ~/.platformio
       - run:
           name: 'Upgrade to latest PlatformIO'
           working_directory: 'controllers/esp32'
@@ -120,6 +121,7 @@ jobs:
           key: esp32-controller-pioenvs-{{ arch }}
           paths:
             - controllers/esp32/.pioenvs
+            - ~/.platformio
 
 workflows:
   version: 2
