@@ -88,6 +88,10 @@ jobs:
       - run:
           name: 'Build master-app'
           command: './gradlew buildMasterApp'
+      - save_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
 
   build_esp32_controller:
     docker:
