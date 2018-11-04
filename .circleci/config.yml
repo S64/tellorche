@@ -43,6 +43,10 @@ jobs:
       - image: circleci/jdk8:0.1.1
     steps:
       - checkout
+      - restore_cache:
+          key: masterapp-gradlew-{{ arch }}
+          paths:
+            - master/.gradle/
       - run:
           name: 'Check master-app requirements'
           command: './gradlew checkMasterAppRequirements'
@@ -61,6 +65,10 @@ jobs:
       - image: circleci/jdk8:0.1.1
     steps:
       - checkout
+      - restore_cache:
+          key: masterapp-gradlew-{{ arch }}
+          paths:
+            - master/.gradle/
       - run:
           name: 'Clean master-app builds'
           command: './gradlew cleanMasterApp'
