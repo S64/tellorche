@@ -2,7 +2,7 @@ version: 2
 jobs:
   init_root_gradle_wrapper:
     docker:
-      - image: openjdk:8
+      - image: circleci/jdk8:0.1.1
     steps:
       - checkout
       - restore_cache:
