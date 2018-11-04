@@ -103,6 +103,8 @@ jobs:
           paths:
             - .gradle/
             - ~/.gradle
+      - store_artifacts:
+          path: master/build/libs/*
 
   build_esp32_controller:
     docker:
