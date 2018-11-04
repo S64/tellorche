@@ -1,5 +1,22 @@
 version: 2
 jobs:
+  init_root_gradle_wrapper:
+    docker:
+      - image: openjdk:8
+    steps:
+      - checkout
+      - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+      - run:
+          name: 'Init root gradlew'
+          command: './gradlew --version'
+      - save_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+
   check_requirements_masterapp:
     docker:
       - image: circleci/jdk8:0.1.1
@@ -42,9 +59,11 @@ workflows:
   version: 2
   workflow_master_app:
     jobs:
+      - init_root_gradle_wrapper
       - check_requirements_masterapp
       - build_masterapp
   workflow_esp32_controller:
     jobs:
+      - init_root_gradle_wrapper
       - check_requirements_esp32_controller
       - build_esp32_controller
