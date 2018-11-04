@@ -44,6 +44,10 @@ jobs:
     steps:
       - checkout
       - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+      - restore_cache:
           key: masterapp-gradlew-{{ arch }}
           paths:
             - master/.gradle/
@@ -65,6 +69,10 @@ jobs:
       - image: circleci/jdk8:0.1.1
     steps:
       - checkout
+      - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
       - restore_cache:
           key: masterapp-gradlew-{{ arch }}
           paths:
