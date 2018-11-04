@@ -1,0 +1,50 @@
+version: 2
+jobs:
+  check_requirements_masterapp:
+    docker:
+      - image: circleci/jdk8:0.1.1
+    steps:
+      - checkout
+      - run:
+        name: 'Check master-app requirements'
+        command: './gradlew checkMasterAppRequirements'
+  check_requirements_esp32_controller:
+    docker:
+      - image: eclipse/platformio:latest
+    steps:
+      - checkout
+      - run:
+        name: 'Check ESP32 Controllers requirements'
+        command: './gradlew checkEsp32ControllerRequirements'
+  build_masterapp:
+    docker:
+      - image: circleci/jdk8:0.1.1
+    steps:
+      - checkout
+      - run:
+        name: 'Clean master-app builds'
+        command: './gradlew cleanMasterApp'
+      - run:
+        name: 'Build master-app'
+        command: './gradlew buildMasterApp'
+  build_esp32_controller:
+    docker:
+      - image: eclipse/platformio:latest
+    steps:
+      - checkout
+      - run:
+        name: 'Clean ESP32 Controller builds'
+        command: './gradlew cleanEsp32Controller'
+      - run:
+        name: 'Build ESP32 Controller'
+        command: './gradlew buildEsp32Controller'
+workflows:
+  version: 2
+  workflow_master_app:
+    jobs:
+      - check_requirements_masterapp
+      - build_masterapp
+  workflow_esp32_controller:
+    jobs:
+      - check_requirements_esp32_controller
+      - build_esp32_controller
