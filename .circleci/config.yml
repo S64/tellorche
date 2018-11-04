@@ -32,6 +32,7 @@ jobs:
             - master/.gradle/
       - run:
           name: 'Init masterapp gradlew'
+          working_directory: master/
           command: './gradlew --version'
       - save_cache:
           key: masterapp-gradlew-{{ arch }}
