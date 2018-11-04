@@ -1,0 +1,146 @@
+version: 2
+jobs:
+  init_root_gradle_wrapper:
+    docker:
+      - image: circleci/jdk8:0.1.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+      - run:
+          name: 'Init root gradlew'
+          command: './gradlew --version'
+      - save_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+
+  init_masterapp_gradle_wrapper:
+    docker:
+      - image: circleci/jdk8:0.1.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+      - restore_cache:
+          key: masterapp-gradlew-{{ arch }}
+          paths:
+            - master/.gradle/
+      - run:
+          name: 'Init masterapp gradlew'
+          working_directory: master/
+          command: './gradlew --version'
+      - save_cache:
+          key: masterapp-gradlew-{{ arch }}
+          paths:
+            - master/.gradle/
+
+  check_requirements_masterapp:
+    docker:
+      - image: circleci/jdk8:0.1.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+      - restore_cache:
+          key: masterapp-gradlew-{{ arch }}
+          paths:
+            - master/.gradle/
+      - run:
+          name: 'Check master-app requirements'
+          command: './gradlew checkMasterAppRequirements'
+
+  check_requirements_esp32_controller:
+    docker:
+      - image: eclipse/platformio:latest
+    steps:
+      - checkout
+      - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+      - run:
+          name: 'Check ESP32 Controllers requirements'
+          command: './gradlew checkEsp32ControllerRequirements'
+
+  build_masterapp:
+    docker:
+      - image: circleci/jdk8:0.1.1
+    steps:
+      - checkout
+      - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+      - restore_cache:
+          key: masterapp-gradlew-{{ arch }}
+          paths:
+            - master/.gradle/
+      - run:
+          name: 'Clean master-app builds'
+          command: './gradlew cleanMasterApp'
+      - run:
+          name: 'Build master-app'
+          command: './gradlew buildMasterApp'
+      - save_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+
+  build_esp32_controller:
+    docker:
+      - image: eclipse/platformio:latest
+    steps:
+      - checkout
+      - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+      - restore_cache:
+          key: esp32-controller-pioenvs-{{ arch }}
+          paths:
+            - controllers/esp32/.pioenvs
+      - run:
+          name: 'Upgrade to latest PlatformIO'
+          working_directory: 'controllers/esp32'
+          command: 'sudo pip install -U platformio'
+      - run:
+          name: 'Clean ESP32 Controller builds'
+          command: './gradlew cleanEsp32Controller'
+      - run:
+          name: 'Build ESP32 Controller'
+          command: './gradlew buildEsp32Controller'
+      - save_cache:
+          key: esp32-controller-pioenvs-{{ arch }}
+          paths:
+            - controllers/esp32/.pioenvs
+
+workflows:
+  version: 2
+  workflow_master_app:
+    jobs:
+      - init_root_gradle_wrapper
+      - init_masterapp_gradle_wrapper:
+          requires:
+            - init_root_gradle_wrapper
+      - check_requirements_masterapp:
+          requires:
+            - init_masterapp_gradle_wrapper
+      - build_masterapp:
+          requires:
+            - check_requirements_masterapp
+  workflow_esp32_controller:
+    jobs:
+      - init_root_gradle_wrapper
+      - check_requirements_esp32_controller:
+          requires:
+            - init_root_gradle_wrapper
+      - build_esp32_controller:
+          requires:
+            - check_requirements_esp32_controller

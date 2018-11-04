@@ -34,7 +34,7 @@ cd tellorche
 ```sh
 ./gradlew.bat checkRequirements
 # 
-#  Task :tellorche:checkJavaRequirements
+#  Task :tellorche:checkMasterAppRequirements
 # OK: Java 8がインストールされています
 # OK: JDK 8がインストールされています
 # 

@@ -1,5 +1,5 @@
 task checkRequirements(type:GradleBuild) {
-    tasks = ['checkJavaRequirements', 'checkEsp32ControllerRequirements']
+    tasks = ['checkMasterAppRequirements', 'checkEsp32ControllerRequirements']
 }
 
 task build(type:GradleBuild) {
@@ -10,7 +10,7 @@ task clean(type:GradleBuild) {
     tasks = ['cleanMasterApp', 'cleanEsp32Controller']
 }
 
-task buildMasterApp(type:Exec, dependsOn: 'checkJavaRequirements') {
+task buildMasterApp(type:Exec, dependsOn: 'checkMasterAppRequirements') {
     workingDir './master'
     commandLine './gradlew', 'shadowJar'
 }
@@ -42,7 +42,7 @@ task printCommandLineUploadEsp32Controller {
     }
 }
 
-task checkJavaRequirements {
+task checkMasterAppRequirements {
     doLast {
         if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
             throw new GradleException('NG: JDK 8のインストールが必要です')
