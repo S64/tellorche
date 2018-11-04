@@ -1,5 +1,7 @@
 # Tellorche
 
+[![CircleCI](https://circleci.com/gh/S64/tellorche.svg?style=svg&circle-token=4ad500a05a550e4c8f15a1b015f109fc6a027f88)](https://circleci.com/gh/S64/tellorche)
+
 **Orche**stration toolchain for **TELLO** drone.
 
 ## What's this?
