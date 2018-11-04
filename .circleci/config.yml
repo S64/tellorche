@@ -25,6 +25,7 @@ jobs:
       - run:
           name: 'Check master-app requirements'
           command: './gradlew checkMasterAppRequirements'
+
   check_requirements_esp32_controller:
     docker:
       - image: eclipse/platformio:latest
@@ -33,6 +34,7 @@ jobs:
       - run:
           name: 'Check ESP32 Controllers requirements'
           command: './gradlew checkEsp32ControllerRequirements'
+
   build_masterapp:
     docker:
       - image: circleci/jdk8:0.1.1
@@ -44,6 +46,7 @@ jobs:
       - run:
           name: 'Build master-app'
           command: './gradlew buildMasterApp'
+
   build_esp32_controller:
     docker:
       - image: eclipse/platformio:latest
@@ -55,6 +58,7 @@ jobs:
       - run:
           name: 'Build ESP32 Controller'
           command: './gradlew buildEsp32Controller'
+
 workflows:
   version: 2
   workflow_master_app:
