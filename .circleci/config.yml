@@ -107,6 +107,10 @@ jobs:
           paths:
             - controllers/esp32/.pioenvs
       - run:
+          name: 'Upgrade to latest PlatformIO'
+          working_directory: 'controllers/esp32'
+          command: 'sudo pip install -U platformio'
+      - run:
           name: 'Clean ESP32 Controller builds'
           command: './gradlew cleanEsp32Controller'
       - run:
