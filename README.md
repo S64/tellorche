@@ -109,3 +109,7 @@ exec
 # in shell
 echo 'cmd: Wi-Fi disconnected.' > /dev/ttys003
 ```
+
+## License / 利用許諾
+
+[LICENSE](./LICENSE) ファイルを参照してください。
