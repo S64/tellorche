@@ -42,6 +42,15 @@ task printCommandLineUploadEsp32Controller {
     }
 }
 
+task writeMicroPythonToEsp32(type:Exec, dependsOn: 'checkMicroPythonWriterRequirements') {
+    doFirst {
+        if (!project.hasProperty('port')) {
+            throw new GradleException('`-Pport=***`がセットされていません');
+        }
+    }
+    commandLine 'esptool.py', '--chip', 'esp32', '--port', "${project.findProperty('port') ?: ''}", '--baud', '115200', 'write_flash', '-z', '0x1000', './caches/esp32-20181107-v1.9.4-683-gd94aa577a.bin'
+}
+
 task checkMasterAppRequirements {
     doLast {
         if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
