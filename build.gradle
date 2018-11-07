@@ -55,6 +55,15 @@ task writeMicroPythonToEsp32(type:Exec, dependsOn: 'checkMicroPythonWriterRequir
     commandLine 'esptool.py', '--chip', 'esp32', '--port', "${project.findProperty('port') ?: ''}", '--baud', '115200', 'write_flash', '-z', '0x1000', './caches/esp32-20181107-v1.9.4-683-gd94aa577a.bin'
 }
 
+task downloadMicroPythonForEsp32 {
+    doLast {
+        download {
+            src 'http://micropython.org/resources/firmware/esp32-20181107-v1.9.4-683-gd94aa577a.bin'
+            dest new File('./caches/esp32-20181107-v1.9.4-683-gd94aa577a.bin')
+        }
+    }
+}
+
 task checkMasterAppRequirements {
     doLast {
         if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
