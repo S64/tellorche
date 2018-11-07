@@ -100,6 +100,12 @@ task checkMicroPythonWriterRequirements {
     }
 }
 
+task printCommandLineWriteMicroPythonForEsp32 {
+    doLast {
+        println './gradlew printCommandLineUploadEsp32Controller -Pport=/your/serial/port'
+    }
+}
+
 boolean checkCommandExists(command) {
     try {
         def p = Runtime.getRuntime().exec(command)
