@@ -84,6 +84,7 @@ Telloを操作するためには、いずれかのcontrollerが必要です。
 ## Documents
 
 - [開発の手引き](docs/development-tutorial.md)
+- [関連資料](docs/useful-docs.md)
 
 ## How to debug **without ESP32-DevKitC**
 
