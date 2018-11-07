@@ -121,6 +121,8 @@ task writeController(dependsOn: 'checkMicroPythonWriterRequirements') {
         if (!project.hasProperty('port')) {
             throw new GradleException('`-Pport=***`がセットされていません');
         }
+    }
+    doLast {
         exec {
             workingDir './controllers/micropython'
             commandLine 'ampy', '--port', "${project.findProperty('port') ?: ''}", 'put', 'main.py'
