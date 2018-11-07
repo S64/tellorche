@@ -61,6 +61,7 @@ cd tellorche
 ```sh
 ./gradlew.bat printCommandLineMasterApp
 ./gradlew.bat printCommandLineUploadEsp32Controller
+./gradlew.bat printCommandLineWriteMicroPythonForEsp32
 ```
 
 ## Supported Platforms

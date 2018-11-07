@@ -1,3 +1,7 @@
+plugins {
+    id "de.undercouch.download" version "3.4.3"
+}
+
 task checkRequirements(type:GradleBuild) {
     tasks = ['checkMasterAppRequirements', 'checkEsp32ControllerRequirements']
 }
@@ -42,6 +46,25 @@ task printCommandLineUploadEsp32Controller {
     }
 }
 
+task writeMicroPythonToEsp32(type:Exec, dependsOn: ['checkMicroPythonWriterRequirements', 'downloadMicroPythonForEsp32']) {
+    doFirst {
+        if (!project.hasProperty('port')) {
+            throw new GradleException('`-Pport=***`がセットされていません');
+        }
+    }
+    commandLine 'esptool.py', '--chip', 'esp32', '--port', "${project.findProperty('port') ?: ''}", '--baud', '115200', 'write_flash', '-z', '0x1000', './caches/esp32-20181107-v1.9.4-683-gd94aa577a.bin'
+}
+
+task downloadMicroPythonForEsp32 {
+    doLast {
+        download {
+            src 'http://micropython.org/resources/firmware/esp32-20181107-v1.9.4-683-gd94aa577a.bin'
+            dest new File('./caches/esp32-20181107-v1.9.4-683-gd94aa577a.bin')
+            onlyIfModified true
+        }
+    }
+}
+
 task checkMasterAppRequirements {
     doLast {
         if (JavaVersion.current() != JavaVersion.VERSION_1_8) {
@@ -64,6 +87,22 @@ task checkEsp32ControllerRequirements {
         } else {
             println 'OK: PlatformIO Core (CLI) がインストールされています'
         }
+    }
+}
+
+task checkMicroPythonWriterRequirements {
+    doLast {
+        if (!checkCommandExists('esptool.py -h')) {
+            throw new GradleException('NG: esptoolのインストールが必要です')
+        } else {
+            println 'OK: esptoolがインストールされています'
+        }
+    }
+}
+
+task printCommandLineWriteMicroPythonForEsp32 {
+    doLast {
+        println './gradlew printCommandLineUploadEsp32Controller -Pport=/your/serial/port'
     }
 }
 
