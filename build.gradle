@@ -60,6 +60,7 @@ task downloadMicroPythonForEsp32 {
         download {
             src 'http://micropython.org/resources/firmware/esp32-20181107-v1.9.4-683-gd94aa577a.bin'
             dest new File('./caches/esp32-20181107-v1.9.4-683-gd94aa577a.bin')
+            onlyIfModified true
         }
     }
 }
