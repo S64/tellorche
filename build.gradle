@@ -67,6 +67,16 @@ task checkEsp32ControllerRequirements {
     }
 }
 
+task checkMicroPythonWriterRequirements {
+    doLast {
+        if (!checkCommandExists('esptool.py -h')) {
+            throw new GradleException('NG: esptoolのインストールが必要です')
+        } else {
+            println 'OK: esptoolがインストールされています'
+        }
+    }
+}
+
 boolean checkCommandExists(command) {
     try {
         def p = Runtime.getRuntime().exec(command)
