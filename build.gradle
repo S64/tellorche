@@ -46,7 +46,7 @@ task printCommandLineUploadEsp32Controller {
     }
 }
 
-task writeMicroPythonToEsp32(type:Exec, dependsOn: 'checkMicroPythonWriterRequirements') {
+task writeMicroPythonToEsp32(type:Exec, dependsOn: ['checkMicroPythonWriterRequirements', 'downloadMicroPythonForEsp32']) {
     doFirst {
         if (!project.hasProperty('port')) {
             throw new GradleException('`-Pport=***`がセットされていません');
