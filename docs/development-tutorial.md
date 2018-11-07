@@ -79,3 +79,8 @@ OKなら`Files changed`タブにある`Review Changes`ボタンから`Approve`�
 ## マージする
 
 レビューが返ってきて、必要な修正が完了し、最終的にApproveしてもらえたら、プルリクエストを**担当者自身の手で**マージしてください。
+
+## Appendix: コメント等が反映されない時は
+
+GitHub.com に障害が発生している可能性があります。  
+[@githubstatus](https://twitter.com/githubstatus)で状況が報告されていたり、[@shuma_yoshioka](https://twitter.com/shuma_yoshioka)が騒いでいる場合があるので確認してみましょう。 
