@@ -106,6 +106,28 @@ task printCommandLineWriteMicroPythonForEsp32 {
     }
 }
 
+task checkControllerWriterRequirements {
+    doLast {
+        if (!checkCommandExists('ampy --version')) {
+            throw new GradleException('NG: ampyのインストールが必要です')
+        } else {
+            println 'OK: ampyがインストールされています'
+        }
+    }
+}
+
+task writeController(dependsOn: 'checkMicroPythonWriterRequirements') {
+    doFirst {
+        if (!project.hasProperty('port')) {
+            throw new GradleException('`-Pport=***`がセットされていません');
+        }
+        exec {
+            workingDir './controllers/micropython'
+            commandLine 'ampy', '--port', "${project.findProperty('port') ?: ''}", 'put', 'main.py'
+        }
+    }
+}
+
 boolean checkCommandExists(command) {
     try {
         def p = Runtime.getRuntime().exec(command)
