@@ -5,13 +5,7 @@ import network
 import machine
 import usocket
 
-TELLO_IP_ADDR = '192.168.10.1'
-TELLO_UDP_PORT = 8889
-
-global wifi
-global wifi_ssid
-global wifi_passphrase
-global connection
+TELLO_ADDR = ('192.168.10.1', 8889)
 
 def main():
     wifi = None
@@ -59,19 +53,17 @@ def main():
                         responseDebugMessage('.')
                     responseMessage('Wi-Fi connected.')
                     responseCommand('Wi-Fi connected.')
-                    connection = usocket.socket()
-                    connection.connect(usocket.getaddrinfo(TELLO_IP_ADDR, TELLO_UDP_PORT)[0][-1])
+                    connection = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM)
                 else:
                     responseMessage('Can\'t understand controller cmd: `' + cmd + '`.')
             elif isTelloCommand(line):
                 cmd = sliceTelloCommandBody(line)
                 responseDebugMessage('Send to tello: `' + cmd + '`.')
-                response = sendTelloCommand(cmd)
-                responseMessage('Response from tello: `' + response +'`.')
+                sendTelloCommand(connection, cmd)
             else:
                 responseMessage('Can\'t understand: `' + line + '`.')
     finally:
-        if wifi is None and wifi.isconnected():
+        if wifi is None or wifi.isconnected():
             responseDebugMessage('Finally block. But Wi-Fi isn\'t disconnected!')
 
 
@@ -103,8 +95,7 @@ def responseMessage(msg):
 def responseCommand(cmd):
     print('cmd: ' + cmd)
 
-def sendTelloCommand(cmd):
-    connection.write(cmd)
-    return connection.readline()
+def sendTelloCommand(connection, cmd):
+    connection.sendto(cmd.encode('utf-8'), TELLO_ADDR)
 
 main()
