@@ -14,7 +14,6 @@ def main():
     responseMessage('Tellorche ESP32 Controller.')
     responseCommand('wakeup.')
     while True:
-        responseDebugMessage('wait command...')
         line = readLine()
         if isControllerCommand(line):
             cmd = sliceControllerCommandBody(line)
@@ -49,6 +48,7 @@ def main():
             responseMessage('Can\'t understand: `' + line + '`.')
 
 def readLine():
+    responseDebugMessage('wait command...')
     return sys.stdin.readline().splitlines()[0]
 
 def isControllerCommand(line):
