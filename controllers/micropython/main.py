@@ -66,7 +66,8 @@ def main():
             elif isTelloCommand(line):
                 cmd = sliceTelloCommandBody(line)
                 responseDebugMessage('Send to tello: `' + cmd + '`.')
-                sendTelloCommand(cmd)
+                response = sendTelloCommand(cmd)
+                responseMessage('Response from tello: `' + response +'`.')
             else:
                 responseMessage('Can\'t understand: `' + line + '`.')
     finally:
@@ -104,5 +105,6 @@ def responseCommand(cmd):
 
 def sendTelloCommand(cmd):
     connection.write(cmd)
+    return connection.readline()
 
 main()
