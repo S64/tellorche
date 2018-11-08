@@ -12,7 +12,7 @@ global wifi_passphrase
 
 def main():
     responseMessage('Tellorche ESP32 Controller.')
-    print('cmd: wakeup.')
+    responseCommand('wakeup.')
     while True:
         responseDebugMessage('wait command...')
         line = readLine()
@@ -40,7 +40,7 @@ def main():
                     time.sleep(1)
                     responseDebugMessage('.')
                 responseMessage('Wi-Fi connected.')
-                print('cmd: Wi-Fi connected.')
+                responseCommand('Wi-Fi connected.')
             else:
                 responseMessage('Can\'t understand controller cmd: `' + cmd + '`.')
         elif line.startswith('cmd-tello: '):
@@ -59,5 +59,8 @@ def responseDebugMessage(msg):
 
 def responseMessage(msg):
     print('msg: ' + msg)
+
+def responseCommand(cmd):
+    print('cmd: ' + cmd)
 
 main()
