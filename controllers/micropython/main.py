@@ -17,7 +17,7 @@ def main():
         responseDebugMessage('wait command...')
         line = readLine()
         if isControllerCommand(line):
-            cmd = line[16:]
+            cmd = sliceControllerCommandBody(line)
             if cmd == 'reset':
                 responseMessage('Disconnecting Wi-Fi...')
                 wifi.disconnect()
@@ -53,6 +53,9 @@ def readLine():
 
 def isControllerCommand(line):
     return line.startswith('cmd-controller: ')
+
+def sliceControllerCommandBody(line):
+    return line[16:]
 
 def responseDebugMessage(msg):
     print('dbg: ' + msg)
