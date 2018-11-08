@@ -25,6 +25,9 @@ def main():
             line = readLine()
             responseDebugMessage('Received line: `' + line +'`.')
             if isResetCommand(line):
+                if connection is not None:
+                    connection.close()
+                    connection = None
                 if wifi is not None:
                     responseMessage('Disconnecting Wi-Fi...')
                     wifi.disconnect()
@@ -56,6 +59,8 @@ def main():
                         responseDebugMessage('.')
                     responseMessage('Wi-Fi connected.')
                     responseCommand('Wi-Fi connected.')
+                    connection = usocket.socket()
+                    connection.connect(usocket.getaddrinfo(TELLO_IP_ADDR, TELLO_UDP_PORT)[0][-1])
                 else:
                     responseMessage('Can\'t understand controller cmd: `' + cmd + '`.')
             elif isTelloCommand(line):
