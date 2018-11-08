@@ -3,6 +3,7 @@ import os
 import sys
 import network
 import machine
+import usocket
 
 TELLO_IP_ADDR = '192.168.10.1'
 TELLO_UDP_PORT = 8889
