@@ -11,11 +11,13 @@ TELLO_UDP_PORT = 8889
 global wifi
 global wifi_ssid
 global wifi_passphrase
+global connection
 
 def main():
     wifi = None
     wifi_ssid = None
     wifi_passphrase = None
+    connection = None
     responseMessage('Tellorche ESP32 Controller.')
     responseCommand('wakeup.')
     try:
