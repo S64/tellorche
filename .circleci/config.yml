@@ -63,20 +63,6 @@ jobs:
           name: 'Check master-app requirements'
           command: './gradlew checkMasterAppRequirements'
 
-  check_requirements_esp32_controller:
-    docker:
-      - image: eclipse/platformio:latest
-    steps:
-      - checkout
-      - restore_cache:
-          key: root-gradlew-{{ arch }}
-          paths:
-            - .gradle/
-            - ~/.gradle
-      - run:
-          name: 'Check ESP32 Controllers requirements'
-          command: './gradlew checkEsp32ControllerRequirements'
-
   build_masterapp:
     docker:
       - image: circleci/jdk8:0.1.1
@@ -105,39 +91,6 @@ jobs:
             - ~/.gradle
       - store_artifacts:
           path: master/build/libs/
-
-  build_esp32_controller:
-    docker:
-      - image: eclipse/platformio:latest
-    steps:
-      - checkout
-      - restore_cache:
-          key: root-gradlew-{{ arch }}
-          paths:
-            - .gradle/
-            - ~/.gradle
-      - restore_cache:
-          key: esp32-controller-pioenvs-{{ arch }}
-          paths:
-            - controllers/esp32/.pioenvs
-            - ~/.platformio
-      - run:
-          name: 'Upgrade to latest PlatformIO'
-          working_directory: 'controllers/esp32'
-          command: 'sudo pip install -U platformio'
-      - run:
-          name: 'Clean ESP32 Controller builds'
-          command: './gradlew cleanEsp32Controller'
-      - run:
-          name: 'Build ESP32 Controller'
-          command: './gradlew buildEsp32Controller'
-      - save_cache:
-          key: esp32-controller-pioenvs-{{ arch }}
-          paths:
-            - controllers/esp32/.pioenvs
-            - ~/.platformio
-      - store_artifacts:
-          path: controllers/esp32/.pioenvs/esp32dev
 
   check_requirements_micropython_controller:
     docker:
@@ -181,15 +134,6 @@ workflows:
       - build_masterapp:
           requires:
             - check_requirements_masterapp
-  workflow_esp32_controller:
-    jobs:
-      - init_root_gradle_wrapper
-      - check_requirements_esp32_controller:
-          requires:
-            - init_root_gradle_wrapper
-      - build_esp32_controller:
-          requires:
-            - check_requirements_esp32_controller
   workflow_micropython_controller:
     jobs:
       - init_root_gradle_wrapper
