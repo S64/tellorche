@@ -94,7 +94,7 @@ jobs:
 
   check_requirements_micropython_controller:
     docker:
-      - image: flintci/pycodestyle
+      - image: rappdw/docker-java-python
     steps:
       - checkout
       - restore_cache:
@@ -103,12 +103,15 @@ jobs:
             - .gradle/
             - ~/.gradle
       - run:
+          name: 'Install pycodestyle'
+          command: 'pip install pycodestyle'
+      - run:
           name: 'Check requirements'
           command: './gradlew checkControllerLinterRequirements'
 
   lint_micropython_controller:
     docker:
-      - image: flintci/pycodestyle
+      - image: rappdw/docker-java-python
     steps:
       - checkout
       - restore_cache:
@@ -116,6 +119,9 @@ jobs:
           paths:
             - .gradle/
             - ~/.gradle
+      - run:
+          name: 'Install pycodestyle'
+          command: 'pip install pycodestyle'
       - run:
           name: 'Lint controller'
           command: './gradlew lintController'
