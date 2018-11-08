@@ -14,7 +14,7 @@ def main():
     print('msg: Tellorche ESP32 Controller.')
     print('cmd: wakeup.')
     while True:
-        print('dbg: wait command...')
+        responseDebugMessage('wait command...')
         line = readLine()
         if isControllerCommand(line):
             cmd = line[16:]
@@ -23,7 +23,7 @@ def main():
                 wifi.disconnect()
                 while wifi.isconnected():
                     time.sleep(1)
-                    print('dbg: .')
+                    responseDebugMessage('.')
                 wifi = None
             elif cmd.startswith('wifi_ssid '):
                 wifi_ssid = cmd[10:]
@@ -38,7 +38,7 @@ def main():
                 wifi.connect(wifi_ssid, wifi_passphrase)
                 while not wifi.isconnected():
                     time.sleep(1)
-                    print('dbg: .')
+                    responseDebugMessage('.')
                 print('msg: Wi-Fi connected.')
                 print('cmd: Wi-Fi connected.')
             else:
@@ -53,5 +53,8 @@ def readLine():
 
 def isControllerCommand(line):
     return line.startswith('cmd-controller: ')
+
+def responseDebugMessage(msg):
+    print('dbg: ' + msg)
 
 main()
