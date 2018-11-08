@@ -38,12 +38,15 @@ cd tellorche
 ```sh
 ./gradlew.bat checkRequirements
 # 
-#  Task :tellorche:checkMasterAppRequirements
+# > Task :tellorche:checkMasterAppRequirements
 # OK: Java 8がインストールされています
 # OK: JDK 8がインストールされています
 # 
-# > Task :tellorche:checkEsp32ControllerRequirements
-# OK: PlatformIO Core (CLI) がインストールされています
+# > Task :tellorche:checkMicroPythonWriterRequirements
+# OK: esptoolがインストールされています
+# 
+# > Task :tellorche:checkControllerWriterRequirements
+# OK: ampyがインストールされています
 # 
 # BUILD SUCCESSFUL in 1s
 # 1 actionable task: 1 executed
