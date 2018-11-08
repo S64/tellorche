@@ -12,7 +12,7 @@ PC向けのマスターアプリとコントローラにあたるデバイスを
 ## Getting Started
 
 Tellorcheでは標準のビルドツールとしてGradleを採用しています。  
-起動コマンドの `Gradle Wrapper` は、Windowsの場合は `gradlew.bat` に、*nix系OSの場合は `gradlew` として読み替えてください。
+起動コマンドの `Gradle Wrapper` は、Windowsの場合は `gradlew.bat` に、\*nix系OSの場合は `gradlew` として読み替えてください。
 
 ### 1. プロジェクトをclone
 
