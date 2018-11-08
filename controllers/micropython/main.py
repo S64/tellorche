@@ -19,7 +19,9 @@ def main():
             while True:
                 line = readLine()
                 responseDebugMessage('Received line: `' + line +'`.')
-                if isResetCommand(line):
+                if isTryCrashCommand(line):
+                    raise Exception
+                elif isResetCommand(line):
                     if connection is not None:
                         connection.close()
                         connection = None
@@ -75,6 +77,9 @@ def readLine():
 
 def isResetCommand(line):
     return line == '!reset'
+
+def isTryCrashCommand(line):
+    return line == '!crash'
 
 def isControllerCommand(line):
     return line.startswith('cmd-controller: ')
