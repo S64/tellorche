@@ -26,6 +26,8 @@ def main():
                 while wifi.isconnected():
                     time.sleep(1)
                     responseDebugMessage('.')
+                responseMessage('Wi-Fi disconnected.')
+                responseCommand('Wi-Fi disconnected.')
                 wifi = None
             else:
                 responseMessage('Wi-Fi already disconnected.')
