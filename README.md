@@ -87,6 +87,22 @@ Telloを操作するためには、いずれかのcontrollerが必要です。
 - [開発の手引き](docs/development-tutorial.md)
 - [関連資料](docs/useful-docs.md)
 
+## How to build
+
+前述の `./gradlew.bat build` による全ビルド以外に、特定モジュールのみビルドする方法があります。
+
+### master-app
+
+```sh
+./gradlew.bat buildMasterApp
+```
+
+### controllers/esp32
+
+```sh
+./gradlew.bat buildEsp32Controller
+```
+
 ## How to debug **without ESP32-DevKitC**
 
 ```sh
