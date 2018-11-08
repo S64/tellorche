@@ -48,7 +48,13 @@ cd tellorche
 # > Task :tellorche:checkControllerWriterRequirements
 # OK: ampyがインストールされています
 # 
-# BUILD SUCCESSFUL in 1s
+# > Task :tellorche:checkControllerLinterRequirements
+# OK: pycodestyleがインストールされています
+# 
+# > Task :tellorche:checkControllerFormatterRequirements
+# OK: autopep8がインストールされています
+# 
+# BUILD SUCCESSFUL in 2s
 # 1 actionable task: 1 executed
 ```
 
@@ -105,7 +111,12 @@ MicroPythonに対応した開発ボード。
 
 ### controllers/micropython
 
-Pythonはビルドする必要がありません。
+Pythonはビルドする必要がありません。  
+構文をチェックするには、以下を実行してください。
+
+```sh
+./gradlew.bat lintController
+```
 
 ## License / 利用許諾
 
