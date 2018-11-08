@@ -64,7 +64,9 @@ def main():
                 else:
                     responseMessage('Can\'t understand controller cmd: `' + cmd + '`.')
             elif isTelloCommand(line):
-                responseMessage('cmd-tello.')
+                cmd = sliceTelloCommandBody(line)
+                responseDebugMessage('Send to tello: `' + cmd + '`.')
+                sendTelloCommand(cmd)
             else:
                 responseMessage('Can\'t understand: `' + line + '`.')
     finally:
@@ -88,6 +90,9 @@ def isTelloCommand(line):
 def sliceControllerCommandBody(line):
     return line[16:]
 
+def sliceTelloCommandBody(line):
+    return line[11:]
+
 def responseDebugMessage(msg):
     print('dbg: ' + msg)
 
@@ -96,5 +101,8 @@ def responseMessage(msg):
 
 def responseCommand(cmd):
     print('cmd: ' + cmd)
+
+def sendTelloCommand(cmd):
+    connection.write(cmd)
 
 main()
