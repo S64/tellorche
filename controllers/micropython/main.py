@@ -66,6 +66,7 @@ def main():
         finally:
             if wifi is None or wifi.isconnected():
                 responseDebugMessage('Finally block. But Wi-Fi isn\'t disconnected!')
+                sendTelloCommand(connection, 'emergency')
 
 
 def readLine():
