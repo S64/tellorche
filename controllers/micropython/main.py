@@ -19,6 +19,7 @@ def main():
     responseCommand('wakeup.')
     while True:
         line = readLine()
+        responseDebugMessage('Received line: `' + line +'`.')
         if isResetCommand(line):
             if wifi is not None:
                 responseMessage('Disconnecting Wi-Fi...')
