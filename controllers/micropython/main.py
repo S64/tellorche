@@ -25,6 +25,7 @@ def main():
                 wifi = None
             else:
                 responseMessage('Wi-Fi already disconnected.')
+            machine.reset()
         if isControllerCommand(line):
             cmd = sliceControllerCommandBody(line)
             if cmd.startswith('wifi_ssid '):
