@@ -31,11 +31,11 @@ def main():
                             time.sleep(1)
                             responseDebugMessage('.')
                         responseMessage('Wi-Fi disconnected.')
-                        responseCommand('Wi-Fi disconnected.')
                         wifi.active(False)
                         wifi = None
                     else:
                         responseMessage('Wi-Fi already disconnected.')
+                    responseCommand('Wi-Fi disconnected.')
                     break
                 if isControllerCommand(line):
                     cmd = sliceControllerCommandBody(line)
