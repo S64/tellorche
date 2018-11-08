@@ -64,7 +64,7 @@ def main():
                 else:
                     responseMessage('Can\'t understand: `' + line + '`.')
         finally:
-            if wifi is None or wifi.isconnected():
+            if wifi is not None or wifi.isconnected():
                 responseDebugMessage('Finally block. But Wi-Fi isn\'t disconnected!')
                 sendTelloCommand(connection, 'emergency')
 
