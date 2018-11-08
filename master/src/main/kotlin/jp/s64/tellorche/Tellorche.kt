@@ -25,8 +25,15 @@ object Tellorche {
 
     private lateinit var controllers: Map<ControllerId, ITelloController>
 
+    private var safeEnded: Boolean = false
+
     @JvmStatic
     fun main(orgArgs: Array<String>) {
+
+        Runtime.getRuntime().addShutdownHook(Thread {
+            doShutdown()
+        })
+
         val args = Args()
         val parser = CmdLineParser(args)
 
@@ -51,19 +58,21 @@ object Tellorche {
             if (readLine() == "exec") break
         } while (true)
 
-        var succeed = false
-
         try {
             // exec
             mainLoop(args.startAtInMillis)
-            succeed = true
+            safeEnded = true
         } finally {
-            controllers.forEach {
-                if (succeed) {
-                    it.value.dispose()
-                } else {
-                    it.value.doCrash()
-                }
+            doShutdown()
+        }
+    }
+
+    private fun doShutdown() {
+        controllers.forEach {
+            if (safeEnded) {
+                it.value.dispose()
+            } else {
+                it.value.doCrash()
             }
         }
     }
