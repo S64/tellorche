@@ -75,4 +75,14 @@ void loop() {
         connection.print(line);
         connection.endPacket();
     }
+    
+    connection.parsePacket();
+    if(connection.available() >0){
+      char buf[connection.available()];
+      connection.read(buf,connection.available());
+      String stringbuf = buf;
+      Serial.println("rtn: "+ stringbuf+ "`.");
+    }
+    
+    
 }
