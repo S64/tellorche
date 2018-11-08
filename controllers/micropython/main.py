@@ -1,5 +1,4 @@
 import time
-import os
 import sys
 import network
 import machine
@@ -66,8 +65,8 @@ def main():
                 else:
                     responseMessage('Can\'t understand: `' + line + '`.')
         finally:
-            if wifi is not None or wifi.isconnected():
-                responseDebugMessage('Finally block. But Wi-Fi isn\'t disconnected!')
+            if connection is not None:
+                responseDebugMessage('Finally block. But connection isn\'t finalized!')
                 sendTelloCommand(connection, 'emergency')
 
 
