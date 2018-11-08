@@ -13,11 +13,11 @@ if (OperatingSystem.current().isWindows()) {
 }
 
 task checkRequirements(type:GradleBuild) {
-    tasks = ['checkMasterAppRequirements', 'checkMicroPythonWriterRequirements', 'checkControllerWriterRequirements']
+    tasks = ['checkMasterAppRequirements', 'checkMicroPythonWriterRequirements', 'checkControllerWriterRequirements', 'checkControllerLinterRequirements', 'checkControllerFormatterRequirements']
 }
 
 task build(type:GradleBuild) {
-    tasks = ['buildMasterApp']
+    tasks = ['buildMasterApp', 'lintController']
 }
 
 task clean(type:GradleBuild) {
@@ -118,6 +118,31 @@ task writeController(dependsOn: 'checkMicroPythonWriterRequirements') {
             commandLine 'ampy', '--port', "${project.findProperty('port') ?: ''}", 'put', 'main.py'
         }
     }
+}
+
+task checkControllerFormatterRequirements {
+    doLast {
+        if (!checkCommandExists('autopep8 --version')) {
+            throw new GradleException('NG: autopep8のインストールが必要です')
+        } else {
+            println 'OK: autopep8がインストールされています'
+        }
+    }
+}
+
+task checkControllerLinterRequirements {
+    doLast {
+        if (!checkCommandExists('pycodestyle --version')) {
+            throw new GradleException('NG: pycodestyleのインストールが必要です')
+        } else {
+            println 'OK: pycodestyleがインストールされています'
+        }
+    }
+}
+
+task lintController(type:Exec, dependsOn: 'checkControllerLinterRequirements') {
+    workingDir './controllers/micropython'
+    commandLine 'pycodestyle', './'
 }
 
 boolean checkCommandExists(command) {
