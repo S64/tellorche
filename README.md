@@ -103,11 +103,9 @@ MicroPythonに対応した開発ボード。
 ./gradlew.bat buildMasterApp
 ```
 
-### controllers/esp32
+### controllers/micropython
 
-```sh
-./gradlew.bat buildEsp32Controller
-```
+Pythonはビルドする必要がありません。
 
 ## How to debug **without ESP32-DevKitC**
 
