@@ -13,15 +13,15 @@ if (OperatingSystem.current().isWindows()) {
 }
 
 task checkRequirements(type:GradleBuild) {
-    tasks = ['checkMasterAppRequirements', 'checkEsp32ControllerRequirements']
+    tasks = ['checkMasterAppRequirements', 'checkMicroPythonWriterRequirements', 'checkControllerWriterRequirements', 'checkControllerLinterRequirements', 'checkControllerFormatterRequirements']
 }
 
 task build(type:GradleBuild) {
-    tasks = ['buildMasterApp', 'buildEsp32Controller']
+    tasks = ['buildMasterApp', 'lintController']
 }
 
 task clean(type:GradleBuild) {
-    tasks = ['cleanMasterApp', 'cleanEsp32Controller']
+    tasks = ['cleanMasterApp']
 }
 
 task buildMasterApp(type:Exec, dependsOn: 'checkMasterAppRequirements') {
@@ -37,22 +37,6 @@ task cleanMasterApp(type:Exec) {
 task printCommandLineMasterApp {
     doLast {
         println 'java -jar ./master/build/libs/tellorche-master-app.jar --config ./tellorcheconfig.example.json'
-    }
-}
-
-task buildEsp32Controller(type:Exec, dependsOn: 'checkEsp32ControllerRequirements') {
-    workingDir './controllers/esp32'
-    commandLine 'platformio', 'run', '--environment', 'esp32dev'
-}
-
-task cleanEsp32Controller(type:Exec, dependsOn: 'checkEsp32ControllerRequirements') {
-    workingDir './controllers/esp32'
-    commandLine 'platformio', 'run', '--environment', 'esp32dev', '--target', 'clean'
-}
-
-task printCommandLineUploadEsp32Controller {
-    doLast {
-        println 'platformio run --project-dir ./controllers/esp32 --environment esp32dev --target upload --upload-port ${YOUR_ESP32_PORT}'
     }
 }
 
@@ -90,16 +74,6 @@ task checkMasterAppRequirements {
     }
 }
 
-task checkEsp32ControllerRequirements {
-    doLast {
-        if (!checkCommandExists('platformio --version')) {
-            throw new GradleException('NG: PlatformIO Core (CLI) のインストールが必要です')
-        } else {
-            println 'OK: PlatformIO Core (CLI) がインストールされています'
-        }
-    }
-}
-
 task checkMicroPythonWriterRequirements {
     doLast {
         if (!checkCommandExists('esptool.py -h')) {
@@ -112,7 +86,7 @@ task checkMicroPythonWriterRequirements {
 
 task printCommandLineWriteMicroPythonForEsp32 {
     doLast {
-        println "./${gradleWrapperEntrypoint} printCommandLineUploadEsp32Controller -Pport=/your/serial/port"
+        println "./${gradleWrapperEntrypoint} writeMicroPythonToEsp32 -Pport=/your/serial/port"
     }
 }
 
@@ -123,6 +97,12 @@ task checkControllerWriterRequirements {
         } else {
             println 'OK: ampyがインストールされています'
         }
+    }
+}
+
+task printCommandLineWriteController {
+    doLast {
+        println "./${gradleWrapperEntrypoint} writeController -Pport=/your/serial/port"
     }
 }
 
@@ -138,6 +118,31 @@ task writeController(dependsOn: 'checkMicroPythonWriterRequirements') {
             commandLine 'ampy', '--port', "${project.findProperty('port') ?: ''}", 'put', 'main.py'
         }
     }
+}
+
+task checkControllerFormatterRequirements {
+    doLast {
+        if (!checkCommandExists('autopep8 --version')) {
+            throw new GradleException('NG: autopep8のインストールが必要です')
+        } else {
+            println 'OK: autopep8がインストールされています'
+        }
+    }
+}
+
+task checkControllerLinterRequirements {
+    doLast {
+        if (!checkCommandExists('pycodestyle --version')) {
+            throw new GradleException('NG: pycodestyleのインストールが必要です')
+        } else {
+            println 'OK: pycodestyleがインストールされています'
+        }
+    }
+}
+
+task lintController(type:Exec, dependsOn: 'checkControllerLinterRequirements') {
+    workingDir './controllers/micropython'
+    commandLine 'pycodestyle', './'
 }
 
 boolean checkCommandExists(command) {

@@ -1,8 +1,8 @@
 package jp.s64.tellorche.controller
 
+import com.fazecast.jSerialComm.SerialPort
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
-import com.fazecast.jSerialComm.SerialPort
 import jp.s64.tellorche.entity.ControllerId
 import jp.s64.tellorche.entity.TelloActionParam
 import jp.s64.tellorche.entity.TelloCommand
@@ -13,24 +13,20 @@ import java.lang.IllegalStateException
 import java.util.Collections
 import java.util.Locale
 
-typealias WifiSsid = String
-typealias WifiPassphrase = String
-typealias ComPortDescriptor = String
-
 @JsonClass(generateAdapter = true)
-data class ESP32ControllerConfig(
-    @Json(name = "ssid") val ssid: WifiSsid,
-    @Json(name = "passphrase") val passphrase: WifiPassphrase,
-    @Json(name = "com_descriptor") val comPortDescriptor: ComPortDescriptor
+data class MicroPythonControllerConfig(
+        @Json(name = "ssid") val ssid: WifiSsid,
+        @Json(name = "passphrase") val passphrase: WifiPassphrase,
+        @Json(name = "com_descriptor") val comPortDescriptor: ComPortDescriptor
 ) {
 
     fun createInterface(id: ControllerId): ITelloController {
         val port = SerialPort.getCommPort(comPortDescriptor)
-                .apply { baudRate = 921600 }
+                .apply { baudRate = 115200 }
                 .apply { this.openPort() }
 
         if (!port.isOpen) {
-            TODO("COMが開かない")
+            TODO("COM ($comPortDescriptor) が開かない")
         }
 
         port.setComPortTimeouts(
@@ -38,49 +34,47 @@ data class ESP32ControllerConfig(
                 0, 0
         )
 
-        return ESP32TelloController(id, port, ssid, passphrase)
+        return MicroPythonTelloController(id, port, ssid, passphrase)
     }
 }
 
-class ESP32TelloController(
-    private val id: ControllerId,
-    private val port: SerialPort,
-    ssid: WifiSsid,
-    passphrase: WifiPassphrase
+class MicroPythonTelloController(
+        id: ControllerId,
+        private val port: SerialPort,
+        ssid: WifiSsid,
+        passphrase: WifiPassphrase
 ) : ITelloController {
 
     override fun doCrash() {
-        TODO("doCrashを実装してません")
-    }
-
-    companion object {
-
-        private const val LINE_SEPARATOR = "\n"
+        try {
+            out.println("!crash")
+        } finally {
+            doFinally()
+        }
     }
 
     private val out: PrintStream
-
-    private val background: MessagePrinter
+    private val background: MicroPythonMessagePrinter
 
     init {
-        background = MessagePrinter(
+        background = MicroPythonMessagePrinter(
                 id = id,
                 `in` = BufferedReader(InputStreamReader(port.inputStream))
         )
         out = PrintStream(port.outputStream, true)
 
-        sendReset()
+        sendReset(true)
 
         do {
             val line = background.nextCmd()
             if (line == "wakeup.") {
-                break
+                break;
             }
         } while (true)
 
-        out.print("wifi_ssid $ssid$LINE_SEPARATOR")
-        out.print("wifi_passphrase $passphrase$LINE_SEPARATOR")
-        out.print("connect$LINE_SEPARATOR")
+        sendControllerCommand("wifi_ssid $ssid")
+        sendControllerCommand("wifi_passphrase $passphrase")
+        sendControllerCommand("connect")
 
         do {
             val line = background.nextCmd()
@@ -91,31 +85,40 @@ class ESP32TelloController(
     }
 
     override fun send(command: TelloCommand, params: List<TelloActionParam>) {
-        out.print(command.toCommand(params) + LINE_SEPARATOR)
+        out.println("cmd-tello: ${command.toCommand(params)}")
     }
 
-    override fun dispose() {
-        try {
-            sendReset()
-        } finally {
-            background.dispose()
-            out.close()
-            port.closePort()
-        }
-    }
-
-    fun sendReset() {
-        out.println("reset")
+    fun sendReset(waitResponse: Boolean) {
+        out.println("!reset")
         do {
             val line = background.nextCmd()
             if (line == "Wi-Fi disconnected.") {
                 break
             }
-        } while (true)
+        } while (waitResponse)
     }
+
+    fun sendControllerCommand(cmd: String) {
+        out.println("cmd-controller: $cmd")
+    }
+
+    override fun dispose() {
+        try {
+            sendReset(false)
+        } finally {
+            doFinally()
+        }
+    }
+
+    private fun doFinally() {
+        background.dispose()
+        out.close()
+        port.closePort()
+    }
+
 }
 
-class MessagePrinter(
+class MicroPythonMessagePrinter (
         private val id: ControllerId,
         private val `in`: BufferedReader
 ) {

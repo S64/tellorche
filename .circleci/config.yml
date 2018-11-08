@@ -63,20 +63,6 @@ jobs:
           name: 'Check master-app requirements'
           command: './gradlew checkMasterAppRequirements'
 
-  check_requirements_esp32_controller:
-    docker:
-      - image: eclipse/platformio:latest
-    steps:
-      - checkout
-      - restore_cache:
-          key: root-gradlew-{{ arch }}
-          paths:
-            - .gradle/
-            - ~/.gradle
-      - run:
-          name: 'Check ESP32 Controllers requirements'
-          command: './gradlew checkEsp32ControllerRequirements'
-
   build_masterapp:
     docker:
       - image: circleci/jdk8:0.1.1
@@ -106,9 +92,9 @@ jobs:
       - store_artifacts:
           path: master/build/libs/
 
-  build_esp32_controller:
+  check_requirements_micropython_controller:
     docker:
-      - image: eclipse/platformio:latest
+      - image: rappdw/docker-java-python
     steps:
       - checkout
       - restore_cache:
@@ -116,28 +102,29 @@ jobs:
           paths:
             - .gradle/
             - ~/.gradle
+      - run:
+          name: 'Install pycodestyle'
+          command: 'pip install pycodestyle'
+      - run:
+          name: 'Check requirements'
+          command: './gradlew checkControllerLinterRequirements'
+
+  lint_micropython_controller:
+    docker:
+      - image: rappdw/docker-java-python
+    steps:
+      - checkout
       - restore_cache:
-          key: esp32-controller-pioenvs-{{ arch }}
+          key: root-gradlew-{{ arch }}
           paths:
-            - controllers/esp32/.pioenvs
-            - ~/.platformio
+            - .gradle/
+            - ~/.gradle
       - run:
-          name: 'Upgrade to latest PlatformIO'
-          working_directory: 'controllers/esp32'
-          command: 'sudo pip install -U platformio'
+          name: 'Install pycodestyle'
+          command: 'pip install pycodestyle'
       - run:
-          name: 'Clean ESP32 Controller builds'
-          command: './gradlew cleanEsp32Controller'
-      - run:
-          name: 'Build ESP32 Controller'
-          command: './gradlew buildEsp32Controller'
-      - save_cache:
-          key: esp32-controller-pioenvs-{{ arch }}
-          paths:
-            - controllers/esp32/.pioenvs
-            - ~/.platformio
-      - store_artifacts:
-          path: controllers/esp32/.pioenvs/esp32dev
+          name: 'Lint controller'
+          command: './gradlew lintController'
 
 workflows:
   version: 2
@@ -153,12 +140,12 @@ workflows:
       - build_masterapp:
           requires:
             - check_requirements_masterapp
-  workflow_esp32_controller:
+  workflow_micropython_controller:
     jobs:
       - init_root_gradle_wrapper
-      - check_requirements_esp32_controller:
+      - check_requirements_micropython_controller:
           requires:
             - init_root_gradle_wrapper
-      - build_esp32_controller:
+      - lint_micropython_controller:
           requires:
-            - check_requirements_esp32_controller
+            - check_requirements_micropython_controller

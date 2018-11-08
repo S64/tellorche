@@ -8,8 +8,8 @@
   },
   "controllers": {
     "my-controller-1": {
-      "type": "ESP32",
-      "type-esp32-config": {
+      "type": "MicroPython",
+      "type-micropython-config": {
         "ssid": "your-wifi-ssid",
         "passphrase": "your-wifi-passphrase",
         "com_descriptor": "/dev/cu.SLAB_USBtoUART"
