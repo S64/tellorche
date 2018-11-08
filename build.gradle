@@ -1,5 +1,15 @@
+import org.gradle.internal.os.OperatingSystem
+
 plugins {
     id "de.undercouch.download" version "3.4.3"
+}
+
+final gradleWrapperEntrypoint
+
+if (OperatingSystem.current().isWindows()) {
+    gradleWrapperEntrypoint = 'gradlew.bat'
+} else {
+    gradleWrapperEntrypoint = 'gradlew'
 }
 
 task checkRequirements(type:GradleBuild) {
@@ -16,12 +26,12 @@ task clean(type:GradleBuild) {
 
 task buildMasterApp(type:Exec, dependsOn: 'checkMasterAppRequirements') {
     workingDir './master'
-    commandLine './gradlew', 'shadowJar'
+    commandLine "./${gradleWrapperEntrypoint}", 'shadowJar'
 }
 
 task cleanMasterApp(type:Exec) {
     workingDir './master'
-    commandLine './gradlew', 'clean'
+    commandLine "./${gradleWrapperEntrypoint}", 'clean'
 }
 
 task printCommandLineMasterApp {
@@ -102,7 +112,7 @@ task checkMicroPythonWriterRequirements {
 
 task printCommandLineWriteMicroPythonForEsp32 {
     doLast {
-        println './gradlew printCommandLineUploadEsp32Controller -Pport=/your/serial/port'
+        println "./${gradleWrapperEntrypoint} printCommandLineUploadEsp32Controller -Pport=/your/serial/port"
     }
 }
 
