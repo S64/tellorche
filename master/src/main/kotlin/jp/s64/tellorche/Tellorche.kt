@@ -31,7 +31,14 @@ object Tellorche {
     fun main(orgArgs: Array<String>) {
 
         Runtime.getRuntime().addShutdownHook(Thread {
-            doShutdown()
+            if (!safeEnded) {
+                System.err.println("Do crash!")
+                controllers.forEach {
+                    it.value.doCrash()
+                }
+            } else {
+                System.out.println("Safe shutdown.")
+            }
         })
 
         val args = Args()
@@ -58,22 +65,13 @@ object Tellorche {
             if (readLine() == "exec") break
         } while (true)
 
-        try {
-            // exec
-            mainLoop(args.startAtInMillis)
-            safeEnded = true
-        } finally {
-            doShutdown()
-        }
-    }
 
-    private fun doShutdown() {
+        // exec
+        mainLoop(args.startAtInMillis)
+        safeEnded = true
+
         controllers.forEach {
-            if (safeEnded) {
-                it.value.dispose()
-            } else {
-                it.value.doCrash()
-            }
+            it.value.dispose()
         }
     }
 

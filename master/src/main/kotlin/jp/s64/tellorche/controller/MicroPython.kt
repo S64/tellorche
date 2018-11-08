@@ -63,7 +63,7 @@ class MicroPythonTelloController(
         )
         out = PrintStream(port.outputStream, true)
 
-        sendReset()
+        sendReset(true)
 
         do {
             val line = background.nextCmd()
@@ -88,14 +88,14 @@ class MicroPythonTelloController(
         out.println("cmd-tello: ${command.toCommand(params)}")
     }
 
-    fun sendReset() {
+    fun sendReset(waitResponse: Boolean) {
         out.println("!reset")
         do {
             val line = background.nextCmd()
             if (line == "Wi-Fi disconnected.") {
                 break
             }
-        } while (true)
+        } while (waitResponse)
     }
 
     fun sendControllerCommand(cmd: String) {
@@ -104,7 +104,7 @@ class MicroPythonTelloController(
 
     override fun dispose() {
         try {
-            sendReset()
+            sendReset(false)
         } finally {
             doFinally()
         }
