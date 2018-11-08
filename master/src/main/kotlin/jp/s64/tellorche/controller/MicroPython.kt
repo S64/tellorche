@@ -22,7 +22,7 @@ data class MicroPythonControllerConfig(
 
     fun createInterface(id: ControllerId): ITelloController {
         val port = SerialPort.getCommPort(comPortDescriptor)
-                .apply { baudRate = 921600 }
+                .apply { baudRate = 115200 }
                 .apply { this.openPort() }
 
         if (!port.isOpen) {
