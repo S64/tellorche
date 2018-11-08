@@ -33,6 +33,8 @@ cd tellorche
 
 ### 2. 依存するツールを確認
 
+※ 特定のモジュールのみビルドしたい場合、全ての依存関係を解決する必要はありません
+
 ```sh
 ./gradlew.bat checkRequirements
 # 
