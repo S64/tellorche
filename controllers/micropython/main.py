@@ -15,7 +15,7 @@ def main():
     print('cmd: wakeup.')
     while True:
         print('dbg: wait command...')
-        line = sys.stdin.readline().splitlines()[0]
+        line = readLine()
         if line.startswith('cmd-controller: '):
             cmd = line[16:]
             if cmd == 'reset':
@@ -47,5 +47,8 @@ def main():
             print('msg: cmd-tello.')
         else:
             print('msg: Can\'t understand: `' + line + '`.')
+
+def readLine():
+    return sys.stdin.readline().splitlines()[0]
 
 main()
