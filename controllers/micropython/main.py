@@ -16,7 +16,7 @@ def main():
     while True:
         print('dbg: wait command...')
         line = readLine()
-        if line.startswith('cmd-controller: '):
+        if isControllerCommand(line):
             cmd = line[16:]
             if cmd == 'reset':
                 print('msg: Disconnecting Wi-Fi...')
@@ -50,5 +50,8 @@ def main():
 
 def readLine():
     return sys.stdin.readline().splitlines()[0]
+
+def isControllerCommand(line):
+    return line.startswith('cmd-controller: ')
 
 main()
