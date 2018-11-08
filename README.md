@@ -12,7 +12,7 @@ PC向けのマスターアプリとコントローラにあたるデバイスを
 ## Getting Started
 
 Tellorcheでは標準のビルドツールとしてGradleを採用しています。  
-起動コマンドの `Gradle Wrapper` は、Windowsの場合は `gradlew.bat` に、*nix系OSの場合は `gradlew` として読み替えてください。
+起動コマンドの `Gradle Wrapper` は、Windowsの場合は `gradlew.bat` に、\*nix系OSの場合は `gradlew` として読み替えてください。
 
 ### 1. プロジェクトをclone
 
@@ -32,6 +32,8 @@ cd tellorche
 </details>
 
 ### 2. 依存するツールを確認
+
+※ 特定のモジュールのみビルドしたい場合、全ての依存関係を解決する必要はありません
 
 ```sh
 ./gradlew.bat checkRequirements
@@ -86,6 +88,22 @@ Telloを操作するためには、いずれかのcontrollerが必要です。
 
 - [開発の手引き](docs/development-tutorial.md)
 - [関連資料](docs/useful-docs.md)
+
+## How to build
+
+前述の `./gradlew.bat build` による全ビルド以外に、特定モジュールのみビルドする方法があります。
+
+### master-app
+
+```sh
+./gradlew.bat buildMasterApp
+```
+
+### controllers/esp32
+
+```sh
+./gradlew.bat buildEsp32Controller
+```
 
 ## How to debug **without ESP32-DevKitC**
 
