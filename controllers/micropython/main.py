@@ -2,15 +2,19 @@ import time
 import os
 import sys
 import network
+import machine
 
 TELLO_IP_ADDR = '192.168.10.1'
 TELLO_UDP_PORT = 8889
 
-global wifi = None
-global wifi_ssid = None
-global wifi_passphrase = None
+global wifi
+global wifi_ssid
+global wifi_passphrase
 
 def main():
+    wifi = None
+    wifi_ssid = None
+    wifi_passphrase = None
     responseMessage('Tellorche ESP32 Controller.')
     responseCommand('wakeup.')
     while True:
