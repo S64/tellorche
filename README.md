@@ -83,9 +83,10 @@ Windows / Mac / Linux distributions
 
 Telloを操作するためには、いずれかのcontrollerが必要です。
 
-#### controllers/esp32
+#### controllers/micropython
 
-[ESP32-DevKitC](https://amzn.to/2OZk3B0)
+MicroPythonに対応した開発ボード。  
+[ESP32-DevKitC](https://amzn.to/2OZk3B0) などが該当します。
 
 ## Documents
 
