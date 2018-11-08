@@ -139,6 +139,34 @@ jobs:
       - store_artifacts:
           path: controllers/esp32/.pioenvs/esp32dev
 
+  check_requirements_micropython_controller:
+    docker:
+      - image: flintci/pycodestyle
+    steps:
+      - checkout
+      - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+            - ~/.gradle
+      - run:
+          name: 'Check requirements'
+          command: './gradlew checkControllerLinterRequirements'
+
+  lint_micropython_controller:
+    docker:
+      - image: flintci/pycodestyle
+    steps:
+      - checkout
+      - restore_cache:
+          key: root-gradlew-{{ arch }}
+          paths:
+            - .gradle/
+            - ~/.gradle
+      - run:
+          name: 'Lint controller'
+          command: './gradlew lintController'
+
 workflows:
   version: 2
   workflow_master_app:
@@ -162,3 +190,12 @@ workflows:
       - build_esp32_controller:
           requires:
             - check_requirements_esp32_controller
+  workflow_micropython_controller:
+    jobs:
+      - init_root_gradle_wrapper
+      - check_requirements_micropython_controller:
+          requires:
+            - init_root_gradle_wrapper
+      - lint_micropython_controller:
+          requires:
+            - check_requirements_micropython_controller
