@@ -6,6 +6,7 @@ import usocket
 
 TELLO_ADDR = ('192.168.10.1', 8889)
 
+
 def main():
     while True:
         wifi = None
@@ -17,7 +18,7 @@ def main():
         try:
             while True:
                 line = readLine()
-                responseDebugMessage('Received line: `' + line +'`.')
+                responseDebugMessage('Received line: `' + line + '`.')
                 if isTryCrashCommand(line):
                     raise Exception
                 elif isResetCommand(line):
@@ -55,9 +56,11 @@ def main():
                             responseDebugMessage('.')
                         responseMessage('Wi-Fi connected.')
                         responseCommand('Wi-Fi connected.')
-                        connection = usocket.socket(usocket.AF_INET, usocket.SOCK_DGRAM)
+                        connection = usocket.socket(
+                            usocket.AF_INET, usocket.SOCK_DGRAM)
                     else:
-                        responseMessage('Can\'t understand controller cmd: `' + cmd + '`.')
+                        responseMessage(
+                            'Can\'t understand controller cmd: `' + cmd + '`.')
                 elif isTelloCommand(line):
                     cmd = sliceTelloCommandBody(line)
                     responseDebugMessage('Send to tello: `' + cmd + '`.')
@@ -66,7 +69,8 @@ def main():
                     responseMessage('Can\'t understand: `' + line + '`.')
         finally:
             if connection is not None:
-                responseDebugMessage('Finally block. But connection isn\'t finalized!')
+                responseDebugMessage(
+                    'Finally block. But connection isn\'t finalized!')
                 sendTelloCommand(connection, 'emergency')
 
 
@@ -74,34 +78,45 @@ def readLine():
     responseDebugMessage('wait command...')
     return sys.stdin.readline().splitlines()[0]
 
+
 def isResetCommand(line):
     return line == '!reset'
+
 
 def isTryCrashCommand(line):
     return line == '!crash'
 
+
 def isControllerCommand(line):
     return line.startswith('cmd-controller: ')
+
 
 def isTelloCommand(line):
     return line.startswith('cmd-tello: ')
 
+
 def sliceControllerCommandBody(line):
     return line[16:]
+
 
 def sliceTelloCommandBody(line):
     return line[11:]
 
+
 def responseDebugMessage(msg):
     print('dbg: ' + msg)
+
 
 def responseMessage(msg):
     print('msg: ' + msg)
 
+
 def responseCommand(cmd):
     print('cmd: ' + cmd)
 
+
 def sendTelloCommand(connection, cmd):
     connection.sendto(cmd.encode('utf-8'), TELLO_ADDR)
+
 
 main()
