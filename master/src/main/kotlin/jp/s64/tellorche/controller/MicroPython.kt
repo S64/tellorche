@@ -45,6 +45,14 @@ class MicroPythonTelloController(
         passphrase: WifiPassphrase
 ) : ITelloController {
 
+    override fun doCrash() {
+        try {
+            out.println("!crash")
+        } finally {
+            doFinally()
+        }
+    }
+
     private val out: PrintStream
     private val background: MicroPythonMessagePrinter
 
@@ -98,10 +106,14 @@ class MicroPythonTelloController(
         try {
             sendReset()
         } finally {
-            background.dispose()
-            out.close()
-            port.closePort()
+            doFinally()
         }
+    }
+
+    private fun doFinally() {
+        background.dispose()
+        out.close()
+        port.closePort()
     }
 
 }

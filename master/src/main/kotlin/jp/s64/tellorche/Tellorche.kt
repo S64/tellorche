@@ -51,12 +51,19 @@ object Tellorche {
             if (readLine() == "exec") break
         } while (true)
 
+        var succeed = false
+
         try {
             // exec
             mainLoop(args.startAtInMillis)
+            succeed = true
         } finally {
             controllers.forEach {
-                it.value.dispose()
+                if (succeed) {
+                    it.value.dispose()
+                } else {
+                    it.value.doCrash()
+                }
             }
         }
     }

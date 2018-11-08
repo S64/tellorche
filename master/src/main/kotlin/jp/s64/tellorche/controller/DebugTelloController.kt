@@ -9,6 +9,10 @@ class DebugTelloController(
     private val id: ControllerId
 ) : ITelloController {
 
+    override fun doCrash() {
+        TODO("doCrashを実装する")
+    }
+
     override fun send(command: TelloCommand, params: List<TelloActionParam>) {
         println(
             String.format(

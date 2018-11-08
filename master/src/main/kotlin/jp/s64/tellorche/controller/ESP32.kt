@@ -49,6 +49,10 @@ class ESP32TelloController(
     passphrase: WifiPassphrase
 ) : ITelloController {
 
+    override fun doCrash() {
+        TODO("doCrashを実装してません")
+    }
+
     companion object {
 
         private const val LINE_SEPARATOR = "\n"
