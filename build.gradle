@@ -46,14 +46,14 @@ task writeMicroPythonToEsp32(type:Exec, dependsOn: ['checkMicroPythonWriterRequi
             throw new GradleException('`-Pport=***`がセットされていません');
         }
     }
-    commandLine 'esptool.py', '--chip', 'esp32', '--port', "${project.findProperty('port') ?: ''}", '--baud', '115200', 'write_flash', '-z', '0x1000', './caches/esp32-20181107-v1.9.4-683-gd94aa577a.bin'
+    commandLine 'esptool.py', '--chip', 'esp32', '--port', "${project.findProperty('port') ?: ''}", '--baud', '115200', 'write_flash', '-z', '0x1000', './caches/esp32-20180511-v1.9.4.bin'
 }
 
 task downloadMicroPythonForEsp32 {
     doLast {
         download {
-            src 'http://micropython.org/resources/firmware/esp32-20181107-v1.9.4-683-gd94aa577a.bin'
-            dest new File('./caches/esp32-20181107-v1.9.4-683-gd94aa577a.bin')
+            src 'http://micropython.org/resources/firmware/esp32-20180511-v1.9.4.bin'
+            dest new File('./caches/esp32-20180511-v1.9.4.bin')
             onlyIfModified true
         }
     }
