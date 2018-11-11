@@ -3,6 +3,7 @@ import sys
 import network
 import machine
 import usocket
+import utime
 # import esp
 
 TELLO_ADDR = ('192.168.10.1', 8889)
@@ -122,13 +123,15 @@ def responseCommand(cmd):
 def sendTelloCommand(connection, cmd):
     responseDebugMessage('Send to tello: `' + cmd + '`.')
     connection.sendto(toBytes(cmd), TELLO_ADDR)
+    sentTime = getTickMs()
     responseDebugMessage('Wait response from tello...')
     reses = toStr(connection.recv(RESPONSE_BUFFER_SIZE)).splitlines()
     if len(reses) > 1:
         responseDebugMessage(
             'Warn: Received multiple responses: [' + ', '.join(reses) + '].')
     ret = reses[-1]
-    responseDebugMessage('Response received from tello: `' + ret + '`.')
+    responseDebugMessage('Response received from tello: `' +
+                         ret + '` (' + str(getTickMs() - sentTime) + 'ms).')
     return ret
 
 
@@ -138,6 +141,10 @@ def toBytes(str):
 
 def toStr(bytes):
     return bytes.decode('utf-8')
+
+
+def getTickMs():
+    return utime.ticks_ms()
 
 
 main()
