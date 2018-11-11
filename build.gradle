@@ -36,7 +36,7 @@ task cleanMasterApp(type:Exec) {
 
 task printCommandLineMasterApp {
     doLast {
-        println 'java -jar ./master/build/libs/tellorche-master-app.jar --config ./tellorcheconfig.example.json'
+        println 'java -jar ./master/build/libs/tellorche-master-app.jar --config ./examples/single-move.tellorcheconfig.example.json'
     }
 }
 
