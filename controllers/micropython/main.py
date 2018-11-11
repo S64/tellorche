@@ -3,6 +3,7 @@ import sys
 import network
 import machine
 import usocket
+# import esp
 
 TELLO_ADDR = ('192.168.10.1', 8889)
 
@@ -13,6 +14,7 @@ def main():
         wifi_ssid = None
         wifi_passphrase = None
         connection = None
+        # esp.osdebug(None)
         responseMessage('Tellorche ESP32 Controller.')
         responseCommand('wakeup.')
         try:
