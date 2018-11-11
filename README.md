@@ -98,6 +98,7 @@ MicroPythonに対応した開発ボード。
 
 - [開発の手引き](docs/development-tutorial.md)
 - [関連資料](docs/useful-docs.md)
+- [How to debug](docs/how-to-debug.md)
 
 ## How to build
 
