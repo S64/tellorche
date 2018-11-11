@@ -1,0 +1,3 @@
+tellorcheconfig.json
+*.tellorcheconfig.json
+!*.tellorcheconfig.example.json
