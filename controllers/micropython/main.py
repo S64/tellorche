@@ -3,8 +3,13 @@ import sys
 import network
 import machine
 import usocket
+import utime
+import esp
 
 TELLO_ADDR = ('192.168.10.1', 8889)
+BIND_ADDR = ('0.0.0.0', 8889)
+RESPONSE_BUFFER_SIZE = 4096
+OS_DEBUG = None
 
 
 def main():
@@ -13,6 +18,7 @@ def main():
         wifi_ssid = None
         wifi_passphrase = None
         connection = None
+        esp.osdebug(OS_DEBUG)
         responseMessage('Tellorche ESP32 Controller.')
         responseCommand('wakeup.')
         try:
@@ -58,20 +64,19 @@ def main():
                         responseCommand('Wi-Fi connected.')
                         connection = usocket.socket(
                             usocket.AF_INET, usocket.SOCK_DGRAM)
-                    else:
-                        responseMessage(
-                            'Can\'t understand controller cmd: `' + cmd + '`.')
+                        connection.bind(BIND_ADDR)
                 elif isTelloCommand(line):
                     cmd = sliceTelloCommandBody(line)
-                    responseDebugMessage('Send to tello: `' + cmd + '`.')
                     sendTelloCommand(connection, cmd)
                 else:
                     responseMessage('Can\'t understand: `' + line + '`.')
-        finally:
+        except Exception as e:
+            responseMessage('Exception caught!')
             if connection is not None:
                 responseDebugMessage(
                     'Finally block. But connection isn\'t finalized!')
                 sendTelloCommand(connection, 'emergency')
+            raise e
 
 
 def readLine():
@@ -116,7 +121,36 @@ def responseCommand(cmd):
 
 
 def sendTelloCommand(connection, cmd):
-    connection.sendto(cmd.encode('utf-8'), TELLO_ADDR)
+    responseDebugMessage('Send to tello: `' + cmd + '`.')
+    connection.sendto(toBytes(cmd), TELLO_ADDR)
+    sentTime = getTickMs()
+    responseDebugMessage('Wait response from tello...')
+    reses = toStr(connection.recv(RESPONSE_BUFFER_SIZE)).splitlines()
+    if len(reses) > 1:
+        responseDebugMessage(
+            'Warn: Received multiple responses: [' + ', '.join(reses) + '].')
+    ret = reses[-1]
+    responseDebugMessage('Response received from tello: `' +
+                         ret + '` (' + str(getTickMs() - sentTime) + 'ms).')
+    return ret
+
+
+def toBytes(str):
+    return str.encode('utf-8')
+
+
+def toStr(bytes):
+    ret = None
+    try:
+        ret = bytes.decode('utf-8', 'replace')
+    except UnicodeError:
+        responseDebugMessage('Failed to decode bytes to string. Ignored.')
+        pass
+    return ret
+
+
+def getTickMs():
+    return utime.ticks_ms()
 
 
 main()

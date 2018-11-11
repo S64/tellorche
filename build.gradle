@@ -145,6 +145,11 @@ task lintController(type:Exec, dependsOn: 'checkControllerLinterRequirements') {
     commandLine 'pycodestyle', './'
 }
 
+task formatController(type:Exec, dependsOn: 'checkControllerFormatterRequirements') {
+    workingDir './controllers/micropython'
+    commandLine 'autopep8', '-i', 'main.py'
+}
+
 boolean checkCommandExists(command) {
     try {
         def p = Runtime.getRuntime().exec(command)

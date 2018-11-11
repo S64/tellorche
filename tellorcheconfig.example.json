@@ -10,8 +10,8 @@
     "my-controller-1": {
       "type": "MicroPython",
       "type-micropython-config": {
-        "ssid": "your-wifi-ssid",
-        "passphrase": "your-wifi-passphrase",
+        "ssid": "your-tello's-wifi-ssid",
+        "passphrase": "your-tello's-wifi-passphrase",
         "com_descriptor": "/dev/cu.SLAB_USBtoUART"
       }
     }
@@ -22,44 +22,42 @@
         "command": "command",
         "params": [],
         "controllers": ["my-controller-1"]
-      }
-    ],
-    "5000": [
+      },
       {
         "command": "set_speed",
         "params": ["100"],
         "controllers": ["my-controller-1"]
       }
     ],
-    "6000": [
+    "3000": [
       {
         "command": "takeoff",
         "params": [],
         "controllers": ["my-controller-1"]
       }
     ],
-    "10000": [
+    "8000": [
       {
-        "command": "down",
-        "params": ["30"],
+        "command": "forward",
+        "params": ["50"],
         "controllers": ["my-controller-1"]
       }
     ],
-    "15000": [
+    "13000": [
+      {
+        "command": "back",
+        "params": ["50"],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "18000": [
       {
         "command": "flip",
         "params": ["f"],
         "controllers": ["my-controller-1"]
       }
     ],
-    "20000": [
-      {
-        "command": "flip",
-        "params": ["b"],
-        "controllers": ["my-controller-1"]
-      }
-    ],
-    "25000": [
+    "23000": [
       {
         "command": "land",
         "params": [],
