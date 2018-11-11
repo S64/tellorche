@@ -6,7 +6,7 @@ import usocket
 # import esp
 
 TELLO_ADDR = ('192.168.10.1', 8889)
-
+BIND_ADDR = ('0.0.0.0', 8889)
 
 def main():
     while True:
@@ -60,6 +60,7 @@ def main():
                         responseCommand('Wi-Fi connected.')
                         connection = usocket.socket(
                             usocket.AF_INET, usocket.SOCK_DGRAM)
+                        connection.bind(BIND_ADDR)
                     else:
                         responseMessage(
                             'Can\'t understand controller cmd: `' + cmd + '`.')
