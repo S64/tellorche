@@ -68,7 +68,6 @@ def main():
                             'Can\'t understand controller cmd: `' + cmd + '`.')
                 elif isTelloCommand(line):
                     cmd = sliceTelloCommandBody(line)
-                    responseDebugMessage('Send to tello: `' + cmd + '`.')
                     sendTelloCommand(connection, cmd)
                 else:
                     responseMessage('Can\'t understand: `' + line + '`.')
@@ -121,12 +120,16 @@ def responseCommand(cmd):
 
 
 def sendTelloCommand(connection, cmd):
+    responseDebugMessage('Send to tello: `' + cmd + '`.')
     connection.sendto(toBytes(cmd), TELLO_ADDR)
+    responseDebugMessage('Wait response from tello...')
     reses = toStr(connection.recv(RESPONSE_BUFFER_SIZE)).splitlines()
     if len(reses) > 1:
         responseDebugMessage(
             'Warn: Received multiple responses: [' + ', '.join(reses) + '].')
-    return reses[-1]
+    ret = reses[-1]
+    responseDebugMessage('Response received from tello: `' + ret + '`.')
+    return ret
 
 
 def toBytes(str):
