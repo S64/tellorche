@@ -1,0 +1,99 @@
+{
+  "accuracy_in_millis": 100,
+  "scale": {
+    "x_in_cm": 1,
+    "y_in_cm": 1,
+    "z_in_cm": 1,
+    "speed_in_cm_per_sec": 1
+  },
+  "controllers": {
+    "my-controller-1": {
+      "type": "MicroPython",
+      "type-micropython-config": {
+        "ssid": "your-tello's-wifi-ssid",
+        "passphrase": "your-tello's-wifi-passphrase",
+        "com_descriptor": "/dev/cu.SLAB_USBtoUART"
+      }
+    }
+  },
+  "sequence": {
+    "0": [
+      {
+        "command": "command",
+        "params": [],
+        "controllers": ["my-controller-1"]
+      },
+      {
+        "command": "set_speed",
+        "params": ["100"],
+        "controllers": ["my-controller-1"]
+      },
+      {
+        "command": "takeoff",
+        "params": [],
+        "controllers": ["my-controller-1"]
+      },
+      {
+        "command": "down",
+        "params": ["100"],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "10000": [
+      {
+        "command": "cw",
+        "params": ["150"],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "15000": [
+      {
+        "command": "forward",
+        "params": ["20"],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "20000": [
+      {
+        "command": "cw",
+        "params": ["120"],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "25000": [
+      {
+        "command": "forward",
+        "params": ["20"],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "30000": [
+      {
+        "command": "cw",
+        "params": ["120"],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "35000": [
+      {
+        "command": "forward",
+        "params": ["20"],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "40000": [
+      {
+        "command": "cw",
+        "params": ["-30"],
+        "controllers": ["my-controller-1"]
+      }
+    ],
+    "45000": [
+      {
+        "command": "land",
+        "params": [],
+        "controllers": ["my-controller-1"]
+      }
+    ]
+  }
+}
