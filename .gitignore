@@ -4,7 +4,6 @@
 /.idea
 /*.iml
 
-!/tellorcheconfig.example.json
-/tellorcheconfig.json
+tellorcheconfig.json
 
 /caches
