@@ -88,6 +88,7 @@ enum class TelloCommand(
     CW(Type.DO, "cw"),
     CCW(Type.DO, "ccw"),
     FLIP(Type.DO, "flip"),
+    GO(Type.DO, "go"),
     SET_SPEED(Type.SET, "set_speed"),
     READ_SPEED(Type.READ, "read_speed"),
     READ_BATTERY(Type.READ, "read_battery"),
@@ -140,6 +141,14 @@ enum class TelloCommand(
                 }
                 SET_SPEED -> {
                     return listOf((params[0].toInt() * scale.speedInCmPerSec).toString())
+                }
+                GO -> {
+                    return listOf(
+                            params[0].toInt() * scale.xInCm,
+                            params[1].toInt() * scale.yInCm,
+                            params[2].toInt() * scale.zInCm,
+                            params[3].toInt() * scale.speedInCmPerSec
+                    ).map { it.toString() }
                 }
                 else -> params
             }
