@@ -9,6 +9,7 @@ TELLO_ADDR = ('192.168.10.1', 8889)
 BIND_ADDR = ('0.0.0.0', 8889)
 RESPONSE_BUFFER_SIZE = 4096
 
+
 def main():
     while True:
         wifi = None
@@ -123,13 +124,17 @@ def sendTelloCommand(connection, cmd):
     connection.sendto(toBytes(cmd), TELLO_ADDR)
     reses = toStr(connection.recv(RESPONSE_BUFFER_SIZE)).splitlines()
     if len(reses) > 1:
-        responseDebugMessage('Warn: Received multiple responses: [' + ', '.join(reses) + '].')
+        responseDebugMessage(
+            'Warn: Received multiple responses: [' + ', '.join(reses) + '].')
     return reses[-1]
+
 
 def toBytes(str):
     return str.encode('utf-8')
 
+
 def toStr(bytes):
     return bytes.decode('utf-8')
+
 
 main()
