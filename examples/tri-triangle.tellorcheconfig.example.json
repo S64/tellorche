@@ -1,0 +1,135 @@
+{
+  "accuracy_in_millis": 100,
+  "scale": {
+    "x_in_cm": 1,
+    "y_in_cm": 1,
+    "z_in_cm": 1,
+    "speed_in_cm_per_sec": 1
+  },
+  "controllers": {
+    "top": {
+      "type": "MicroPython",
+      "type-micropython-config": {
+        "ssid": "your-tello's-wifi-ssid",
+        "passphrase": "your-tello's-wifi-passphrase",
+        "com_descriptor": "/dev/cu.SLAB_USBtoUART"
+      }
+    },
+    "right": {
+      "type": "MicroPython",
+      "type-micropython-config": {
+        "ssid": "your-tello's-wifi-ssid",
+        "passphrase": "your-tello's-wifi-passphrase",
+        "com_descriptor": "/dev/cu.SLAB_USBtoUART2"
+      }
+    },
+    "left": {
+      "type": "MicroPython",
+      "type-micropython-config": {
+        "ssid": "your-tello's-wifi-ssid",
+        "passphrase": "your-tello's-wifi-passphrase",
+        "com_descriptor": "/dev/cu.SLAB_USBtoUART3"
+      }
+    }
+  },
+  "sequence": {
+    "0": [
+      {
+        "command": "command",
+        "params": [],
+        "controllers": ["top", "left", "right"]
+      },
+      {
+        "command": "set_speed",
+        "params": ["100"],
+        "controllers": ["top", "left", "right"]
+      },
+      {
+        "command": "takeoff",
+        "params": [],
+        "controllers": ["top", "left", "right"]
+      },
+      {
+        "command": "down",
+        "params": ["100"],
+        "controllers": ["top", "left", "right"]
+      }
+    ],
+    "10000": [
+      {
+        "command": "cw",
+        "params": ["150"],
+        "controllers": ["top"]
+      },
+      {
+        "command": "cw",
+        "params": ["-90"],
+        "controllers": ["right"]
+      },
+      {
+        "command": "cw",
+        "params": ["30"],
+        "controllers": ["left"]
+      }
+    ],
+    "15000": [
+      {
+        "command": "forward",
+        "params": ["20"],
+        "controllers": ["top", "left", "right"]
+      }
+    ],
+    "20000": [
+      {
+        "command": "cw",
+        "params": ["120"],
+        "controllers": ["top", "right", "left"]
+      }
+    ],
+    "25000": [
+      {
+        "command": "forward",
+        "params": ["20"],
+        "controllers": ["top", "left", "right"]
+      }
+    ],
+    "30000": [
+      {
+        "command": "cw",
+        "params": ["120"],
+        "controllers": ["top", "left", "right"]
+      }
+    ],
+    "35000": [
+      {
+        "command": "forward",
+        "params": ["20"],
+        "controllers": ["top", "left", "right"]
+      }
+    ],
+    "40000": [
+      {
+        "command": "cw",
+        "params": ["-30"],
+        "controllers": ["top"]
+      },
+      {
+        "comand": "cw",
+        "params": ["-150"],
+        "controllers": ["right"]
+      },
+      {
+        "command": "cw",
+        "params": ["90"],
+        "controllers": ["left"]
+      }
+    ],
+    "45000": [
+      {
+        "command": "land",
+        "params": [],
+        "controllers": ["top", "left", "right"]
+      }
+    ]
+  }
+}
