@@ -8,6 +8,7 @@ import usocket
 TELLO_ADDR = ('192.168.10.1', 8889)
 BIND_ADDR = ('0.0.0.0', 8889)
 
+
 def main():
     while True:
         wifi = None
@@ -126,5 +127,6 @@ def sendTelloCommand(connection, cmd):
         responseDebugMessage(line)
         last = line
     return last
+
 
 main()
