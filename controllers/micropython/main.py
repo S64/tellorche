@@ -121,12 +121,15 @@ def responseCommand(cmd):
 
 def sendTelloCommand(connection, cmd):
     connection.sendto(toBytes(cmd), TELLO_ADDR)
-    reses = connection.recv(4096).decode('utf-8').splitlines()
+    reses = toStr(connection.recv(4096)).splitlines()
     if len(reses) > 1:
         responseDebugMessage('Warn: Received multiple responses: [' + ', '.join(reses) + '].')
     return reses[-1]
 
 def toBytes(str):
     return str.encode('utf-8')
+
+def toStr(bytes):
+    return bytes.decode('utf-8')
 
 main()
