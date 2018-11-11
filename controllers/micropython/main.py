@@ -4,11 +4,12 @@ import network
 import machine
 import usocket
 import utime
-# import esp
+import esp
 
 TELLO_ADDR = ('192.168.10.1', 8889)
 BIND_ADDR = ('0.0.0.0', 8889)
 RESPONSE_BUFFER_SIZE = 4096
+OS_DEBUG = None
 
 
 def main():
@@ -17,7 +18,7 @@ def main():
         wifi_ssid = None
         wifi_passphrase = None
         connection = None
-        # esp.osdebug(None)
+        esp.osdebug(OS_DEBUG)
         responseMessage('Tellorche ESP32 Controller.')
         responseCommand('wakeup.')
         try:
