@@ -64,19 +64,19 @@ def main():
                         connection = usocket.socket(
                             usocket.AF_INET, usocket.SOCK_DGRAM)
                         connection.bind(BIND_ADDR)
-                    else:
-                        responseMessage(
-                            'Can\'t understand controller cmd: `' + cmd + '`.')
                 elif isTelloCommand(line):
                     cmd = sliceTelloCommandBody(line)
                     sendTelloCommand(connection, cmd)
                 else:
                     responseMessage('Can\'t understand: `' + line + '`.')
-        finally:
+        except Exception as e:
+            responseMessage('Exception caught!')
             if connection is not None:
                 responseDebugMessage(
                     'Finally block. But connection isn\'t finalized!')
                 sendTelloCommand(connection, 'emergency')
+            raise e
+
 
 
 def readLine():
@@ -140,7 +140,13 @@ def toBytes(str):
 
 
 def toStr(bytes):
-    return bytes.decode('utf-8')
+    ret = None
+    try:
+        ret = bytes.decode('utf-8', 'replace')
+    except UnicodeError:
+        responseDebugMessage('Failed to decode bytes to string. `' + str(bytes) + '`.')
+        pass
+    return ret
 
 
 def getTickMs():
