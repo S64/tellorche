@@ -78,7 +78,6 @@ def main():
             raise e
 
 
-
 def readLine():
     responseDebugMessage('wait command...')
     return sys.stdin.readline().splitlines()[0]
@@ -144,7 +143,8 @@ def toStr(bytes):
     try:
         ret = bytes.decode('utf-8', 'replace')
     except UnicodeError:
-        responseDebugMessage('Failed to decode bytes to string. `' + str(bytes) + '`.')
+        responseDebugMessage(
+            'Failed to decode bytes to string. `' + str(bytes) + '`.')
         pass
     return ret
 
