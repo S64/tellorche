@@ -125,7 +125,12 @@ def sendTelloCommand(connection, cmd):
     connection.sendto(toBytes(cmd), TELLO_ADDR)
     sentTime = getTickMs()
     responseDebugMessage('Wait response from tello...')
-    reses = toStr(connection.recv(RESPONSE_BUFFER_SIZE)).splitlines()
+
+    rawRes = toStr(connection.recv(RESPONSE_BUFFER_SIZE))
+    if rawRes is None:
+        return None
+
+    reses = rawRes.splitlines()
     if len(reses) > 1:
         responseDebugMessage(
             'Warn: Received multiple responses: [' + ', '.join(reses) + '].')
@@ -146,7 +151,8 @@ def toStr(bytes):
     except UnicodeError:
         responseDebugMessage('Failed to decode bytes to string. Ignored.')
         pass
-    return ret
+    finally:
+        return ret
 
 
 def getTickMs():
