@@ -114,7 +114,7 @@
         "controllers": ["top"]
       },
       {
-        "comand": "cw",
+        "command": "cw",
         "params": ["-150"],
         "controllers": ["right"]
       },
