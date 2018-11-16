@@ -1,0 +1,96 @@
+{
+  "accuracy_in_millis": 50,
+  "scale": {
+    "x_in_cm": 1,
+    "y_in_cm": 1,
+    "z_in_cm": 1,
+    "speed_in_cm_per_sec": 1
+  },
+  "controllers": {
+    "left": {
+      "type": "MicroPython",
+      "type-micropython-config": {
+        "ssid": "your-tello's-wifi-ssid",
+        "passphrase": "ggrks",
+        "com_descriptor": "/dev/cu.SLAB_USBtoUART"
+      }
+    },
+    "center": {
+      "type": "MicroPython",
+      "type-micropython-config": {
+        "ssid": "your-tello's-wifi-ssid",
+        "passphrase": "your-tello's-wifi-passphrase",
+        "com_descriptor": "/dev/cu.SLAB_USBtoUART2"
+      }
+    },
+    "right": {
+      "type": "MicroPython",
+      "type-micropython-config": {
+        "ssid": "your-tello's-wifi-ssid",
+        "passphrase": "your-tello's-wifi-passphrase",
+        "com_descriptor": "/dev/cu.SLAB_USBtoUART3"
+      }
+    }
+  },
+  "sequence": {
+    "0": [
+      {
+        "command": "command",
+        "params": [],
+        "controllers": ["center", "left", "right"]
+      },
+      {
+        "command": "set_speed",
+        "params": ["100"],
+        "controllers": ["center", "left", "right"]
+      }
+    ],
+    "5000": [
+      {
+        "command": "takeoff",
+        "params": [],
+        "controllers": ["center", "left", "right"]
+      }
+    ],
+    "10000": [
+      {
+        "command": "left",
+        "params": ["180"],
+        "controllers": ["left"]
+      },
+      {
+        "command": "right",
+        "params": ["180"],
+        "controllers": ["right"]
+      }
+    ],
+    "15000": [
+      {
+        "command": "flip",
+        "params": ["b"],
+        "controllers": ["left"]
+      }
+    ],
+    "15500": [
+      {
+        "command": "flip",
+        "params": ["b"],
+        "controllers": ["center"]
+      }
+    ],
+    "16000": [
+      {
+        "command": "flip",
+        "params": ["b"],
+        "controllers": ["right"]
+      }
+    ],
+    "19000": [
+      {
+        "command": "land",
+        "params": [],
+        "controllers": ["left", "right", "center"]
+      }
+    ]
+  }
+}
