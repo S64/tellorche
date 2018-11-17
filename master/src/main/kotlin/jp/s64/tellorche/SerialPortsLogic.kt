@@ -3,7 +3,7 @@ package jp.s64.tellorche
 import com.fazecast.jSerialComm.SerialPort
 import java.util.Locale
 
-class PortsLogic {
+class SerialPortsLogic {
 
     fun exec() {
         SerialPort.getCommPorts().forEachIndexed { i, port ->

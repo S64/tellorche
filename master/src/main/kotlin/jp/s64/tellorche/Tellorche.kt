@@ -26,7 +26,7 @@ object Tellorche {
 
         when (args.mode) {
             is SequenceMode -> SequenceLogic(args.mode as SequenceMode).exec()
-            is PortsMode -> PortsLogic().exec()
+            is SerialPortsMode -> SerialPortsLogic().exec()
         }
     }
 }
@@ -36,7 +36,7 @@ class Args {
     @Argument(handler = SubCommandHandler::class, required = true, index = 0)
     @SubCommands(
         SubCommand(name = "sequence", impl = SequenceMode::class),
-        SubCommand(name = "ports", impl = PortsMode::class)
+        SubCommand(name = "serialports", impl = SerialPortsMode::class)
     )
     lateinit var mode: Mode
 }
@@ -50,6 +50,6 @@ class SequenceMode : Mode() {
     var startAtInMillis: TimeInMillis? = null
 }
 
-class PortsMode : Mode() {}
+class SerialPortsMode : Mode() {}
 
 sealed class Mode
