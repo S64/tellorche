@@ -108,7 +108,7 @@ task printCommandLineWriteController {
 
 task printCommandLineSerialPorts {
     doLast {
-        println "println 'java -jar ./master/build/libs/tellorche-master-app.jar serialports"
+        println "java -jar ./master/build/libs/tellorche-master-app.jar serialports"
     }
 }
 
