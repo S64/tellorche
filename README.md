@@ -70,6 +70,7 @@ cd tellorche
 ### 4. 使用方法チェック
 
 ```sh
+./gradlew.bat printCommandLineSerialPorts
 ./gradlew.bat printCommandLineMasterApp
 ./gradlew.bat printCommandLineWriteMicroPythonForEsp32
 ./gradlew.bat printCommandLineWriteController

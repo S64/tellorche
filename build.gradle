@@ -106,6 +106,12 @@ task printCommandLineWriteController {
     }
 }
 
+task printCommandLineSerialPorts {
+    doLast {
+        println "java -jar ./master/build/libs/tellorche-master-app.jar serialports"
+    }
+}
+
 task writeController(dependsOn: 'checkMicroPythonWriterRequirements') {
     doFirst {
         if (!project.hasProperty('port')) {
