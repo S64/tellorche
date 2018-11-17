@@ -10,5 +10,4 @@ interface ITelloController {
     fun dispose()
 
     fun doCrash()
-
 }

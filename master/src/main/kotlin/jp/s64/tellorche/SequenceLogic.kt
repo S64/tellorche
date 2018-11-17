@@ -11,7 +11,7 @@ import jp.s64.tellorche.entity.TellorcheConfigJsonAdapter
 import jp.s64.tellorche.entity.TimeInMillis
 
 class SequenceLogic(
-        private val args: SequenceMode
+    private val args: SequenceMode
 ) {
 
     private val moshi = Moshi.Builder()
@@ -51,7 +51,6 @@ class SequenceLogic(
             println("[Tellorche] Config file loaded. Input `exec` to start sequence:")
             if (readLine() == "exec") break
         } while (true)
-
 
         // exec
         mainLoop(args.startAtInMillis)
@@ -115,5 +114,4 @@ class SequenceLogic(
         controllers[id]!!
                 .send(command, params)
     }
-
 }

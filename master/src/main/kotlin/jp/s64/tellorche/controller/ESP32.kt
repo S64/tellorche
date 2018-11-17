@@ -116,8 +116,8 @@ class ESP32TelloController(
 }
 
 class MessagePrinter(
-        private val id: ControllerId,
-        private val `in`: BufferedReader
+    private val id: ControllerId,
+    private val `in`: BufferedReader
 ) {
 
     private val cmds: MutableList<String> = Collections.synchronizedList(mutableListOf())
@@ -163,5 +163,4 @@ class MessagePrinter(
     fun dispose() {
         thread = null
     }
-
 }

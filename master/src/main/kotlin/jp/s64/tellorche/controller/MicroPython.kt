@@ -15,9 +15,9 @@ import java.util.Locale
 
 @JsonClass(generateAdapter = true)
 data class MicroPythonControllerConfig(
-        @Json(name = "ssid") val ssid: WifiSsid,
-        @Json(name = "passphrase") val passphrase: WifiPassphrase,
-        @Json(name = "com_descriptor") val comPortDescriptor: ComPortDescriptor
+    @Json(name = "ssid") val ssid: WifiSsid,
+    @Json(name = "passphrase") val passphrase: WifiPassphrase,
+    @Json(name = "com_descriptor") val comPortDescriptor: ComPortDescriptor
 ) {
 
     fun createInterface(id: ControllerId): ITelloController {
@@ -39,10 +39,10 @@ data class MicroPythonControllerConfig(
 }
 
 class MicroPythonTelloController(
-        id: ControllerId,
-        private val port: SerialPort,
-        ssid: WifiSsid,
-        passphrase: WifiPassphrase
+    id: ControllerId,
+    private val port: SerialPort,
+    ssid: WifiSsid,
+    passphrase: WifiPassphrase
 ) : ITelloController {
 
     override fun doCrash() {
@@ -68,7 +68,7 @@ class MicroPythonTelloController(
         do {
             val line = background.nextCmd()
             if (line == "wakeup.") {
-                break;
+                break
             }
         } while (true)
 
@@ -115,12 +115,11 @@ class MicroPythonTelloController(
         out.close()
         port.closePort()
     }
-
 }
 
-class MicroPythonMessagePrinter (
-        private val id: ControllerId,
-        private val `in`: BufferedReader
+class MicroPythonMessagePrinter(
+    private val id: ControllerId,
+    private val `in`: BufferedReader
 ) {
 
     private val cmds: MutableList<String> = Collections.synchronizedList(mutableListOf())
@@ -166,5 +165,4 @@ class MicroPythonMessagePrinter (
     fun dispose() {
         thread = null
     }
-
 }
