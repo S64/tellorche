@@ -1,6 +1,7 @@
 package jp.s64.tellorche
 
 import jp.s64.tellorche.entity.TimeInMillis
+import jp.s64.tellorche.gui.TellorcheGui
 import org.kohsuke.args4j.Argument
 import org.kohsuke.args4j.CmdLineException
 import org.kohsuke.args4j.CmdLineParser
@@ -9,6 +10,8 @@ import org.kohsuke.args4j.spi.SubCommand
 import org.kohsuke.args4j.spi.SubCommandHandler
 import org.kohsuke.args4j.spi.SubCommands
 import java.io.File
+import java.net.URI
+import java.nio.file.Paths
 
 object Tellorche {
 
@@ -26,9 +29,16 @@ object Tellorche {
 
         when (args.mode) {
             is SequenceMode -> SequenceLogic(args.mode as SequenceMode).exec()
-            is SerialPortsMode -> SerialPortsLogic().exec()
+            is SerialPortsMode -> SerialPortsLogic().exec(System.out, afterClose = false)
+            is GuiMode -> TellorcheGui().exec()
         }
     }
+
+    fun filename(): String {
+        return Paths.get(javaClass.protectionDomain.codeSource.location.toURI())
+                .fileName.toString()
+    }
+
 }
 
 class Args {
@@ -36,7 +46,8 @@ class Args {
     @Argument(handler = SubCommandHandler::class, required = true, index = 0)
     @SubCommands(
         SubCommand(name = "sequence", impl = SequenceMode::class),
-        SubCommand(name = "serialports", impl = SerialPortsMode::class)
+        SubCommand(name = "serialports", impl = SerialPortsMode::class),
+        SubCommand(name = "gui", impl = GuiMode::class)
     )
     lateinit var mode: Mode
 }
@@ -51,5 +62,7 @@ class SequenceMode : Mode() {
 }
 
 class SerialPortsMode : Mode() {}
+
+class GuiMode : Mode() {}
 
 sealed class Mode
