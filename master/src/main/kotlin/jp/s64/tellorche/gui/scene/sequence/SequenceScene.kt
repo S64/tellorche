@@ -2,6 +2,7 @@ package jp.s64.tellorche.gui.scene.sequence
 
 import javafx.event.ActionEvent
 import javafx.fxml.FXML
+import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextInputControl
 import javafx.scene.input.KeyEvent
@@ -34,6 +35,9 @@ class SequenceSceneController {
     lateinit var configFilePath: TextInputControl
 
     @FXML
+    lateinit var execButton: Button
+
+    @FXML
     fun initialize() {
         checkConfigFilePath()
     }
@@ -44,7 +48,11 @@ class SequenceSceneController {
     }
 
     private fun checkConfigFilePath() {
-        configFilePathState.text = if (File(configFilePath.text).exists()) {
+        val file = File(configFilePath.text)
+        val flag = file.exists() && file.isFile
+
+        execButton.isDisable = !flag
+        configFilePathState.text = if (flag) {
             "OK"
         } else {
             "NG"

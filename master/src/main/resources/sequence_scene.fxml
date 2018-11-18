@@ -27,6 +27,6 @@
             <TextField fx:id="configFilePath" onKeyReleased="#onConfigFilePathChanged" GridPane.columnIndex="2" />
          </children>
       </GridPane>
-      <Button mnemonicParsing="false" onAction="#onExecuteClicked" text="実行" />
+      <Button fx:id="execButton" mnemonicParsing="false" onAction="#onExecuteClicked" text="実行" />
    </children>
 </VBox>
