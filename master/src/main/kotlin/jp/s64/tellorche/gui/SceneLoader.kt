@@ -11,5 +11,4 @@ object SceneLoader {
                     javaClass.classLoader.getResource(filename)
             )
     )
-
 }

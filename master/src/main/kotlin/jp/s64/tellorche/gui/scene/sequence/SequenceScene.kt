@@ -3,7 +3,6 @@ package jp.s64.tellorche.gui.scene.sequence
 import javafx.fxml.FXML
 import javafx.scene.control.Label
 import javafx.scene.control.TextInputControl
-import javafx.scene.input.InputMethodEvent
 import javafx.scene.input.KeyEvent
 import javafx.stage.Modality
 import javafx.stage.Stage
@@ -23,7 +22,6 @@ object SequenceSceneFactory {
             initModality(Modality.APPLICATION_MODAL)
         }.showAndWait()
     }
-
 }
 
 class SequenceSceneController {
@@ -51,5 +49,4 @@ class SequenceSceneController {
             "NG"
         }
     }
-
 }

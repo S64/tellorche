@@ -18,5 +18,4 @@ class SerialPortsLogic {
             output.close()
         }
     }
-
 }

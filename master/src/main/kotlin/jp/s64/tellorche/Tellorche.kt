@@ -10,7 +10,6 @@ import org.kohsuke.args4j.spi.SubCommand
 import org.kohsuke.args4j.spi.SubCommandHandler
 import org.kohsuke.args4j.spi.SubCommands
 import java.io.File
-import java.net.URI
 import java.nio.file.Paths
 
 object Tellorche {
@@ -38,7 +37,6 @@ object Tellorche {
         return Paths.get(javaClass.protectionDomain.codeSource.location.toURI())
                 .fileName.toString()
     }
-
 }
 
 class Args {
@@ -61,8 +59,8 @@ class SequenceMode : Mode() {
     var startAtInMillis: TimeInMillis? = null
 }
 
-class SerialPortsMode : Mode() {}
+class SerialPortsMode : Mode()
 
-class GuiMode : Mode() {}
+class GuiMode : Mode()
 
 sealed class Mode

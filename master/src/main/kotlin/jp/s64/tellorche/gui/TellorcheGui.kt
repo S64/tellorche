@@ -9,7 +9,6 @@ class TellorcheGui {
         javafx.application.Application
                 .launch(App::class.java)
     }
-
 }
 
 class App : javafx.application.Application() {
@@ -20,5 +19,4 @@ class App : javafx.application.Application() {
             scene = FirstSceneFactory.create()
         }.show()
     }
-
 }

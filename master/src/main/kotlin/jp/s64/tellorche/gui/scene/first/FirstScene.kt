@@ -13,7 +13,6 @@ import jp.s64.tellorche.gui.scene.serialports.SerialPortsSceneFactory
 object FirstSceneFactory {
 
     fun create(): Scene = SceneLoader.load("first_scene.fxml")
-
 }
 
 class FirstSceneController {
@@ -35,5 +34,4 @@ class FirstSceneController {
         SerialPortsSceneFactory
                 .createAndShow(root.scene.window as Stage)
     }
-
 }

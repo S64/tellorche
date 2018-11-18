@@ -9,14 +9,11 @@ import javafx.stage.Stage
 import jp.s64.tellorche.SerialPortsLogic
 import jp.s64.tellorche.Tellorche
 import jp.s64.tellorche.gui.SceneLoader
-import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.InputStreamReader
-import java.io.OutputStream
 import java.io.PipedInputStream
 import java.io.PipedOutputStream
 import java.io.PrintStream
-import java.io.PrintWriter
 
 object SerialPortsSceneFactory {
 
@@ -31,7 +28,6 @@ object SerialPortsSceneFactory {
             initModality(Modality.APPLICATION_MODAL)
         }.showAndWait()
     }
-
 }
 
 class SerialPortsController {
@@ -96,5 +92,4 @@ class SerialPortsController {
     private fun dispose() {
         stream.close()
     }
-
 }
