@@ -6,9 +6,11 @@ import javafx.scene.Scene
 
 object SceneLoader {
 
+    fun classLoader() = javaClass.classLoader
+
     fun load(filename: String) = Scene(
             FXMLLoader.load<Parent>(
-                    javaClass.classLoader.getResource(filename)
+                    classLoader().getResource(filename)
             )
     )
 }

@@ -1,5 +1,6 @@
 package jp.s64.tellorche.gui.scene.sequence
 
+import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.scene.control.Label
 import javafx.scene.control.TextInputControl
@@ -49,4 +50,15 @@ class SequenceSceneController {
             "NG"
         }
     }
+
+    @FXML
+    fun onExecuteClicked(actionEvent: ActionEvent) {
+        SequenceExecutionScene
+                .createAndShow(
+                        configFilePath.scene.window as Stage,
+                        filename = configFilePath.text,
+                        startPeriod = 0L
+                )
+    }
+
 }
