@@ -9,6 +9,7 @@ import jp.s64.tellorche.entity.TelloCommand
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintStream
+import java.io.PrintWriter
 import java.lang.IllegalStateException
 import java.util.Collections
 import java.util.Locale
@@ -24,7 +25,11 @@ data class ESP32ControllerConfig(
     @Json(name = "com_descriptor") val comPortDescriptor: ComPortDescriptor
 ) {
 
-    fun createInterface(id: ControllerId): ITelloController {
+    fun createInterface(
+            id: ControllerId,
+            output: PrintStream,
+            error: PrintStream
+    ): ITelloController {
         val port = SerialPort.getCommPort(comPortDescriptor)
                 .apply { baudRate = 921600 }
                 .apply { this.openPort() }
@@ -38,7 +43,7 @@ data class ESP32ControllerConfig(
                 0, 0
         )
 
-        return ESP32TelloController(id, port, ssid, passphrase)
+        return ESP32TelloController(id, port, ssid, passphrase, logger = output, error = error)
     }
 }
 
@@ -46,7 +51,9 @@ class ESP32TelloController(
     private val id: ControllerId,
     private val port: SerialPort,
     ssid: WifiSsid,
-    passphrase: WifiPassphrase
+    passphrase: WifiPassphrase,
+    private val logger: PrintStream,
+    private val error: PrintStream
 ) : ITelloController {
 
     override fun doCrash() {
@@ -65,7 +72,8 @@ class ESP32TelloController(
     init {
         background = MessagePrinter(
                 id = id,
-                `in` = BufferedReader(InputStreamReader(port.inputStream))
+                `in` = BufferedReader(InputStreamReader(port.inputStream)),
+                logger = logger
         )
         out = PrintStream(port.outputStream, true)
 
@@ -117,7 +125,8 @@ class ESP32TelloController(
 
 class MessagePrinter(
     private val id: ControllerId,
-    private val `in`: BufferedReader
+    private val `in`: BufferedReader,
+    private val logger: PrintStream
 ) {
 
     private val cmds: MutableList<String> = Collections.synchronizedList(mutableListOf())
@@ -136,7 +145,7 @@ class MessagePrinter(
                     cmds.add(line.substring(5))
                 }
 
-                System.out.println(String.format(
+                logger.println(String.format(
                         Locale.ROOT,
                         "[%s] %s",
                         id,

@@ -27,7 +27,7 @@ object Tellorche {
         }
 
         when (args.mode) {
-            is SequenceMode -> SequenceLogic(args.mode as SequenceMode).exec()
+            is SequenceMode -> SequenceLogic(args.mode as SequenceMode, output = System.out, error = System.err).exec()
             is SerialPortsMode -> SerialPortsLogic().exec(System.out, afterClose = false)
             is GuiMode -> TellorcheGui().exec()
         }

@@ -9,9 +9,13 @@ import jp.s64.tellorche.entity.TelloCommand
 import jp.s64.tellorche.entity.TellorcheConfig
 import jp.s64.tellorche.entity.TellorcheConfigJsonAdapter
 import jp.s64.tellorche.entity.TimeInMillis
+import java.io.PrintStream
+import java.io.PrintWriter
 
 class SequenceLogic(
-    private val args: SequenceMode
+    private val args: SequenceMode,
+    private val output: PrintStream,
+    private val error: PrintStream
 ) {
 
     private val moshi = Moshi.Builder()
@@ -31,24 +35,24 @@ class SequenceLogic(
         ) ?: TODO("Parse error.")
 
         controllers = config.controllers.mapValues {
-            it.value.createInterface(it.key)
+            it.value.createInterface(it.key, output = output, error = error)
         }
 
         Runtime.getRuntime().addShutdownHook(Thread {
             if (!safeEnded) {
-                System.err.println("Do crash!")
+                error.println("Do crash!")
                 controllers.forEach {
                     it.value.doCrash()
                 }
             } else {
-                System.out.println("Safe shutdown.")
+                output.println("Safe shutdown.")
             }
         })
     }
 
     fun exec() {
         do {
-            println("[Tellorche] Config file loaded. Input `exec` to start sequence:")
+            output.println("[Tellorche] Config file loaded. Input `exec` to start sequence:")
             if (readLine() == "exec") break
         } while (true)
 
@@ -82,7 +86,7 @@ class SequenceLogic(
             val targets = config.sequence.keys.filter { it <= toExecuteTick && !executedPeriods.contains(it) }
 
             if (targets.isNotEmpty()) {
-                println("[Tellorche] Period: ($currentTick)...$toExecuteTick:")
+                output.println("[Tellorche] Period: ($currentTick)...$toExecuteTick:")
             }
 
             targets.forEach { timeInMillis ->
@@ -102,7 +106,7 @@ class SequenceLogic(
             }
 
             if (executedPeriods.size == config.sequence.size) {
-                println("[Tellorche] All sequences was executed.")
+                output.println("[Tellorche] All sequences was executed.")
                 break
             }
         } while (true)

@@ -3,10 +3,14 @@ package jp.s64.tellorche.controller
 import jp.s64.tellorche.entity.ControllerId
 import jp.s64.tellorche.entity.TelloActionParam
 import jp.s64.tellorche.entity.TelloCommand
+import java.io.PrintStream
+import java.io.PrintWriter
 import java.util.Locale
 
 class DebugTelloController(
-    private val id: ControllerId
+        private val id: ControllerId,
+        private val output: PrintStream,
+        private val error: PrintStream
 ) : ITelloController {
 
     override fun doCrash() {
@@ -14,7 +18,7 @@ class DebugTelloController(
     }
 
     override fun send(command: TelloCommand, params: List<TelloActionParam>) {
-        println(
+        output.println(
             String.format(
                     Locale.ROOT,
                     "Debug[%s]: `%s`",
@@ -24,7 +28,7 @@ class DebugTelloController(
     }
 
     override fun dispose() {
-        println(
+        output.println(
                 String.format(
                         Locale.ROOT,
                         "Debug[%s]: disposed.",
