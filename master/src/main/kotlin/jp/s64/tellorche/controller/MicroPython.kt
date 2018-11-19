@@ -139,6 +139,9 @@ class MicroPythonMessagePrinter(
     init {
         thread = Thread {
             while (thread != null) {
+                while (!`in`.ready()) {
+                    Thread.sleep(1) // for interrupt
+                }
                 val line = `in`.readLine()
 
                 if (line == null) {
@@ -164,7 +167,13 @@ class MicroPythonMessagePrinter(
         }
 
         while (cmds.size == (lastRead + 1) && thread != null) {
-            Thread.sleep(10)
+            try {
+                Thread.sleep(10)
+            } catch (_: InterruptedException) {
+                if (thread != null && !thread!!.isInterrupted) {
+                    thread!!.interrupt()
+                }
+            }
         }
         lastRead++
 

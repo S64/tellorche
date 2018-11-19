@@ -1,11 +1,26 @@
 package jp.s64.tellorche.gui.scene.sequence
 
+import javafx.application.Platform
+import javafx.event.ActionEvent
+import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
-import javafx.scene.Parent
 import javafx.scene.Scene
+import javafx.scene.control.Label
+import javafx.scene.control.TextField
+import javafx.scene.layout.BorderPane
 import javafx.stage.Modality
 import javafx.stage.Stage
+import jp.s64.tellorche.SequenceLogic
+import jp.s64.tellorche.SequenceMode
+import jp.s64.tellorche.Tellorche
 import jp.s64.tellorche.gui.SceneLoader
+import java.io.BufferedReader
+import java.io.File
+import java.io.InputStreamReader
+import java.io.PipedInputStream
+import java.io.PipedOutputStream
+import java.io.PrintStream
+import java.io.PrintWriter
 import kotlin.properties.Delegates
 
 object SequenceExecutionScene {
@@ -36,12 +51,114 @@ object SequenceExecutionScene {
 
 class SequenceExecutionController {
 
+    @FXML
+    lateinit var output: Label
+
+    @FXML
+    lateinit var root: BorderPane
+
+    @FXML
+    lateinit var inputField: TextField
+
+    private val input: PipedOutputStream
+    private val writer: PrintWriter
+
+
+    private val buffer: BufferedReader
+    private val stream: PrintStream
+
     private lateinit var filename: String
     private var startPeriod: Long by Delegates.notNull()
+
+    private lateinit var consoleThread: Thread
+    private lateinit var logicThread: Thread
+
+    private lateinit var logic: SequenceLogic
+
+    init {
+        val input = PipedInputStream()
+
+        stream = PrintStream(PipedOutputStream(input))
+        buffer = BufferedReader(InputStreamReader(input))
+
+        this.input = PipedOutputStream()
+        this.writer = PrintWriter(this.input)
+    }
+
+    @FXML
+    fun initialize() {
+        root.sceneProperty().addListener { _, _, newScene ->
+            newScene.windowProperty().addListener { _, _, newWindow ->
+                (newWindow as Stage)
+                        .showingProperty()
+                        .addListener { _, oldValue, newValue ->
+                            if (oldValue == false && newValue == true) {
+                                onWindowCreated()
+                            } else if (oldValue == true && newValue == false) {
+                                dispose()
+                            }
+                        }
+            }
+        }
+    }
+
+    private fun onWindowCreated() {
+        consoleThread = Thread {
+            Platform.runLater {
+                printlnInGui("java -jar " + Tellorche.filename() + " serialports")
+            }
+            buffer.forEachLine {
+                Platform.runLater {
+                    printlnInGui(it)
+                }
+            }
+            Platform.runLater {
+                printlnInGui("exited.")
+            }
+        }.apply {
+            start()
+        }
+
+        logicThread = Thread {
+            logic = SequenceLogic(
+                    SequenceMode().apply {
+                        configFile = File(filename)
+                        startAtInMillis = startPeriod
+                    },
+                    input = BufferedReader(InputStreamReader(PipedInputStream(input))),
+                    output = stream,
+                    error = stream,
+                    isConsole = true
+            )
+            logic.exec()
+        }.apply {
+            start()
+        }
+    }
 
     fun setArgs(filename: String, startPeriod: Long) {
         this.filename = filename
         this.startPeriod = startPeriod
+    }
+
+    private fun printlnInGui(line: String) {
+        output.text += line + System.lineSeparator()
+    }
+
+    private fun dispose() {
+        stream.close()
+    }
+
+    @FXML
+    fun onEnterInput(actionEvent: ActionEvent) {
+        val cmd = inputField.text
+        inputField.text = ""
+        writer.println(cmd)
+    }
+
+    @FXML
+    fun onClickKillButton(actionEvent: ActionEvent) {
+        logicThread.interrupt()
     }
 
 }

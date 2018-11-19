@@ -9,7 +9,10 @@ import org.kohsuke.args4j.Option
 import org.kohsuke.args4j.spi.SubCommand
 import org.kohsuke.args4j.spi.SubCommandHandler
 import org.kohsuke.args4j.spi.SubCommands
+import java.io.BufferedInputStream
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
 import java.nio.file.Paths
 
 object Tellorche {
@@ -27,7 +30,7 @@ object Tellorche {
         }
 
         when (args.mode) {
-            is SequenceMode -> SequenceLogic(args.mode as SequenceMode, output = System.out, error = System.err).exec()
+            is SequenceMode -> SequenceLogic(args.mode as SequenceMode, input = BufferedReader(InputStreamReader(System.`in`)), output = System.out, error = System.err, isConsole = false).exec()
             is SerialPortsMode -> SerialPortsLogic().exec(System.out, afterClose = false)
             is GuiMode -> TellorcheGui().exec()
         }

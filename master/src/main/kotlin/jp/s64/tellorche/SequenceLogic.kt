@@ -9,13 +9,16 @@ import jp.s64.tellorche.entity.TelloCommand
 import jp.s64.tellorche.entity.TellorcheConfig
 import jp.s64.tellorche.entity.TellorcheConfigJsonAdapter
 import jp.s64.tellorche.entity.TimeInMillis
+import java.io.BufferedInputStream
+import java.io.BufferedReader
 import java.io.PrintStream
-import java.io.PrintWriter
 
 class SequenceLogic(
     private val args: SequenceMode,
+    private val input: BufferedReader,
     private val output: PrintStream,
-    private val error: PrintStream
+    private val error: PrintStream,
+    private val isConsole: Boolean
 ) {
 
     private val moshi = Moshi.Builder()
@@ -38,22 +41,31 @@ class SequenceLogic(
             it.value.createInterface(it.key, output = output, error = error)
         }
 
-        Runtime.getRuntime().addShutdownHook(Thread {
-            if (!safeEnded) {
-                error.println("Do crash!")
-                controllers.forEach {
-                    it.value.doCrash()
-                }
-            } else {
-                output.println("Safe shutdown.")
+        if (isConsole) {
+            Runtime.getRuntime().addShutdownHook(Thread {
+                shutdown()
+            })
+        }
+    }
+
+    private fun shutdown() {
+        if (!safeEnded) {
+            error.println("Do crash!")
+            controllers.forEach {
+                it.value.doCrash()
             }
-        })
+        } else {
+            output.println("Safe shutdown.")
+        }
     }
 
     fun exec() {
         do {
             output.println("[Tellorche] Config file loaded. Input `exec` to start sequence:")
-            if (readLine() == "exec") break
+            while (!input.ready()) {
+                Thread.sleep(10) // for interrupt
+            }
+            if (input.readLine() == "exec") break
         } while (true)
 
         // exec
@@ -62,6 +74,11 @@ class SequenceLogic(
 
         controllers.forEach {
             it.value.dispose()
+        }
+
+        if (isConsole) {
+            output.close()
+            error.close()
         }
     }
 
