@@ -104,33 +104,40 @@ class SequenceExecutionController {
 
     private fun onWindowCreated() {
         consoleThread = Thread {
-            Platform.runLater {
-                printlnInGui("java -jar " + Tellorche.filename() + " serialports")
-            }
-            buffer.forEachLine {
+            try {
                 Platform.runLater {
-                    printlnInGui(it)
+                    printlnInGui("java -jar " + Tellorche.filename() + " serialports")
                 }
-            }
-            Platform.runLater {
-                printlnInGui("exited.")
+                buffer.forEachLine {
+                    Platform.runLater {
+                        printlnInGui(it)
+                    }
+                }
+            } finally {
+                Platform.runLater {
+                    printlnInGui("exited.")
+                }
             }
         }.apply {
             start()
         }
 
         logicThread = Thread {
-            logic = SequenceLogic(
-                    SequenceMode().apply {
-                        configFile = File(filename)
-                        startAtInMillis = startPeriod
-                    },
-                    input = BufferedReader(InputStreamReader(PipedInputStream(input))),
-                    output = stream,
-                    error = stream,
-                    isConsole = true
-            )
-            logic.exec()
+            try {
+                logic = SequenceLogic(
+                        SequenceMode().apply {
+                            configFile = File(filename)
+                            startAtInMillis = startPeriod
+                        },
+                        input = BufferedReader(InputStreamReader(PipedInputStream(input))),
+                        output = stream,
+                        error = stream,
+                        isConsole = true
+                )
+                logic.exec()
+            } catch (e: Throwable) {
+                e.printStackTrace(stream)
+            }
         }.apply {
             start()
         }
