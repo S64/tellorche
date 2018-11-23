@@ -27,7 +27,7 @@ object Tellorche {
         when (args.mode) {
             is SequenceMode -> SequenceLogic(args.mode as SequenceMode).exec()
             is SerialPortsMode -> SerialPortsLogic().exec()
-            is ValidateMode -> TODO()
+            is ValidateMode -> ValidateLogic(args.mode as ValidateMode).exec()
         }
     }
 }
