@@ -65,6 +65,9 @@ class SequenceExecutionController {
     @FXML
     lateinit var sendButton: Button
 
+    @FXML
+    lateinit var killButton: Button
+
     private val input: PipedOutputStream
     private val writer: PrintWriter
 
@@ -121,6 +124,7 @@ class SequenceExecutionController {
             } finally {
                 Platform.runLater {
                     printlnInGui("exited.")
+                    onKilled()
                 }
             }
         }.apply {
@@ -190,6 +194,12 @@ class SequenceExecutionController {
         inputField.text = ""
         writer.println(cmd)
         checkInputValue()
+    }
+
+    private fun onKilled() {
+        sendButton.isDisable = true
+        inputField.isDisable = true
+        killButton.isDisable = true
     }
 
 }
