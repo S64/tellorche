@@ -6,6 +6,8 @@ import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextInputControl
 import javafx.scene.input.KeyEvent
+import javafx.scene.layout.VBox
+import javafx.stage.FileChooser
 import javafx.stage.Modality
 import javafx.stage.Stage
 import jp.s64.tellorche.gui.SceneLoader
@@ -38,6 +40,9 @@ class SequenceSceneController {
     lateinit var execButton: Button
 
     @FXML
+    lateinit var root: VBox
+
+    @FXML
     fun initialize() {
         checkConfigFilePath()
     }
@@ -63,10 +68,17 @@ class SequenceSceneController {
     fun onExecuteClicked(actionEvent: ActionEvent) {
         SequenceExecutionScene
                 .createAndShow(
-                        configFilePath.scene.window as Stage,
+                        root.scene.window as Stage,
                         filename = configFilePath.text,
                         startPeriod = 0L
                 )
+    }
+
+    fun onClickConfigPickButton(actionEvent: ActionEvent) {
+        configFilePath.text = FileChooser()
+                .showOpenDialog(root.scene.window as Stage)
+                .absolutePath
+        checkConfigFilePath()
     }
 
 }

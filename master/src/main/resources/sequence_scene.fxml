@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jp.s64.tellorche.gui.scene.sequence.SequenceSceneController">
+<VBox fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jp.s64.tellorche.gui.scene.sequence.SequenceSceneController">
    <children>
       <GridPane prefWidth="637.0">
         <columnConstraints>
@@ -22,7 +22,7 @@
         </rowConstraints>
          <children>
             <Label text="tellorcheconfig.json: " GridPane.columnIndex="1" />
-            <Button mnemonicParsing="false" text="参照" GridPane.columnIndex="3" />
+            <Button mnemonicParsing="false" onAction="#onClickConfigPickButton" text="参照" GridPane.columnIndex="3" />
             <Label fx:id="configFilePathState" text="?" />
             <TextField fx:id="configFilePath" onKeyReleased="#onConfigFilePathChanged" GridPane.columnIndex="2" />
          </children>
