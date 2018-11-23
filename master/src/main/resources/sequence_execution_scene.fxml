@@ -11,7 +11,8 @@
    <bottom>
       <HBox BorderPane.alignment="CENTER">
          <children>
-            <TextField fx:id="inputField" onAction="#onEnterInput" HBox.hgrow="ALWAYS" />
+            <TextField fx:id="inputField" onAction="#onEnterInput" onKeyReleased="#onInputted" HBox.hgrow="ALWAYS" />
+            <Button fx:id="sendButton" mnemonicParsing="false" onAction="#onClickSendButton" text="Send" />
             <Button mnemonicParsing="false" onAction="#onClickKillButton" text="Kill" />
          </children>
       </HBox>

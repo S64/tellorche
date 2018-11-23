@@ -5,8 +5,10 @@ import javafx.event.ActionEvent
 import javafx.fxml.FXML
 import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
+import javafx.scene.control.Button
 import javafx.scene.control.Label
 import javafx.scene.control.TextField
+import javafx.scene.input.KeyEvent
 import javafx.scene.layout.BorderPane
 import javafx.stage.Modality
 import javafx.stage.Stage
@@ -59,6 +61,9 @@ class SequenceExecutionController {
 
     @FXML
     lateinit var inputField: TextField
+
+    @FXML
+    lateinit var sendButton: Button
 
     private val input: PipedOutputStream
     private val writer: PrintWriter
@@ -141,6 +146,8 @@ class SequenceExecutionController {
         }.apply {
             start()
         }
+
+        checkInputValue()
     }
 
     fun setArgs(filename: String, startPeriod: Long) {
@@ -158,14 +165,31 @@ class SequenceExecutionController {
 
     @FXML
     fun onEnterInput(actionEvent: ActionEvent) {
-        val cmd = inputField.text
-        inputField.text = ""
-        writer.println(cmd)
+        sendCommand()
     }
 
     @FXML
     fun onClickKillButton(actionEvent: ActionEvent) {
         logicThread.interrupt()
+    }
+
+    fun onInputted(keyEvent: KeyEvent) {
+        checkInputValue()
+    }
+
+    private fun checkInputValue() {
+        sendButton.isDisable = inputField.text.isEmpty()
+    }
+
+    fun onClickSendButton(actionEvent: ActionEvent) {
+        sendCommand()
+    }
+
+    private fun sendCommand() {
+        val cmd = inputField.text
+        inputField.text = ""
+        writer.println(cmd)
+        checkInputValue()
     }
 
 }
