@@ -27,6 +27,7 @@ object Tellorche {
         when (args.mode) {
             is SequenceMode -> SequenceLogic(args.mode as SequenceMode).exec()
             is SerialPortsMode -> SerialPortsLogic().exec()
+            is ValidateMode -> TODO()
         }
     }
 }
@@ -36,7 +37,8 @@ class Args {
     @Argument(handler = SubCommandHandler::class, required = true, index = 0)
     @SubCommands(
         SubCommand(name = "sequence", impl = SequenceMode::class),
-        SubCommand(name = "serialports", impl = SerialPortsMode::class)
+        SubCommand(name = "serialports", impl = SerialPortsMode::class),
+        SubCommand(name = "validate", impl = ValidateMode::class)
     )
     lateinit var mode: Mode
 }
@@ -51,5 +53,12 @@ class SequenceMode : Mode() {
 }
 
 class SerialPortsMode : Mode() {}
+
+class ValidateMode : Mode() {
+
+    @Option(name = "--config", metaVar = "path", required = true)
+    lateinit var configFile: File
+
+}
 
 sealed class Mode
