@@ -1,0 +1,10 @@
+{
+  "json.schemas": [
+    {
+      "fileMatch": [
+        "/examples/*.json"
+      ],
+      "url": "/master/src/main/resources/schema.json"
+    }
+  ]
+}
