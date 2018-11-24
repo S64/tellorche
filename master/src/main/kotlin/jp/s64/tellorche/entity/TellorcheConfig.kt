@@ -83,6 +83,7 @@ enum class TelloCommand(
     val type: Type,
     val configValue: String
 ) {
+    KEEPALIVE(Type.DO, "tellorche-keepalive"),
     COMMAND(Type.MODE, "command"),
     TAKEOFF(Type.DO, "takeoff"),
     LAND(Type.DO, "land"),
