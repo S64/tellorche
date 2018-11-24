@@ -156,7 +156,7 @@ task formatController(type:Exec, dependsOn: 'checkControllerFormatterRequirement
     commandLine 'autopep8', '-i', 'main.py'
 }
 
-task validateExamples(dependsOn: 'checkMasterAppRequirements') {
+task validateExamples(dependsOn: ['checkMasterAppRequirements', 'buildMasterApp']) {
     doLast {
         fileTree('./examples').filter { it.isFile() }.files.path.each { file ->
             println 'Validate ' + file + '.'
