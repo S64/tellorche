@@ -20,7 +20,8 @@
         "ssid": { "type": "string" },
         "passphrase": { "type": "string" },
         "com_descriptor": {"type": "string"}
-      }
+      },
+      "additionalProperties": false
     },
     "controller": {
       "id": "#controller",
@@ -33,6 +34,7 @@
         "type-esp32-config": { "$ref": "#/definitions/standardControllerConfig" },
         "type-micropython-config": { "$ref": "#/definitions/standardControllerConfig" }
       },
+      "additionalProperties": false,
       "oneOf": [
         {
           "properties": {
@@ -69,5 +71,6 @@
         "^.+$": { "$ref": "#/definitions/controller" }
       }
     }
-  }
+  },
+  "additionalProperties": false
 }
