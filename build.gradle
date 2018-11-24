@@ -156,6 +156,18 @@ task formatController(type:Exec, dependsOn: 'checkControllerFormatterRequirement
     commandLine 'autopep8', '-i', 'main.py'
 }
 
+task validateExamples(dependsOn: ['checkMasterAppRequirements', 'buildMasterApp']) {
+    doLast {
+        fileTree('./examples').filter { it.isFile() }.files.path.each { file ->
+            println 'Validate ' + file + '.'
+            exec {
+                commandLine 'java', '-jar', './master/build/libs/tellorche-master-app.jar', 'validate', '--config', file
+            }
+            println ''
+        }
+    }
+}
+
 boolean checkCommandExists(command) {
     try {
         def p = Runtime.getRuntime().exec(command)
