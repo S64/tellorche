@@ -39,6 +39,8 @@ object Tellorche {
             is GuiMode -> TellorcheGui().exec()
             is ValidateMode -> System.exit(ValidateLogic((args.mode as ValidateMode).configFile, out = System.out, err = System.err).exec())
         }
+
+        System.exit(0)
     }
 
     fun filename(): String {
