@@ -116,7 +116,7 @@ class SequenceExecutionController {
         consoleThread = Thread({
             try {
                 Platform.runLater {
-                    printlnInGui("java -jar " + Tellorche.filename() + " serialports")
+                    printlnInGui("java -jar " + Tellorche.filename() + " sequence --config " + filename)
                 }
                 buffer.forEachLine {
                     Platform.runLater {
