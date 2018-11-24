@@ -14,6 +14,11 @@ PC向けのマスターアプリとコントローラにあたるデバイスを
 Tellorcheでは標準のビルドツールとしてGradleを採用しています。  
 起動コマンドの `Gradle Wrapper` は、Windowsの場合は `gradlew.bat` に、\*nix系OSの場合は `gradlew` として読み替えてください。
 
+`master-app`を利用する際は、事前に`controller`を用意してください。
+
+<details>
+<summary> `controllers/micropython` のプロビジョニング</summary>
+
 ### 1. プロジェクトをclone
 
 [GitHub Desktop](https://desktop.github.com/) アプリなどを使うと、簡単にGitリポジトリをcloneすることができます。  
@@ -33,47 +38,48 @@ cd tellorche
 
 ### 2. 依存するツールを確認
 
-※ 特定のモジュールのみビルドしたい場合、全ての依存関係を解決する必要はありません
+※ 特定のモジュールのみ利用したい場合、全ての依存関係を解決する必要はありません
 
 ```sh
-./gradlew.bat checkRequirements
-# 
-# > Task :tellorche:checkMasterAppRequirements
-# OK: Java 8がインストールされています
-# OK: JDK 8がインストールされています
-# 
-# > Task :tellorche:checkMicroPythonWriterRequirements
-# OK: esptoolがインストールされています
-# 
-# > Task :tellorche:checkControllerWriterRequirements
-# OK: ampyがインストールされています
-# 
-# > Task :tellorche:checkControllerLinterRequirements
-# OK: pycodestyleがインストールされています
-# 
-# > Task :tellorche:checkControllerFormatterRequirements
-# OK: autopep8がインストールされています
-# 
-# BUILD SUCCESSFUL in 2s
-# 1 actionable task: 1 executed
+./gradlew.bat checkMicroPythonWriterRequirements
+./gradlew.bat checkControllerWriterRequirements
 ```
 
-### 3. 一括ビルド
+### 3. 使用方法チェック
 
 ```sh
-./gradlew.bat build
-# ...
-# BUILD SUCCESSFUL in 4s
-# 1 actionable task: 1 executed
-```
-
-### 4. 使用方法チェック
-
-```sh
-./gradlew.bat printCommandLineSerialPorts
-./gradlew.bat printCommandLineMasterApp
 ./gradlew.bat printCommandLineWriteMicroPythonForEsp32
 ./gradlew.bat printCommandLineWriteController
+```
+
+</details>
+
+### 1. Java Runtime Environment 8以降がインストールされていることを確認
+
+`master-app`はJavaで開発されています。利用するPCに **JRE8** または **それ以降** のバージョンがインストールされていることを確認してください。  
+JREは[Oracleのウェブサイト](https://www.oracle.com/technetwork/java/javase/downloads/index.html)からダウンロードできます。
+
+### 2. 最新リリースをダウンロード
+
+GitHubリポジトリの[Releases](https://github.com/S64/tellorche/releases)から、`tellorche-master-app.jar`をダウンロードしてください。
+
+### 3. 飛行シーケンス設定ファイルを作成
+
+サンプルが[examples/](examples/)に掲載されています。  
+必要に応じて、`controllers`プロパティ内の`ssid / passphrase / com_descriptor`などを編集してください。
+
+### 4. Tellorche GUIを起動
+
+以下のコマンドで実行できます。
+
+```sh
+java -jar ${ダウンロードしたjarファイルのパス} gui
+```
+
+たとえば`C:\Users\myuser\Downloads\tellorche-master-app.jar`へダウンロードした場合、以下のようになります:
+
+```dos
+java -jar C:\Users\myuser\Downloads\tellorche-master-app.jar gui
 ```
 
 ## Supported Platforms
