@@ -45,6 +45,11 @@ class SequenceLogic(
         } else {
             output.println("Safe shutdown.")
         }
+
+        if (isConsole) {
+            output.close()
+            error.close()
+        }
     }
 
     fun exec() {
@@ -62,11 +67,6 @@ class SequenceLogic(
 
         controllers.forEach {
             it.value.dispose()
-        }
-
-        if (isConsole) {
-            output.close()
-            error.close()
         }
     }
 
