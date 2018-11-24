@@ -81,7 +81,7 @@ class ValidateController {
     }
 
     private fun onWindowCreated() {
-        Thread {
+        Thread({
             printlnInGui("java -jar " + Tellorche.filename() + " validate --config " + filename)
             try {
                 buffer.forEachLine {
@@ -90,13 +90,13 @@ class ValidateController {
             } finally {
                 printlnInGui("exited")
             }
-        }.apply {
+        }, "ValidateScene GUI Printer").apply {
             start()
         }
 
-        Thread {
+        Thread({
             logic.exec()
-        }.apply {
+        }, "ValidateScene Logic Bridge").apply {
             start()
         }
     }

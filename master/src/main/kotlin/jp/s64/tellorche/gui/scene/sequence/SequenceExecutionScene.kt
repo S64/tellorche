@@ -113,7 +113,7 @@ class SequenceExecutionController {
     }
 
     private fun onWindowCreated() {
-        consoleThread = Thread {
+        consoleThread = Thread({
             try {
                 Platform.runLater {
                     printlnInGui("java -jar " + Tellorche.filename() + " serialports")
@@ -129,11 +129,11 @@ class SequenceExecutionController {
                     onKilled()
                 }
             }
-        }.apply {
+        }, "SequenceExecutionScene GUI Printer").apply {
             start()
         }
 
-        logicThread = Thread {
+        logicThread = Thread({
             try {
                 logic = SequenceLogic(
                         SequenceMode().apply {
@@ -149,7 +149,7 @@ class SequenceExecutionController {
             } catch (e: Throwable) {
                 e.printStackTrace(stream)
             }
-        }.apply {
+        }, "SequenceExecutionScene Logic Bridge").apply {
             start()
         }
 

@@ -30,9 +30,9 @@ class SequenceLogic(
         }
 
         if (isConsole) {
-            Runtime.getRuntime().addShutdownHook(Thread {
+            Runtime.getRuntime().addShutdownHook(Thread({
                 shutdown()
-            })
+            }, "SequenceLogic shutdown hook"))
         }
     }
 

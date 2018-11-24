@@ -56,7 +56,7 @@ class SerialPortsController {
     fun initialize() {
         logic.exec(stream, afterClose = true)
 
-        thread = Thread {
+        thread = Thread({
             Platform.runLater {
                 printlnInGui("java -jar " + Tellorche.filename() + " serialports")
             }
@@ -68,7 +68,7 @@ class SerialPortsController {
             Platform.runLater {
                 printlnInGui("exited.")
             }
-        }.apply {
+        }, "SerialPorts GUI Printer").apply {
             start()
         }
 

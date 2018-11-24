@@ -137,7 +137,7 @@ class MicroPythonMessagePrinter(
     private var thread: Thread? = null
 
     init {
-        thread = Thread {
+        thread = Thread({
             while (thread != null) {
                 while (!`in`.ready()) {
                     Thread.sleep(1) // for interrupt
@@ -157,7 +157,7 @@ class MicroPythonMessagePrinter(
                         line
                 ))
             }
-        }
+        }, "MicroPython Message Printer")
         thread!!.start()
     }
 

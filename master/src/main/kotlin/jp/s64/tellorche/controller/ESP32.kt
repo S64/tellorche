@@ -135,7 +135,7 @@ class MessagePrinter(
     private var thread: Thread? = null
 
     init {
-        thread = Thread {
+        thread = Thread({
             while (thread != null) {
                 val line = `in`.readLine()
 
@@ -152,7 +152,7 @@ class MessagePrinter(
                         line
                 ))
             }
-        }
+        }, "ESP32 Message Printer")
         thread!!.start()
     }
 
