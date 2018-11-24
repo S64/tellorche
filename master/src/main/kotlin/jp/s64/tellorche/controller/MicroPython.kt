@@ -21,7 +21,11 @@ data class MicroPythonControllerConfig(
     @Json(name = "com_descriptor") override val comPortDescriptor: ComPortDescriptor
 ) : ISerialControllerConfig {
 
-    fun createInterface(id: ControllerId): ITelloController {
+    fun createInterface(
+        id: ControllerId,
+        output: PrintStream,
+        error: PrintStream
+    ): ITelloController {
         val port = SerialPort.getCommPort(comPortDescriptor)
                 .apply { baudRate = 115200 }
                 .apply { this.openPort() }
@@ -35,7 +39,7 @@ data class MicroPythonControllerConfig(
                 0, 0
         )
 
-        return MicroPythonTelloController(id, port, ssid, passphrase)
+        return MicroPythonTelloController(id, port, ssid, passphrase, logger = output, error = error)
     }
 }
 
@@ -43,7 +47,9 @@ class MicroPythonTelloController(
     id: ControllerId,
     private val port: SerialPort,
     ssid: WifiSsid,
-    passphrase: WifiPassphrase
+    passphrase: WifiPassphrase,
+    logger: PrintStream,
+    error: PrintStream
 ) : ITelloController {
 
     override fun doCrash() {
@@ -60,7 +66,8 @@ class MicroPythonTelloController(
     init {
         background = MicroPythonMessagePrinter(
                 id = id,
-                `in` = BufferedReader(InputStreamReader(port.inputStream))
+                `in` = BufferedReader(InputStreamReader(port.inputStream)),
+                logger = logger
         )
         out = PrintStream(port.outputStream, true)
 
@@ -120,7 +127,8 @@ class MicroPythonTelloController(
 
 class MicroPythonMessagePrinter(
     private val id: ControllerId,
-    private val `in`: BufferedReader
+    private val `in`: BufferedReader,
+    private val logger: PrintStream
 ) {
 
     private val cmds: MutableList<String> = Collections.synchronizedList(mutableListOf())
@@ -141,8 +149,11 @@ class MicroPythonMessagePrinter(
     
     init {
         resetBuffers()
-        thread = Thread {
+        thread = Thread({
             while (thread != null) {
+                while (!`in`.ready()) {
+                    Thread.sleep(1) // for interrupt
+                }
                 val line = `in`.readLine()
 
                 if (line == null) {
@@ -151,14 +162,14 @@ class MicroPythonMessagePrinter(
                     cmds.add(line.substring(5))
                 }
 
-                System.out.println(String.format(
+                logger.println(String.format(
                         Locale.ROOT,
                         "[%s] %s",
                         id,
                         line
                 ))
             }
-        }
+        }, "MicroPython Message Printer")
         thread!!.start()
     }
 
@@ -168,7 +179,13 @@ class MicroPythonMessagePrinter(
         }
 
         while (cmds.size == (lastRead + 1) && thread != null) {
-            Thread.sleep(10)
+            try {
+                Thread.sleep(10)
+            } catch (_: InterruptedException) {
+                if (thread != null && !thread!!.isInterrupted) {
+                    thread!!.interrupt()
+                }
+            }
         }
         lastRead++
 

@@ -8,6 +8,7 @@ import jp.s64.tellorche.controller.DebugTelloController
 import jp.s64.tellorche.controller.ITelloController
 import jp.s64.tellorche.controller.ESP32ControllerConfig
 import jp.s64.tellorche.controller.MicroPythonControllerConfig
+import java.io.PrintStream
 
 @JsonClass(generateAdapter = true)
 data class TellorcheConfig(
@@ -34,11 +35,11 @@ data class TelloController(
     @Json(name = "type-micropython-config") val microPythonConfigs: MicroPythonControllerConfig?
 ) {
 
-    fun createInterface(id: ControllerId): ITelloController {
+    fun createInterface(id: ControllerId, output: PrintStream, error: PrintStream): ITelloController {
         return when (type) {
-            ControllerType.DEBUG -> DebugTelloController(id)
-            ControllerType.ESP32 -> esp32Configs!!.createInterface(id)
-            ControllerType.MICRO_PYTHON -> microPythonConfigs!!.createInterface(id)
+            ControllerType.DEBUG -> DebugTelloController(id, output = output, error = error)
+            ControllerType.ESP32 -> esp32Configs!!.createInterface(id, output = output, error = error)
+            ControllerType.MICRO_PYTHON -> microPythonConfigs!!.createInterface(id, output = output, error = error)
         }
     }
 }
@@ -65,7 +66,6 @@ enum class ControllerType(
 interface ISerialControllerConfig {
 
     val comPortDescriptor: ComPortDescriptor
-
 }
 
 typealias TimeInMillis = Long

@@ -1,17 +1,20 @@
 package jp.s64.tellorche
 
-import com.squareup.moshi.Moshi
 import jp.s64.tellorche.controller.ITelloController
 import jp.s64.tellorche.entity.ControllerId
-import jp.s64.tellorche.entity.ControllerType
 import jp.s64.tellorche.entity.TelloActionParam
 import jp.s64.tellorche.entity.TelloCommand
 import jp.s64.tellorche.entity.TellorcheConfig
-import jp.s64.tellorche.entity.TellorcheConfigJsonAdapter
 import jp.s64.tellorche.entity.TimeInMillis
+import java.io.BufferedReader
+import java.io.PrintStream
 
 class SequenceLogic(
-    private val args: SequenceMode
+    private val args: SequenceMode,
+    private val input: BufferedReader,
+    private val output: PrintStream,
+    private val error: PrintStream,
+    private val isConsole: Boolean
 ) {
 
     private val config: TellorcheConfig
@@ -23,33 +26,53 @@ class SequenceLogic(
     init {
         config = Tellorche.parseConfig(args.configFile)
         controllers = config.controllers.mapValues {
-            it.value.createInterface(it.key)
+            it.value.createInterface(it.key, output = output, error = error)
         }
 
-        Runtime.getRuntime().addShutdownHook(Thread {
-            if (!safeEnded) {
-                System.err.println("Do crash!")
-                controllers.forEach {
-                    it.value.doCrash()
-                }
-            } else {
-                System.out.println("Safe shutdown.")
+        if (isConsole) {
+            Runtime.getRuntime().addShutdownHook(Thread({
+                shutdown()
+            }, "SequenceLogic shutdown hook"))
+        }
+    }
+
+    private fun shutdown() {
+        if (!safeEnded) {
+            error.println("Do crash!")
+            controllers.forEach {
+                it.value.doCrash()
             }
-        })
+        } else {
+            output.println("Safe shutdown.")
+        }
+
+        if (isConsole) {
+            output.close()
+            error.close()
+        }
     }
 
     fun exec() {
-        do {
-            println("[Tellorche] Config file loaded. Input `exec` to start sequence:")
-            if (readLine() == "exec") break
-        } while (true)
+        try {
+            do {
+                output.println("[Tellorche] Config file loaded. Input `exec` to start sequence:")
+                while (!input.ready()) {
+                    Thread.sleep(10) // for interrupt
+                }
+                if (input.readLine() == "exec") break
+            } while (true)
 
-        // exec
-        mainLoop(args.startAtInMillis)
-        safeEnded = true
+            // exec
+            mainLoop(args.startAtInMillis)
+            safeEnded = true
 
-        controllers.forEach {
-            it.value.dispose()
+            controllers.forEach {
+                it.value.dispose()
+            }
+        } finally {
+            if (isConsole) {
+                shutdown()
+            }
         }
     }
 
@@ -67,6 +90,8 @@ class SequenceLogic(
         }
 
         do {
+            Thread.sleep(1) // for interrupt
+
             val tickStartAt = System.currentTimeMillis()
             val currentTick = (tickStartAt - initAt) + startTick
             val toExecuteTick = currentTick + config.accuracy
@@ -74,7 +99,7 @@ class SequenceLogic(
             val targets = config.sequence.keys.filter { it <= toExecuteTick && !executedPeriods.contains(it) }
 
             if (targets.isNotEmpty()) {
-                println("[Tellorche] Period: ($currentTick)...$toExecuteTick:")
+                output.println("[Tellorche] Period: ($currentTick)...$toExecuteTick:")
             }
 
             targets.forEach { timeInMillis ->
@@ -94,7 +119,7 @@ class SequenceLogic(
             }
 
             if (executedPeriods.size == config.sequence.size) {
-                println("[Tellorche] All sequences was executed.")
+                output.println("[Tellorche] All sequences was executed.")
                 break
             }
         } while (true)

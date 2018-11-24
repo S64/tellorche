@@ -25,7 +25,11 @@ data class ESP32ControllerConfig(
     @Json(name = "com_descriptor") override val comPortDescriptor: ComPortDescriptor
 ) : ISerialControllerConfig {
 
-    fun createInterface(id: ControllerId): ITelloController {
+    fun createInterface(
+        id: ControllerId,
+        output: PrintStream,
+        error: PrintStream
+    ): ITelloController {
         val port = SerialPort.getCommPort(comPortDescriptor)
                 .apply { baudRate = 921600 }
                 .apply { this.openPort() }
@@ -39,7 +43,7 @@ data class ESP32ControllerConfig(
                 0, 0
         )
 
-        return ESP32TelloController(id, port, ssid, passphrase)
+        return ESP32TelloController(id, port, ssid, passphrase, logger = output, error = error)
     }
 }
 
@@ -47,7 +51,9 @@ class ESP32TelloController(
     private val id: ControllerId,
     private val port: SerialPort,
     ssid: WifiSsid,
-    passphrase: WifiPassphrase
+    passphrase: WifiPassphrase,
+    private val logger: PrintStream,
+    private val error: PrintStream
 ) : ITelloController {
 
     override fun doCrash() {
@@ -66,7 +72,8 @@ class ESP32TelloController(
     init {
         background = MessagePrinter(
                 id = id,
-                `in` = BufferedReader(InputStreamReader(port.inputStream))
+                `in` = BufferedReader(InputStreamReader(port.inputStream)),
+                logger = logger
         )
         out = PrintStream(port.outputStream, true)
 
@@ -118,7 +125,8 @@ class ESP32TelloController(
 
 class MessagePrinter(
     private val id: ControllerId,
-    private val `in`: BufferedReader
+    private val `in`: BufferedReader,
+    private val logger: PrintStream
 ) {
 
     private val cmds: MutableList<String> = Collections.synchronizedList(mutableListOf())
@@ -127,7 +135,7 @@ class MessagePrinter(
     private var thread: Thread? = null
 
     init {
-        thread = Thread {
+        thread = Thread({
             while (thread != null) {
                 val line = `in`.readLine()
 
@@ -137,14 +145,14 @@ class MessagePrinter(
                     cmds.add(line.substring(5))
                 }
 
-                System.out.println(String.format(
+                logger.println(String.format(
                         Locale.ROOT,
                         "[%s] %s",
                         id,
                         line
                 ))
             }
-        }
+        }, "ESP32 Message Printer")
         thread!!.start()
     }
 
