@@ -53,20 +53,26 @@ class SequenceLogic(
     }
 
     fun exec() {
-        do {
-            output.println("[Tellorche] Config file loaded. Input `exec` to start sequence:")
-            while (!input.ready()) {
-                Thread.sleep(10) // for interrupt
+        try {
+            do {
+                output.println("[Tellorche] Config file loaded. Input `exec` to start sequence:")
+                while (!input.ready()) {
+                    Thread.sleep(10) // for interrupt
+                }
+                if (input.readLine() == "exec") break
+            } while (true)
+
+            // exec
+            mainLoop(args.startAtInMillis)
+            safeEnded = true
+
+            controllers.forEach {
+                it.value.dispose()
             }
-            if (input.readLine() == "exec") break
-        } while (true)
-
-        // exec
-        mainLoop(args.startAtInMillis)
-        safeEnded = true
-
-        controllers.forEach {
-            it.value.dispose()
+        } finally {
+            if (isConsole) {
+                shutdown()
+            }
         }
     }
 
@@ -84,6 +90,8 @@ class SequenceLogic(
         }
 
         do {
+            Thread.sleep(1) // for interrupt
+
             val tickStartAt = System.currentTimeMillis()
             val currentTick = (tickStartAt - initAt) + startTick
             val toExecuteTick = currentTick + config.accuracy
