@@ -8,10 +8,11 @@ import org.everit.json.schema.ValidationException
 import org.everit.json.schema.loader.SchemaLoader
 import org.json.JSONObject
 import org.json.JSONTokener
+import java.io.File
 import java.io.PrintStream
 
 class ValidateLogic(
-        private val mode: ValidateMode,
+        private val configFile: File,
         private val out: PrintStream,
         private val err: PrintStream
 ) {
@@ -28,7 +29,7 @@ class ValidateLogic(
         javaClass.classLoader.getResourceAsStream("schema.json").use {
             schema = SchemaLoader.load(JSONObject(JSONTokener(it)))
         }
-        mode.configFile.inputStream().use {
+        configFile.inputStream().use {
             config = JSONObject(JSONTokener(it))
         }
     }
@@ -41,7 +42,7 @@ class ValidateLogic(
             return EXIT_CODE_ERR
         }
 
-        val parsed = Tellorche.parseConfig(mode.configFile)
+        val parsed = Tellorche.parseConfig(configFile)
 
         parsed.controllers.forEach { id, controller ->
             val config: ISerialControllerConfig? = when (controller.type) {

@@ -11,6 +11,7 @@ import javafx.stage.FileChooser
 import javafx.stage.Modality
 import javafx.stage.Stage
 import jp.s64.tellorche.gui.SceneLoader
+import jp.s64.tellorche.gui.scene.validate.ValidateSceneFactory
 import java.io.File
 
 object SequenceSceneFactory {
@@ -40,6 +41,9 @@ class SequenceSceneController {
     lateinit var execButton: Button
 
     @FXML
+    lateinit var validateButton: Button
+
+    @FXML
     lateinit var root: VBox
 
     @FXML
@@ -57,6 +61,8 @@ class SequenceSceneController {
         val flag = file.exists() && file.isFile
 
         execButton.isDisable = !flag
+        validateButton.isDisable = !flag
+
         configFilePathState.text = if (flag) {
             "OK"
         } else {
@@ -77,11 +83,19 @@ class SequenceSceneController {
     fun onClickConfigPickButton(actionEvent: ActionEvent) {
         val result = FileChooser()
                 .showOpenDialog(root.scene.window as Stage)
-        
+
         result?.let {
             configFilePath.text = it.absolutePath
             checkConfigFilePath()
         }
+    }
+
+    fun onValidateClicked(actionEvent: ActionEvent) {
+        ValidateSceneFactory
+                .createAndShow(
+                        root.scene.window as Stage,
+                        configFilePath.text
+                )
     }
 
 }

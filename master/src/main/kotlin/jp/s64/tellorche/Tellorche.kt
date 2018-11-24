@@ -38,7 +38,7 @@ object Tellorche {
             is SequenceMode -> SequenceLogic(args.mode as SequenceMode, input = BufferedReader(InputStreamReader(System.`in`)), output = System.out, error = System.err, isConsole = false).exec()
             is SerialPortsMode -> SerialPortsLogic().exec(System.out, afterClose = false)
             is GuiMode -> TellorcheGui().exec()
-            is ValidateMode -> System.exit(ValidateLogic(args.mode as ValidateMode, out = System.out, err = System.err).exec())
+            is ValidateMode -> System.exit(ValidateLogic((args.mode as ValidateMode).configFile, out = System.out, err = System.err).exec())
         }
     }
 
