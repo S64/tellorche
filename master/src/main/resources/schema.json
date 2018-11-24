@@ -1,0 +1,141 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "controllerType": {
+      "id": "#controllerType",
+      "type": "string",
+      "enum": [
+        "ESP32",
+        "Debug",
+        "MicroPython"
+      ]
+    },
+    "standardControllerConfig": {
+      "id": "#standardControllerConfig",
+      "type": "object",
+      "required": [
+        "ssid", "passphrase", "com_descriptor"
+      ],
+      "properties": {
+        "ssid": { "type": "string" },
+        "passphrase": { "type": "string" },
+        "com_descriptor": {"type": "string"}
+      },
+      "additionalProperties": false
+    },
+    "controller": {
+      "id": "#controller",
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": { "$ref": "#/definitions/controllerType" },
+        "type-esp32-config": { "$ref": "#/definitions/standardControllerConfig" },
+        "type-micropython-config": { "$ref": "#/definitions/standardControllerConfig" }
+      },
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "type": { "enum": ["ESP32"] },
+            "type-micropython-config": { "type": "null" }
+          },
+          "required": [ "type-esp32-config" ]
+        },
+        {
+          "properties": {
+            "type": { "enum": ["MicroPython"] },
+            "type-esp32-config": { "type": "null" }
+          },
+          "required": [ "type-micropython-config" ]
+        },
+        {
+          "properties": {
+            "type": { "enum": ["Debug"] },
+            "type-micropython-config": { "type": "null" },
+            "type-esp32-config": { "type": "null" }
+          }
+        }
+      ]
+    },
+    "sequence": {
+      "id": "#sequence",
+      "type": "object",
+      "required": [
+        "command", "params", "controllers"
+      ],
+      "properties": {
+        "command": {
+          "type": "string"
+        },
+        "params": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 0
+        },
+        "controllers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "controllers",
+    "sequence",
+    "accuracy_in_millis",
+    "scale"
+  ],
+  "properties": {
+    "accuracy_in_millis": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "scale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x_in_cm", "y_in_cm", "z_in_cm", "speed_in_cm_per_sec"
+      ],
+      "properties": {
+        "x_in_cm": {
+          "type": "number"
+        },
+        "y_in_cm": {
+          "type": "number"
+        },
+        "z_in_cm": {
+          "type": "number"
+        },
+        "speed_in_cm_per_sec": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "controllers": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^.+$": { "$ref": "#/definitions/controller" }
+      }
+    },
+    "sequence": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[0-9]+$": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/sequence" },
+          "minItems": 1,
+          "additionalItems": false
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

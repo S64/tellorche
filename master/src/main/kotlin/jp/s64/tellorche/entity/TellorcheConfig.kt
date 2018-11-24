@@ -3,6 +3,7 @@ package jp.s64.tellorche.entity
 import com.squareup.moshi.FromJson
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
+import jp.s64.tellorche.controller.ComPortDescriptor
 import jp.s64.tellorche.controller.DebugTelloController
 import jp.s64.tellorche.controller.ITelloController
 import jp.s64.tellorche.controller.ESP32ControllerConfig
@@ -61,6 +62,12 @@ enum class ControllerType(
                     .find { it.value == value }
         }
     }
+}
+
+interface ISerialControllerConfig {
+
+    val comPortDescriptor: ComPortDescriptor
+
 }
 
 typealias TimeInMillis = Long

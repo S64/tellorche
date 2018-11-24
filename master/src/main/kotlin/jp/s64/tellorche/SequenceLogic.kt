@@ -21,11 +21,6 @@ class SequenceLogic(
     private val isConsole: Boolean
 ) {
 
-    private val moshi = Moshi.Builder()
-            .add(ControllerType.Adapter)
-            .add(TelloCommand.Adapter)
-            .build()
-
     private val config: TellorcheConfig
 
     private val controllers: Map<ControllerId, ITelloController>
@@ -33,10 +28,7 @@ class SequenceLogic(
     private var safeEnded: Boolean = false
 
     init {
-        config = TellorcheConfigJsonAdapter(moshi).fromJson(
-                args.configFile.readText(Charsets.UTF_8)
-        ) ?: TODO("Parse error.")
-
+        config = Tellorche.parseConfig(args.configFile)
         controllers = config.controllers.mapValues {
             it.value.createInterface(it.key, output = output, error = error)
         }

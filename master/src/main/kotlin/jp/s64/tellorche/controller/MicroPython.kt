@@ -4,6 +4,7 @@ import com.fazecast.jSerialComm.SerialPort
 import com.squareup.moshi.Json
 import com.squareup.moshi.JsonClass
 import jp.s64.tellorche.entity.ControllerId
+import jp.s64.tellorche.entity.ISerialControllerConfig
 import jp.s64.tellorche.entity.TelloActionParam
 import jp.s64.tellorche.entity.TelloCommand
 import java.io.BufferedReader
@@ -18,8 +19,8 @@ import java.util.Locale
 data class MicroPythonControllerConfig(
     @Json(name = "ssid") val ssid: WifiSsid,
     @Json(name = "passphrase") val passphrase: WifiPassphrase,
-    @Json(name = "com_descriptor") val comPortDescriptor: ComPortDescriptor
-) {
+    @Json(name = "com_descriptor") override val comPortDescriptor: ComPortDescriptor
+) : ISerialControllerConfig {
 
     fun createInterface(
             id: ControllerId,

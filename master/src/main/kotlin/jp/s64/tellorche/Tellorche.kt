@@ -1,5 +1,10 @@
 package jp.s64.tellorche
 
+import com.squareup.moshi.Moshi
+import jp.s64.tellorche.entity.ControllerType
+import jp.s64.tellorche.entity.TelloCommand
+import jp.s64.tellorche.entity.TellorcheConfig
+import jp.s64.tellorche.entity.TellorcheConfigJsonAdapter
 import jp.s64.tellorche.entity.TimeInMillis
 import jp.s64.tellorche.gui.TellorcheGui
 import org.kohsuke.args4j.Argument
@@ -33,6 +38,7 @@ object Tellorche {
             is SequenceMode -> SequenceLogic(args.mode as SequenceMode, input = BufferedReader(InputStreamReader(System.`in`)), output = System.out, error = System.err, isConsole = false).exec()
             is SerialPortsMode -> SerialPortsLogic().exec(System.out, afterClose = false)
             is GuiMode -> TellorcheGui().exec()
+            is ValidateMode -> System.exit(ValidateLogic(args.mode as ValidateMode, out = System.out, err = System.err).exec())
         }
     }
 
@@ -40,6 +46,18 @@ object Tellorche {
         return Paths.get(javaClass.protectionDomain.codeSource.location.toURI())
                 .fileName.toString()
     }
+
+    private val moshi = Moshi.Builder()
+            .add(ControllerType.Adapter)
+            .add(TelloCommand.Adapter)
+            .build()
+
+    fun parseConfig(configFile: File): TellorcheConfig {
+        return TellorcheConfigJsonAdapter(moshi).fromJson(
+                configFile.readText(Charsets.UTF_8)
+        ) ?: TODO("Parse error.")
+    }
+
 }
 
 class Args {
@@ -48,7 +66,8 @@ class Args {
     @SubCommands(
         SubCommand(name = "sequence", impl = SequenceMode::class),
         SubCommand(name = "serialports", impl = SerialPortsMode::class),
-        SubCommand(name = "gui", impl = GuiMode::class)
+        SubCommand(name = "gui", impl = GuiMode::class),
+        SubCommand(name = "validate", impl = ValidateMode::class)
     )
     lateinit var mode: Mode
 }
@@ -65,5 +84,12 @@ class SequenceMode : Mode() {
 class SerialPortsMode : Mode()
 
 class GuiMode : Mode()
+
+class ValidateMode : Mode() {
+
+    @Option(name = "--config", metaVar = "path", required = true)
+    lateinit var configFile: File
+
+}
 
 sealed class Mode
