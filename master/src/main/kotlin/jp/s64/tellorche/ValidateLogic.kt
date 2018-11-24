@@ -55,6 +55,8 @@ class ValidateLogic(
                 try {
                     if (!com.openPort()) {
                         warn("$id に設定された ${it.comPortDescriptor} は現在開けません")
+                    } else {
+                        ok("$id に設定された ${it.comPortDescriptor} が利用できることを確認しました")
                     }
                 } finally {
                     com.closePort()
@@ -73,9 +75,13 @@ class ValidateLogic(
         }
         if (invalidControllerId) return EXIT_CODE_ERR
 
-        out.println("ok: この設定ファイルは利用できます")
+        ok("この設定ファイルは利用できます")
 
         return EXIT_CODE_OK
+    }
+
+    private fun ok(msg: String) {
+        out.println("o: $msg")
     }
 
     private fun warn(msg: String) {
