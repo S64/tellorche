@@ -61,7 +61,8 @@
     }
   },
   "required": [
-    "controllers"
+    "controllers",
+    "sequence"
   ],
   "properties": {
     "controllers": {
@@ -70,6 +71,14 @@
       "patternProperties": {
         "^.+$": { "$ref": "#/definitions/controller" }
       }
+    },
+    "sequence": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^[0-9]+$": { "type": "string" }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false
