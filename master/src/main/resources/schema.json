@@ -1,0 +1,69 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "controllerType": {
+      "id": "#controllerType",
+      "type": "string",
+      "enum": [
+        "ESP32",
+        "Debug",
+        "MicroPython"
+      ]
+    },
+    "standardControllerConfig": {
+      "id": "#standardControllerConfig",
+      "type": "object",
+      "required": [
+        "ssid", "passphrase", "com_descriptor"
+      ],
+      "properties": {
+        "ssid": { "type": "string" },
+        "passphrase": { "type": "string" },
+        "com_descriptor": {"type": "string"}
+      }
+    },
+    "controller": {
+      "id": "#controller",
+      "type": "object",
+      "required": [
+        "type"
+      ],
+      "properties": {
+        "type": { "$ref": "#/definitions/controllerType" },
+        "type-esp32-config": { "$ref": "#/definitions/standardControllerConfig" },
+        "type-micropython-config": { "$ref": "#/definitions/standardControllerConfig" }
+      },
+      "oneOf": [
+        {
+          "properties": {
+            "type": { "enum": ["ESP32"] }
+          },
+          "required": [ "type-esp32-config" ]
+        },
+        {
+          "properties": {
+            "type": { "enum": ["MicroPython"] }
+          },
+          "required": [ "type-micropython-config" ]
+        },
+        {
+          "properties": {
+            "type": { "enum": ["Debug"] }
+          }
+        }
+      ]
+    }
+  },
+  "required": [
+    "controllers"
+  ],
+  "properties": {
+    "controllers": {
+      "type": "object",
+      "minProperties": 1,
+      "patternProperties": {
+        "^.+$": { "$ref": "#/definitions/controller" }
+      }
+    }
+  }
+}
