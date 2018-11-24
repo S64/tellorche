@@ -75,10 +75,13 @@ class SequenceSceneController {
     }
 
     fun onClickConfigPickButton(actionEvent: ActionEvent) {
-        configFilePath.text = FileChooser()
+        val result = FileChooser()
                 .showOpenDialog(root.scene.window as Stage)
-                .absolutePath
-        checkConfigFilePath()
+        
+        result?.let {
+            configFilePath.text = it.absolutePath
+            checkConfigFilePath()
+        }
     }
 
 }
