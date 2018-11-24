@@ -36,19 +36,23 @@
       "oneOf": [
         {
           "properties": {
-            "type": { "enum": ["ESP32"] }
+            "type": { "enum": ["ESP32"] },
+            "type-micropython-config": { "type": "null" }
           },
           "required": [ "type-esp32-config" ]
         },
         {
           "properties": {
-            "type": { "enum": ["MicroPython"] }
+            "type": { "enum": ["MicroPython"] },
+            "type-esp32-config": { "type": "null" }
           },
           "required": [ "type-micropython-config" ]
         },
         {
           "properties": {
-            "type": { "enum": ["Debug"] }
+            "type": { "enum": ["Debug"] },
+            "type-micropython-config": { "type": "null" },
+            "type-esp32-config": { "type": "null" }
           }
         }
       ]
