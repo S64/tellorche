@@ -190,6 +190,7 @@ class SequenceExecutionController {
     private fun sendCommand() {
         val cmd = inputField.text
         inputField.text = ""
+        stream.println(cmd)
         writer.println(cmd)
         writer.flush()
         checkInputValue()
