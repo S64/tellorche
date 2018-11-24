@@ -67,7 +67,25 @@
       ],
       "properties": {
         "command": {
-          "type": "string"
+          "type": "string",
+          "enum": [
+            "tellorche-keepalive",
+            "command",
+            "takeoff",
+            "land",
+            "up",
+            "down",
+            "left",
+            "right",
+            "forward",
+            "back",
+            "cw",
+            "ccw",
+            "flip",
+            "go",
+            "curve",
+            "set_speed"
+          ]
         },
         "params": {
           "type": "array",
