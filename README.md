@@ -57,7 +57,7 @@ cd tellorche
 ### 1. Java Runtime Environment 8以降がインストールされていることを確認
 
 `master-app`はJavaで開発されています。利用するPCに **JRE8** または **それ以降** のバージョンがインストールされていることを確認してください。  
-JREは[Oracleのウェブサイト](https://www.oracle.com/technetwork/java/javase/downloads/index.html)からダウンロードできます。
+JREは[Oracleのウェブサイト](https://java.com/download/)からダウンロードできます。
 
 ### 2. 最新リリースをダウンロード
 
