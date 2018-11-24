@@ -128,7 +128,19 @@ class MicroPythonMessagePrinter(
 
     private var thread: Thread? = null
 
+    private fun resetBuffers() {
+        do {
+            var read = false
+            Thread.sleep(100)
+            while (`in`.ready()) {
+                read = true
+                `in`.read()
+            }
+        } while (read)
+    }
+    
     init {
+        resetBuffers()
         thread = Thread {
             while (thread != null) {
                 val line = `in`.readLine()
