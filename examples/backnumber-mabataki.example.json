@@ -1,0 +1,140 @@
+{
+  "accuracy_in_millis": 10,
+  "scale": {
+    "speed_in_cm_per_sec": 1,
+    "x_in_cm": 1,
+    "y_in_cm": 1,
+    "z_in_cm": 1
+  },
+  "controllers": {
+    "controller1": {
+      "type": "MicroPython",
+      "type-micropython-config": {
+        "ssid": "your-tello's-wifi-ssid",
+        "passphrase": "your-tello's-wifi-passphrase",
+        "com_descriptor": "/dev/cu.SLAB_USBtoUART"
+      }
+    }
+  },
+  "sequence": {
+    "0": [
+      {
+        "command": "command",
+        "params": [],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "1000": [
+      {
+        "command": "set_speed",
+        "params": ["20"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "2680": [
+      {
+        "command": "takeoff",
+        "params": [],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "10000": [
+      {
+        "command": "tellorche-keepalive",
+        "params": [],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "16540": [
+      {
+        "command": "down",
+        "params": ["40"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "20000": [
+      {
+        "command": "tellorche-keepalive",
+        "params": [],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "28410": [
+      {
+        "command": "right",
+        "params": ["40"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "34490": [
+      {
+        "command": "left",
+        "params": ["40"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "40470": [
+      {
+        "command": "flip",
+        "params": ["f"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "43500": [
+      {
+        "command": "flip",
+        "params": ["b"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "49470": [
+      {
+        "command": "cw",
+        "params": ["360"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "55000": [
+      {
+        "command": "tellorche-keepalive",
+        "params": [],
+        "controllers": ["controller1"]
+      }
+    ],
+    "61520": [
+      {
+        "command": "ccw",
+        "params": ["360"],
+        "controllers": ["controller1"]
+      }
+    ],
+    "73510": [
+      {
+        "command": "up",
+        "params": ["40"],
+        "controllers": ["controller1"]
+      }
+    ],
+    "79570": [
+      {
+        "command": "down",
+        "params": ["40"],
+        "controllers": ["controller1"]
+      }
+    ],
+    "89000": [
+      {
+        "command": "tellorche-keepalive",
+        "params": [],
+        "controllers": ["controller1"]
+      }
+    ],
+    "91430": [
+      {
+        "command": "land",
+        "params": [],
+        "controllers": ["controller1"]
+      }
+    ]
+  }
+}
