@@ -88,6 +88,9 @@
     "sequence"
   ],
   "properties": {
+    "accuracy_in_millis": {
+      "type": "integer"
+    },
     "controllers": {
       "type": "object",
       "minProperties": 1,
