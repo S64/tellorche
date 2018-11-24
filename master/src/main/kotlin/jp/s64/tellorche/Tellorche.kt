@@ -1,5 +1,10 @@
 package jp.s64.tellorche
 
+import com.squareup.moshi.Moshi
+import jp.s64.tellorche.entity.ControllerType
+import jp.s64.tellorche.entity.TelloCommand
+import jp.s64.tellorche.entity.TellorcheConfig
+import jp.s64.tellorche.entity.TellorcheConfigJsonAdapter
 import jp.s64.tellorche.entity.TimeInMillis
 import org.kohsuke.args4j.Argument
 import org.kohsuke.args4j.CmdLineException
@@ -30,6 +35,18 @@ object Tellorche {
             is ValidateMode -> System.exit(ValidateLogic(args.mode as ValidateMode, out = System.out, err = System.err).exec())
         }
     }
+
+    private val moshi = Moshi.Builder()
+            .add(ControllerType.Adapter)
+            .add(TelloCommand.Adapter)
+            .build()
+
+    fun parseConfig(configFile: File): TellorcheConfig {
+        return TellorcheConfigJsonAdapter(moshi).fromJson(
+                configFile.readText(Charsets.UTF_8)
+        ) ?: TODO("Parse error.")
+    }
+
 }
 
 class Args {
