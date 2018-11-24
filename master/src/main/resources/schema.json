@@ -58,6 +58,29 @@
           }
         }
       ]
+    },
+    "sequence": {
+      "id": "#sequence",
+      "type": "object",
+      "required": [
+        "command", "params", "controllers"
+      ],
+      "properties": {
+        "command": {
+          "type": "string"
+        },
+        "params": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 0
+        },
+        "controllers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
     }
   },
   "required": [
@@ -76,7 +99,12 @@
       "type": "object",
       "minProperties": 1,
       "patternProperties": {
-        "^[0-9]+$": { "type": "string" }
+        "^[0-9]+$": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/sequence" },
+          "minItems": 1,
+          "additionalItems": false
+        }
       },
       "additionalProperties": false
     }
