@@ -191,6 +191,7 @@ class SequenceExecutionController {
         val cmd = inputField.text
         inputField.text = ""
         writer.println(cmd)
+        writer.flush()
         checkInputValue()
     }
 
