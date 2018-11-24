@@ -11,7 +11,7 @@
          <font>
             <Font name="System Bold" size="40.0" />
          </font></Text>
-      <Button fx:id="sequenceButton" mnemonicParsing="false" onAction="#onClickExecuteSequence" text="シーケンス実行" />
+      <Button fx:id="sequenceButton" mnemonicParsing="false" onAction="#onClickExecuteSequence" text="設定ファイル検証 / シーケンス実行" />
       <Button mnemonicParsing="false" onAction="#onClickSerialPortsButton" text="シリアルポート一覧" />
    </children>
 </VBox>
