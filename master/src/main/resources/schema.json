@@ -85,11 +85,36 @@
   },
   "required": [
     "controllers",
-    "sequence"
+    "sequence",
+    "accuracy_in_millis",
+    "scale"
   ],
   "properties": {
     "accuracy_in_millis": {
-      "type": "integer"
+      "type": "integer",
+      "minimum": 0
+    },
+    "scale": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x_in_cm", "y_in_cm", "z_in_cm", "speed_in_cm_per_sec"
+      ],
+      "properties": {
+        "x_in_cm": {
+          "type": "number"
+        },
+        "y_in_cm": {
+          "type": "number"
+        },
+        "z_in_cm": {
+          "type": "number"
+        },
+        "speed_in_cm_per_sec": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
     },
     "controllers": {
       "type": "object",
