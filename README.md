@@ -98,8 +98,8 @@ Telloを操作するためには、いずれかのcontrollerが必要です。
 
 #### controllers/micropython
 
-MicroPythonに対応した開発ボード。  
-[HiLetgo ESP32 NodeMCU開発ボード](https://amzn.to/2R8HYv0) や [ESP32-DevKitC](https://amzn.to/2OZk3B0) などが該当します。
+MicroPythonに対応した開発ボード。[ESP32-DevKitC](https://amzn.to/2OZk3B0)での利用を想定しています。  
+ESP32互換製品として[一部他社製のより安価なボード](https://amzn.to/2R8HYv0)でも動作確認をしています。
 
 ## Documents
 
