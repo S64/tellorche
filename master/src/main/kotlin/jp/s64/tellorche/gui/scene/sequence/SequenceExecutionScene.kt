@@ -7,6 +7,7 @@ import javafx.fxml.FXMLLoader
 import javafx.scene.Scene
 import javafx.scene.control.Button
 import javafx.scene.control.Label
+import javafx.scene.control.ScrollPane
 import javafx.scene.control.TextField
 import javafx.scene.input.KeyEvent
 import javafx.scene.layout.BorderPane
@@ -66,6 +67,9 @@ class SequenceExecutionController {
 
     @FXML
     lateinit var killButton: Button
+
+    @FXML
+    lateinit var scrollPane: ScrollPane
 
     private val input: PipedOutputStream
     private val writer: PrintWriter
@@ -150,6 +154,10 @@ class SequenceExecutionController {
         }
 
         checkInputValue()
+
+        output.heightProperty().addListener { observable, oldValue, newValue ->
+            scrollPane.vvalue = 1.0 // auto-scroll
+        }
     }
 
     fun setArgs(filename: String, startPeriod: Long) {

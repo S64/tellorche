@@ -18,7 +18,7 @@
       </HBox>
    </bottom>
    <center>
-      <ScrollPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <ScrollPane fx:id="scrollPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <content>
              <Label fx:id="output" alignment="TOP_LEFT" style="-fx-background-color: #000000;" textFill="WHITE" wrapText="true" />
          </content>
