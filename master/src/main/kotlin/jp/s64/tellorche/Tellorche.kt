@@ -6,6 +6,7 @@ import jp.s64.tellorche.entity.TelloCommand
 import jp.s64.tellorche.entity.TellorcheConfig
 import jp.s64.tellorche.entity.TellorcheConfigJsonAdapter
 import jp.s64.tellorche.entity.TimeInMillis
+import jp.s64.tellorche.gui.TellorcheGui
 import org.kohsuke.args4j.Argument
 import org.kohsuke.args4j.CmdLineException
 import org.kohsuke.args4j.CmdLineParser
@@ -13,7 +14,10 @@ import org.kohsuke.args4j.Option
 import org.kohsuke.args4j.spi.SubCommand
 import org.kohsuke.args4j.spi.SubCommandHandler
 import org.kohsuke.args4j.spi.SubCommands
+import java.io.BufferedReader
 import java.io.File
+import java.io.InputStreamReader
+import java.nio.file.Paths
 
 object Tellorche {
 
@@ -30,10 +34,18 @@ object Tellorche {
         }
 
         when (args.mode) {
-            is SequenceMode -> SequenceLogic(args.mode as SequenceMode).exec()
-            is SerialPortsMode -> SerialPortsLogic().exec()
-            is ValidateMode -> System.exit(ValidateLogic(args.mode as ValidateMode, out = System.out, err = System.err).exec())
+            is SequenceMode -> SequenceLogic(args.mode as SequenceMode, input = BufferedReader(InputStreamReader(System.`in`)), output = System.out, error = System.err, isConsole = false).exec()
+            is SerialPortsMode -> SerialPortsLogic().exec(System.out, afterClose = false)
+            is GuiMode -> TellorcheGui().exec()
+            is ValidateMode -> System.exit(ValidateLogic((args.mode as ValidateMode).configFile, out = System.out, err = System.err).exec())
         }
+
+        System.exit(0)
+    }
+
+    fun filename(): String {
+        return Paths.get(javaClass.protectionDomain.codeSource.location.toURI())
+                .fileName.toString()
     }
 
     private val moshi = Moshi.Builder()
@@ -46,7 +58,6 @@ object Tellorche {
                 configFile.readText(Charsets.UTF_8)
         ) ?: TODO("Parse error.")
     }
-
 }
 
 class Args {
@@ -55,6 +66,7 @@ class Args {
     @SubCommands(
         SubCommand(name = "sequence", impl = SequenceMode::class),
         SubCommand(name = "serialports", impl = SerialPortsMode::class),
+        SubCommand(name = "gui", impl = GuiMode::class),
         SubCommand(name = "validate", impl = ValidateMode::class)
     )
     lateinit var mode: Mode
@@ -69,13 +81,14 @@ class SequenceMode : Mode() {
     var startAtInMillis: TimeInMillis? = null
 }
 
-class SerialPortsMode : Mode() {}
+class SerialPortsMode : Mode()
+
+class GuiMode : Mode()
 
 class ValidateMode : Mode() {
 
     @Option(name = "--config", metaVar = "path", required = true)
     lateinit var configFile: File
-
 }
 
 sealed class Mode

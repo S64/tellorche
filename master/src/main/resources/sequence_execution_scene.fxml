@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+
+<BorderPane fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="jp.s64.tellorche.gui.scene.sequence.SequenceExecutionController">
+   <bottom>
+      <HBox BorderPane.alignment="CENTER">
+         <children>
+            <TextField fx:id="inputField" onAction="#onEnterInput" onKeyReleased="#onInputted" HBox.hgrow="ALWAYS" />
+            <Button fx:id="sendButton" mnemonicParsing="false" onAction="#onClickSendButton" text="Send" />
+            <Button fx:id="killButton" mnemonicParsing="false" onAction="#onClickKillButton" text="Kill" />
+         </children>
+      </HBox>
+   </bottom>
+   <center>
+      <ScrollPane fx:id="scrollPane" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <content>
+             <Label fx:id="output" alignment="TOP_LEFT" style="-fx-background-color: #000000;" textFill="WHITE" wrapText="true" />
+         </content>
+      </ScrollPane>
+   </center>
+</BorderPane>
