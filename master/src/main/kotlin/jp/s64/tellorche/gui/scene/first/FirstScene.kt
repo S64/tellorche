@@ -9,7 +9,6 @@ import javafx.stage.Stage
 import jp.s64.tellorche.gui.SceneLoader
 import jp.s64.tellorche.gui.scene.sequence.SequenceSceneFactory
 import jp.s64.tellorche.gui.scene.serialports.SerialPortsSceneFactory
-import jp.s64.tellorche.gui.scene.validate.ValidateSceneFactory
 
 object FirstSceneFactory {
 
@@ -35,5 +34,4 @@ class FirstSceneController {
         SerialPortsSceneFactory
                 .createAndShow(root.scene.window as Stage)
     }
-
 }

@@ -48,7 +48,6 @@ object SequenceExecutionScene {
             initModality(Modality.APPLICATION_MODAL)
         }.showAndWait()
     }
-
 }
 
 class SequenceExecutionController {
@@ -70,7 +69,6 @@ class SequenceExecutionController {
 
     private val input: PipedOutputStream
     private val writer: PrintWriter
-
 
     private val buffer: BufferedReader
     private val stream: PrintStream
@@ -201,5 +199,4 @@ class SequenceExecutionController {
         inputField.isDisable = true
         killButton.isDisable = true
     }
-
 }

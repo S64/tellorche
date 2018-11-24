@@ -14,7 +14,6 @@ import org.kohsuke.args4j.Option
 import org.kohsuke.args4j.spi.SubCommand
 import org.kohsuke.args4j.spi.SubCommandHandler
 import org.kohsuke.args4j.spi.SubCommands
-import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader
@@ -57,7 +56,6 @@ object Tellorche {
                 configFile.readText(Charsets.UTF_8)
         ) ?: TODO("Parse error.")
     }
-
 }
 
 class Args {
@@ -89,7 +87,6 @@ class ValidateMode : Mode() {
 
     @Option(name = "--config", metaVar = "path", required = true)
     lateinit var configFile: File
-
 }
 
 sealed class Mode

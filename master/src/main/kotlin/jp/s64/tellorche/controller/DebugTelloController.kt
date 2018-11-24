@@ -4,13 +4,12 @@ import jp.s64.tellorche.entity.ControllerId
 import jp.s64.tellorche.entity.TelloActionParam
 import jp.s64.tellorche.entity.TelloCommand
 import java.io.PrintStream
-import java.io.PrintWriter
 import java.util.Locale
 
 class DebugTelloController(
-        private val id: ControllerId,
-        private val output: PrintStream,
-        private val error: PrintStream
+    private val id: ControllerId,
+    private val output: PrintStream,
+    private val error: PrintStream
 ) : ITelloController {
 
     override fun doCrash() {

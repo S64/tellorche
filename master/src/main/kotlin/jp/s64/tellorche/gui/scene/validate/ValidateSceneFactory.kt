@@ -11,17 +11,12 @@ import javafx.stage.Stage
 import jp.s64.tellorche.Tellorche
 import jp.s64.tellorche.ValidateLogic
 import jp.s64.tellorche.gui.SceneLoader
-import jp.s64.tellorche.gui.TellorcheGui
-import jp.s64.tellorche.gui.scene.sequence.SequenceExecutionController
-import java.io.BufferedInputStream
 import java.io.BufferedReader
 import java.io.File
-import java.io.InputStream
 import java.io.InputStreamReader
 import java.io.PipedInputStream
 import java.io.PipedOutputStream
 import java.io.PrintStream
-import java.io.PrintWriter
 
 object ValidateSceneFactory {
 
@@ -46,7 +41,6 @@ object ValidateSceneFactory {
             initModality(Modality.APPLICATION_MODAL)
         }.showAndWait()
     }
-
 }
 
 class ValidateController {
@@ -112,5 +106,4 @@ class ValidateController {
             output.text += msg + System.lineSeparator()
         }
     }
-
 }

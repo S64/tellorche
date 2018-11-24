@@ -10,7 +10,6 @@ import jp.s64.tellorche.entity.TelloCommand
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.PrintStream
-import java.io.PrintWriter
 import java.lang.IllegalStateException
 import java.util.Collections
 import java.util.Locale
@@ -23,9 +22,9 @@ data class MicroPythonControllerConfig(
 ) : ISerialControllerConfig {
 
     fun createInterface(
-            id: ControllerId,
-            output: PrintStream,
-            error: PrintStream
+        id: ControllerId,
+        output: PrintStream,
+        error: PrintStream
     ): ITelloController {
         val port = SerialPort.getCommPort(comPortDescriptor)
                 .apply { baudRate = 115200 }

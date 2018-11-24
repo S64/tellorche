@@ -9,7 +9,6 @@ import jp.s64.tellorche.controller.ITelloController
 import jp.s64.tellorche.controller.ESP32ControllerConfig
 import jp.s64.tellorche.controller.MicroPythonControllerConfig
 import java.io.PrintStream
-import java.io.PrintWriter
 
 @JsonClass(generateAdapter = true)
 data class TellorcheConfig(
@@ -67,7 +66,6 @@ enum class ControllerType(
 interface ISerialControllerConfig {
 
     val comPortDescriptor: ComPortDescriptor
-
 }
 
 typealias TimeInMillis = Long

@@ -12,9 +12,9 @@ import java.io.File
 import java.io.PrintStream
 
 class ValidateLogic(
-        private val configFile: File,
-        private val out: PrintStream,
-        private val err: PrintStream
+    private val configFile: File,
+    private val out: PrintStream,
+    private val err: PrintStream
 ) {
 
     companion object {
@@ -37,7 +37,7 @@ class ValidateLogic(
     fun exec(): Int {
         try {
             schema.validate(config)
-        } catch(e: ValidationException) {
+        } catch (e: ValidationException) {
             err.println(e.allMessages)
             return EXIT_CODE_ERR
         }
@@ -92,5 +92,4 @@ class ValidateLogic(
     private fun fail(msg: String) {
         err.println("e: $msg")
     }
-
 }
