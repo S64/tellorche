@@ -91,6 +91,12 @@ jobs:
             - ~/.gradle
       - store_artifacts:
           path: master/build/libs/
+  validate_examples:
+    docker:
+      - image: circleci/jdk8:0.1.1
+    steps:
+      - checkout
+      - run: './gradlew validateExamples'
 
   check_requirements_micropython_controller:
     docker:
@@ -140,6 +146,9 @@ workflows:
       - build_masterapp:
           requires:
             - check_requirements_masterapp
+      - validate_examples:
+          requires:
+            - build_masterapp
   workflow_micropython_controller:
     jobs:
       - init_root_gradle_wrapper
