@@ -59,6 +59,10 @@ cd tellorche
 `master-app`はJavaで開発されています。利用するPCに **JRE8** または **それ以降** のバージョンがインストールされていることを確認してください。  
 JREは[Oracleのウェブサイト](https://java.com/download/)からダウンロードできます。
 
+なおTellorche GUIを利用したい場合は、上記のOracle版JREのような「JavaFXに対応したJRE」であること併せて確認してください。
+
+JDKで利用したい場合、[Amazon Corretto](https://aws.amazon.com/jp/corretto/)などが該当します。
+
 ### 2. 最新リリースをダウンロード
 
 GitHubリポジトリの[Releases](https://github.com/S64/tellorche/releases)から、`tellorche-master-app.jar`をダウンロードしてください。
