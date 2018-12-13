@@ -63,16 +63,39 @@ JREは[Oracleのウェブサイト](https://java.com/download/)からダウン�
 
 JDKで利用したい場合、[Amazon Corretto](https://aws.amazon.com/jp/corretto/)などが該当します。
 
-### 2. 最新リリースをダウンロード
+### 2. USB to UART Driverをインストール
+
+ESP32系ボードのMicroPython Controllerを用いる場合などに必要です。  
+インストーラは[Silicon Labsのウェブサイト](https://jp.silabs.com/products/development-tools/software/usb-to-uart-bridge-vcp-drivers)からダウンロードすることができます。  
+なお、UbuntuなどのLinux系OSを利用している場合はドライバは不要です。
+
+Windowsの場合は`COM*`、  
+macOSの場合は`/dev/tty.SLAB_USBtoUART*`
+Ubuntu等Linux系OSの場合は`/dev/ttyUSB*`
+
+の形式でシリアルポートを検出することができます。
+
+<details>
+<summary>Ubuntuなどを使っていて、ポートの読書がPermission Deniedになる場合</summary>
+
+以下のコマンドを実行し、再起動をしてみてください。
+
+```sh
+sudo usermod -a -G dialout $USER
+```
+
+</details>
+
+### 3. 最新リリースをダウンロード
 
 GitHubリポジトリの[Releases](https://github.com/S64/tellorche/releases)から、`tellorche-master-app.jar`をダウンロードしてください。
 
-### 3. 飛行シーケンス設定ファイルを作成
+### 4. 飛行シーケンス設定ファイルを作成
 
 サンプルが[examples/](examples/)に掲載されています。  
 必要に応じて、`controllers`プロパティ内の`ssid / passphrase / com_descriptor`などを編集してください。
 
-### 4. Tellorche GUIを起動
+### 5. Tellorche GUIを起動
 
 以下のコマンドで実行できます。
 
