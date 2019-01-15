@@ -100,7 +100,7 @@ Tellorhceのシーケンスファイルでは、おおまかに以下のよう�
           "my-controller-2"
         ]
       }
-    ]
+    ],
     "10000": [
       {
         "command": "land",
