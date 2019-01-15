@@ -260,3 +260,34 @@ valueには角括弧（`[`, `]`）が指定されているとおり、内容と�
 | `"controllers"` | コマンドを送出するコントローラ識別子 | 配列 => 文字列 |
 
 コマンド名とそのパラメータを記述し、同様のコマンドを送出したいコントローラ識別子を列挙します。
+
+コマンドには一部の例外を除き、Telloのサポートするものを直接利用できます。  
+例えば `go 20 20 20 100` を送出する場合は以下のように記述できます:
+
+```json
+...
+      {
+        "command": "go",
+        "params": ["20", "20", "20", "100"],
+        "controllers": [...]
+      },
+      ...
+...
+```
+
+## 特殊コマンド
+
+Tellorcheでは、シーケンスファイル記述に際する形式の統一を目的とし、一部コマンドの挙動変更、及び特殊なコマンドの追加を行っています:
+
+| コマンド名 | パラメータ | 説明 |
+|----------|-----------|------|
+| `tellorche-keepalive` | (none) | タイムアウトによる自動着陸を阻止する目的で、サポートされないパケットを送出します |
+| `up` | <x: distance x cm> | `y_in_cm`が適用されます |
+| `down` | <x: distance x cm> | `y_in_cm`が適用されます |
+| `left` | <x: distance x cm> | `x_in_cm`が適用されます |
+| `right` | <x: distance x cm> | `x_in_cm`が適用されます |
+| `forward` | <x: distance x cm> | `z_in_cm`が適用されます |
+| `back` | <x: distance x cm> | `z_in_cm`が適用されます |
+| `set_speed` | <x: x cm per second> | `speed x`に対応し、`speed_in_cm_per_sec`が適用されます |
+| `go` | <x, y, z, speed> | scaleの各値が適用されます |
+| `curve` | <x1, y1, z1, x2, y2, z2, speed> | scaleの各値が適用されます |
