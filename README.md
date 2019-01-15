@@ -130,6 +130,7 @@ ESP32互換製品として[一部他社製のより安価なボード](https://a
 
 ## Documents
 
+- [シーケンスファイル作成手順](docs/sequence-file.md)
 - [開発の手引き](docs/development-tutorial.md)
 - [関連資料](docs/useful-docs.md)
 - [How to debug](docs/how-to-debug.md)
