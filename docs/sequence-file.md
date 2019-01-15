@@ -1,7 +1,7 @@
-# シーケンスファイル作成手順
+# シーケンスファイル
 
 Tellorcheでは飛行パターンを記述した設定ファイルを「シーケンスファイル」と呼んでいます。  
-ここでは、シーケンスファイルの利用、および作成手順を記します。
+ここでは、シーケンスファイルの仕様および作成について記述します。
 
 ## ファイル形式
 
@@ -31,11 +31,11 @@ Tellorhceのシーケンスファイルでは、おおまかに以下のよう�
   1. Tello1機目
     - SSID: TELLO-XXXX01
     - PW: mypassword01
-    - COMポート: /dev/cu.SLAB_USBtoUART
+    - COMポート: COM0
   2. Tello2機目
     - SSID: TELLO-XXXX02
     - PW: mypassword02
-    - COMポート: /dev/cu.SLAB_USBtoUART2
+    - COMポート: COM1
 
 シーケンスファイル全体像は以下のようになります:
 
@@ -54,7 +54,7 @@ Tellorhceのシーケンスファイルでは、おおまかに以下のよう�
       "type-micropython-config": {
         "ssid": "TELLO-XXXX01",
         "passphrase": "mypassword01",
-        "com_descriptor": "/dev/cu.SLAB_USBtoUART"
+        "com_descriptor": "COM0"
       }
     },
     "my-controller-2": {
@@ -62,7 +62,7 @@ Tellorhceのシーケンスファイルでは、おおまかに以下のよう�
       "type-micropython-config": {
         "ssid": "TELLO-XXXX02",
         "passphrase": "mypassword02",
-        "com_descriptor": "/dev/cu.SLAB_USBtoUART2"
+        "com_descriptor": "COM1"
       }
     }
   },
