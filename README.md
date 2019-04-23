@@ -4,7 +4,7 @@
 
 **Orche**stration toolchain for **TELLO** drone.
 
-Demos are available on [s64.github.io/tellorche](https://s64.github.io/tellorche).
+Demos are available on [tellorche.hachi.sraft-ps.org](http://tellorche.hachi.sraft-ps.org).
 
 ## What's this?
 
