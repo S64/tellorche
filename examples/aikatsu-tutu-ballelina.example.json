@@ -1,0 +1,189 @@
+{
+  "accuracy_in_millis": 10,
+  "scale": {
+    "speed_in_cm_per_sec": 1,
+    "x_in_cm": 1,
+    "y_in_cm": 1,
+    "z_in_cm": 1
+  },
+  "controllers": {
+    "controller1": {
+      "type": "MicroPython",
+      "type-micropython-config": {
+        "ssid": "your-tello's-wifi-ssid",
+        "passphrase": "your-tello's-wifi-passphrase",
+        "com_descriptor": "/dev/cu.SLAB_USBtoUART"
+      }
+    }
+  },
+  "sequence": {
+    "0": [
+      {
+        "command": "command",
+        "params": [],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "1000": [
+      {
+        "command": "set_speed",
+        "params": ["20"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "4800": [
+      {
+        "command": "takeoff",
+        "params": [],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "12590": [
+      {
+        "command": "cw",
+        "params": ["360"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "16500": [
+      {
+        "command": "tellorche-keepalive",
+        "params": [],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "20050": [
+      {
+        "command": "right",
+        "params": ["30"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "26070": [
+      {
+        "command": "left",
+        "params": ["30"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "32080": [
+      {
+        "command": "up",
+        "params": ["30"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "38100": [
+      {
+        "command": "down",
+        "params": ["30"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "44050": [
+      {
+        "command": "cw",
+        "params": ["90"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "47090": [
+      {
+        "command": "cw",
+        "params": ["90"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "50080": [
+      {
+        "command": "cw",
+        "params": ["90"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "53080": [
+      {
+        "command": "cw",
+        "params": ["90"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "56080": [
+      {
+        "command": "ccw",
+        "params": ["90"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "59120": [
+      {
+        "command": "ccw",
+        "params": ["90"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "62080": [
+      {
+        "command": "ccw",
+        "params": ["90"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "65060": [
+      {
+        "command": "ccw",
+        "params": ["90"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "69630": [
+      {
+        "command": "flip",
+        "params": ["f"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "75630": [
+      {
+        "command": "flip",
+        "params": ["b"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "81660": [
+      {
+        "command": "flip",
+        "params": ["f"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "87580": [
+      {
+        "command": "down",
+        "params": ["30"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "90580": [
+      {
+        "command": "flip",
+        "params": ["b"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "93590": [
+      {
+        "command": "up",
+        "params": ["40"],
+        "controllers": [ "controller1" ]
+      }
+    ],
+    "96580": [
+      {
+        "command": "land",
+        "params": [],
+        "controllers": [ "controller1" ]
+      }
+    ]
+  }
+}
