@@ -52,9 +52,20 @@ class MicroPythonTelloController(
     error: PrintStream
 ) : ITelloController {
 
+    companion object {
+
+        private const val NEWLINE = "\n"
+
+        private fun sendCommand(out: PrintStream, msg: String) {
+            out.print("$msg$NEWLINE")
+        }
+
+
+    }
+
     override fun doCrash() {
         try {
-            out.println("!crash")
+            sendCommand(out, "!crash")
         } finally {
             doFinally()
         }
@@ -93,11 +104,11 @@ class MicroPythonTelloController(
     }
 
     override fun send(command: TelloCommand, params: List<TelloActionParam>) {
-        out.println("cmd-tello: ${command.toCommand(params)}")
+        sendCommand(out, "cmd-tello: ${command.toCommand(params)}")
     }
 
     fun sendReset(waitResponse: Boolean) {
-        out.println("!reset")
+        sendCommand(out, "!reset")
         do {
             val line = background.nextCmd()
             if (line == "Wi-Fi disconnected.") {
@@ -107,7 +118,7 @@ class MicroPythonTelloController(
     }
 
     fun sendControllerCommand(cmd: String) {
-        out.println("cmd-controller: $cmd")
+        sendCommand(out, "cmd-controller: $cmd")
     }
 
     override fun dispose() {
